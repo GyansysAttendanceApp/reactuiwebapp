@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -27,12 +26,12 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useMsal } from '@azure/msal-react';
+import { useMsal } from "@azure/msal-react";
 
-function Datatable({userRoles}) {
+function Datatable({ userRoles }) {
   const { instance, accounts } = useMsal();
-  console.log(accounts , "datatable")
-  console.log( instance, "INdatatable")
+  console.log(accounts, "datatable");
+  console.log(instance, "INdatatable");
   const [query, setQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedItemAllEntries, setSelectedItemAllEntries] = useState([]);
@@ -48,10 +47,10 @@ function Datatable({userRoles}) {
   const [currentTime, setCurrentTime] = useState(""); // for current time
   const [fetchHistoryError, setFetchHistoryError] = useState("");
   const [showWatchlist, setShowWatchlist] = useState(false);
- 
-  const [watchlist,setWatchlist] = useState([])
 
-  const url=`${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
+  const [watchlist, setWatchlist] = useState([]);
+
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
   console.log("API URL is.....: " + url);
 
@@ -105,7 +104,7 @@ function Datatable({userRoles}) {
 
         const response = await axios.get(`${url}/employees?name=${query}`);
         const data = response.data;
-        console.log(" segg contain dataEMployeeID" , data)
+        console.log(" segg contain dataEMployeeID", data);
         setMasterData(data);
         const suggestions = data.map((item) => item.EmpName);
         setSuggestions(suggestions);
@@ -119,7 +118,7 @@ function Datatable({userRoles}) {
 
   useEffect(() => {
     //const date = "2024-11-15"; // it may work in local to fetch the data while deploying we need to commit this one
-    const date = getCurrentDate() // this one we need to uncommit while deploying to get the current data and it start working
+    const date = getCurrentDate(); // this one we need to uncommit while deploying to get the current data and it start working
     const formattedDateDate = new Date(date);
     const dateFormat = formattedDateDate.toDateString();
     setDtCurrentDate(dateFormat);
@@ -227,35 +226,35 @@ function Datatable({userRoles}) {
     setTotalTodaysCount(calculateTodaysTotalCount());
   }, [departmentData]);
 
-
-   // Function to calculate percentage
-   const calculatePercentage = (expected, today) => {
+  // Function to calculate percentage
+  const calculatePercentage = (expected, today) => {
     return expected !== 0 ? ((today / expected) * 100).toFixed() : 0;
   };
 
   // Group watchlist Names by WatchListName
-  const groupedWatchlist = watchlist.reduce((acc, curr) => {
-    if (!acc[curr.WatchListName]) {
-      acc[curr.WatchListName] = [];
-    }
-    acc[curr.WatchListName].push(curr);
-    return acc;
-  }, {});
-
+  const groupedWatchlist =
+    watchlist.length &&
+    watchlist.reduce((acc, curr) => {
+      if (!acc[curr.WatchListName]) {
+        acc[curr.WatchListName] = [];
+      }
+      acc[curr.WatchListName].push(curr);
+      return acc;
+    }, {});
 
   // This API is show and hide the watchlist
   useEffect(() => {
     const fetchUserRole = async () => {
       const email = accounts[0]?.username;
-      console.log("datatableEMail" , email )
+      console.log("datatableEMail", email);
       try {
         const response = await axios.get(`${url}/userroles?email=${email}`);
         const roles = response.data;
-        if (roles.some(role => role.RoleID === 1 || role.RoleID === 3)) {
+        if (roles.some((role) => role.RoleID === 1 || role.RoleID === 3)) {
           setShowWatchlist(true);
         }
       } catch (error) {
-        console.error('Error fetching user roles: ', error);
+        console.error("Error fetching user roles: ", error);
       }
     };
 
@@ -265,32 +264,32 @@ function Datatable({userRoles}) {
   }, [accounts]);
 
   useEffect(() => {
-    if (userRoles.length > 0) {
-      const hasAccess = userRoles.some(role => role.RoleID === 1 || role.RoleID === 3);
+    if (userRoles && userRoles.length > 0) {
+      const hasAccess = userRoles.some(
+        (role) => role.RoleID === 1 || role.RoleID === 3
+      );
       setShowWatchlist(hasAccess);
     }
   }, [userRoles]);
 
-
   // Function to fetch watchlist data from the API
   useEffect(() => {
-    
     const fetchWatchlistData = async () => {
       try {
-        const date = getCurrentDate()
-        const email = accounts[0].username; 
-        console.log("getwatchlist data in datatable API" , email)
+        const date = getCurrentDate();
+        const email = accounts[0].username;
+        console.log("getwatchlist data in datatable API", email);
         const response = await fetch(`${url}/watchlist/${email}/${date}`);
         const data = await response.json();
-        console.log("getwatchlist data in datatable API" , data)
+        console.log("getwatchlist data in datatable API", data);
         setWatchlist(data);
       } catch (error) {
-        console.error('Error fetching watchlist data:', error);
+        console.error("Error fetching watchlist data:", error);
       }
     };
     fetchWatchlistData();
   }, [accounts]);
-   
+
   return (
     <Box sx={{ flexGrow: 1, minHeight: "80vh" }}>
       <Paper elevation={3} sx={{ p: 1 }}>
@@ -305,8 +304,8 @@ function Datatable({userRoles}) {
             alignItems: "center",
           }}
         >
-          Today's Attendance Count: {totalTodaysCount} / {totalExpectedCount} (as on: {dtCurrentDate}{" "}
-          {currentTime})
+          Today's Attendance Count: {totalTodaysCount} / {totalExpectedCount}{" "}
+          (as on: {dtCurrentDate} {currentTime})
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -322,7 +321,11 @@ function Datatable({userRoles}) {
                     <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
                       <TableSortLabel
                         active={sortOrder.column == "ExpectedCount"}
-                        direction={sortOrder.column ==   "ExpectedCount" ? sortOrder.direction : "asc"}
+                        direction={
+                          sortOrder.column == "ExpectedCount"
+                            ? sortOrder.direction
+                            : "asc"
+                        }
                         onClick={() => handleSort("ExpectedCount")}
                       >
                         <Typography variant="h10" fontWeight="bold">
@@ -330,12 +333,16 @@ function Datatable({userRoles}) {
                         </Typography>
                       </TableSortLabel>
                     </TableCell>
-                     <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
+                    <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
                       <TableSortLabel
                         active={sortOrder.column == "TodaysCount"}
-                        direction={sortOrder.column == "TodaysCount" ? sortOrder.direction : "asc"}
+                        direction={
+                          sortOrder.column == "TodaysCount"
+                            ? sortOrder.direction
+                            : "asc"
+                        }
                         onClick={() => handleSort("TodaysCount")}
-                      > 
+                      >
                         <Typography variant="h10" fontWeight="bold">
                           TODAYS COUNT
                         </Typography>
@@ -343,7 +350,7 @@ function Datatable({userRoles}) {
                     </TableCell>
                     <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
                       <Typography variant="h10" fontWeight="bold">
-                        ABSENT COUNT 
+                        ABSENT COUNT
                       </Typography>
                     </TableCell>
                     <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
@@ -359,16 +366,34 @@ function Datatable({userRoles}) {
                       <TableCell>{department.DeptName}</TableCell>
                       <TableCell>{department.ExpectedCount}</TableCell>
                       <TableCell>{department.TodaysCount}</TableCell>
-                      <TableCell>{parseInt(department.ExpectedCount) - parseInt(department.TodaysCount)}</TableCell>
-                      <TableCell>{calculatePercentage(parseInt(department.ExpectedCount), parseInt(department.TodaysCount))}%</TableCell>
+                      <TableCell>
+                        {parseInt(department.ExpectedCount) -
+                          parseInt(department.TodaysCount)}
+                      </TableCell>
+                      <TableCell>
+                        {calculatePercentage(
+                          parseInt(department.ExpectedCount),
+                          parseInt(department.TodaysCount)
+                        )}
+                        %
+                      </TableCell>
                     </TableRow>
                   ))}
                   <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
                     <TableCell>Total</TableCell>
                     <TableCell>{totalExpectedCount}</TableCell>
                     <TableCell>{totalTodaysCount}</TableCell>
-                    <TableCell>{parseInt(totalExpectedCount) - parseInt(totalTodaysCount)}</TableCell>
-                    <TableCell>{calculatePercentage(totalExpectedCount, totalTodaysCount)}%</TableCell>
+                    <TableCell>
+                      {parseInt(totalExpectedCount) -
+                        parseInt(totalTodaysCount)}
+                    </TableCell>
+                    <TableCell>
+                      {calculatePercentage(
+                        totalExpectedCount,
+                        totalTodaysCount
+                      )}
+                      %
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -472,7 +497,8 @@ function Datatable({userRoles}) {
                         &nbsp;
                         <a
                           href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
-                          target="_blank">
+                          target="_blank"
+                        >
                           Chat
                         </a>
                       </Typography>
@@ -493,7 +519,7 @@ function Datatable({userRoles}) {
                                 return (
                                   <tr key={index}>
                                     <td>
-                                      {item.SwipeDateTime} - {item.InOut} - {" "} 
+                                      {item.SwipeDateTime} - {item.InOut} -{" "}
                                       {item.FloorDoorName}
                                     </td>
                                   </tr>
@@ -519,7 +545,7 @@ function Datatable({userRoles}) {
                 </>
               )}
             </Box>
-             {showWatchlist && (
+            {showWatchlist && (
               <Box mt={2}>
                 <Accordion sx={{ backgroundColor: "" }}>
                   <AccordionSummary
@@ -556,29 +582,39 @@ function Datatable({userRoles}) {
                                 <Table>
                                   <TableHead>
                                     <TableRow>
-                                      <TableCell><b>Employee Name</b></TableCell>
-                                      <TableCell align="right"><b>In Time</b></TableCell>
-                                      <TableCell align="right"><b>Out Time</b></TableCell>
+                                      <TableCell>
+                                        <b>Employee Name</b>
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        <b>In Time</b>
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        <b>Out Time</b>
+                                      </TableCell>
                                     </TableRow>
-                                  </TableHead> 
+                                  </TableHead>
                                   <TableBody>
                                     {employees.map((employee, i) => (
-                                      
                                       <TableRow key={i}>
                                         <TableCell>
-                                        <a
-                                          href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
-                                          target="_blank">
-                                          <PiMicrosoftTeamsLogoFill
-                                            size={20}
-                                            sx={{ backgroundColor: "#d6338f" }}
-                                          />
-                                        </a>
-                                        &nbsp;
-                                        <a href={`mailto:${employee.EmployeeEmail}`}                                        
-                                        style={{ textDecoration: 'none' }}
-                                        > 
-                                        {employee.EmployeeName}</a>  
+                                          <a
+                                            href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
+                                            target="_blank"
+                                          >
+                                            <PiMicrosoftTeamsLogoFill
+                                              size={20}
+                                              sx={{
+                                                backgroundColor: "#d6338f",
+                                              }}
+                                            />
+                                          </a>
+                                          &nbsp;
+                                          <a
+                                            href={`mailto:${employee.EmployeeEmail}`}
+                                            style={{ textDecoration: "none" }}
+                                          >
+                                            {employee.EmployeeName}
+                                          </a>
                                         </TableCell>
                                         <TableCell align="right">
                                           {employee.InTime}

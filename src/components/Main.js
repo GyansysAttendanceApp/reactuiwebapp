@@ -2,7 +2,7 @@
     import Datatable from "./Datatable"
     import Navbar from "./Navbar"
     import Footer from "./Footer"
-    import NextComponents from "./NextComponents"
+ 
     import {BrowserRouter as  Router, Route, Routes, BrowserRouter } from 'react-router-dom';
 
     const Main = ({username , showWatchlist , userRoles}) =>{

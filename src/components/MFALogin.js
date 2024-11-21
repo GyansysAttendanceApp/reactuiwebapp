@@ -13,28 +13,15 @@ const MFALogin = ({ username }) => {
 
     };
 
- 
-
-
-
-
-
     return (
         <div style={{ display: "flex", justifyContent: "Center", alignItems: "center", flexDirection: "column" }}>
             <h2>Welcome to Gyansys Attendance Application</h2>
             <br />
             <div>
-
-
-
                 {!username && (
                     <button onClick={handleLoginRedirect}>Click here to login with you Organization Email</button>
                 )
                 }
-
-
-
-
 
             </div>
 
