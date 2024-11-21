@@ -1,0 +1,152 @@
+/* EmployeeHistory.css */
+
+/* Styles for desktop */
+/* @media (min-width: 768px) {
+    .navbar {
+      padding: 20px;
+    }
+  
+    .search-input {
+      width: 300px;
+      margin-right: 10px;
+    }
+  
+    .search-button {
+      height: 56px;
+      margin-bottom: 10px;
+    }
+  
+    .suggestion-box {
+      width: 300px;
+      max-height: 200px;
+    }
+  
+    .table-container {
+      overflow-x: auto;
+      padding-top: 10px;
+      max-height: calc(100vh - 128px - 48px);
+    }
+  } */
+  
+  /* Styles for mobile */
+  /* @media (max-width: 767px) {
+    .navbar {
+      padding: 10px;
+    }
+  
+    .search-input {
+      width: calc(100% - 90px);
+      margin-right: 10px;
+    }
+  
+    .search-button {
+      width: 80px;
+      height: 56px;
+      margin-bottom: 5px;
+    }
+  
+    .suggestion-box {
+      width: calc(100% - 20px);
+      max-height: 150px;
+    }
+  
+    .table-container {
+      overflow-x: auto;
+      padding-top: 10px;
+      max-height: calc(100vh - 128px - 48px);
+    }
+  } */
+  
+
+  /* EmployeeHistory.css */
+
+/* Styles for desktop */
+@media (min-width: 768px) {
+    .navbar {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1670b9;
+    }
+  
+    .search-box {
+      display: flex;
+      align-items: center;
+    }
+  
+    .search-input {
+      width: 300px;
+      margin-right: 10px;
+    }
+  
+    .search-button {
+      height: 56px;
+      margin-bottom: 10px;
+    }
+  
+    .suggestion-box {
+      position: absolute;
+      background-color: #fff;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+      border-radius: 5px;
+      margin-top: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+      width: 300px;
+    }
+  
+    .table-container {
+      overflow-x: auto;
+      padding-top: 10px;
+      max-height: calc(100vh - 128px - 48px);
+    }
+  }
+  
+  /* Styles for mobile */
+  @media (max-width: 767px) {
+    .navbar {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #1670b9;
+    }
+  
+    .search-box {
+      margin-top: 10px;
+    }
+  
+    .search-input {
+      width: calc(100% - 90px);
+      margin-right: 5px;
+    }
+  
+    .search-button {
+      width: 80px;
+      height: 56px;
+      margin-bottom: 5px;
+    }
+  
+    .suggestion-box {
+      position: absolute;
+      background-color: #fff;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+      border-radius: 5px;
+      margin-top: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+      width: calc(100% - 20px);
+    }
+  
+    .table-container {
+      overflow-x: auto;
+      padding-top: 10px;
+      max-height: calc(100vh - 128px - 48px);
+    }
+  }
+  
+
+
+
+            
