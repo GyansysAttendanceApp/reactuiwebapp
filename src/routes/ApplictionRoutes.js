@@ -1,12 +1,16 @@
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import Main from "../components/Main";
-import EmployeeHistory from "../components/EmployeeHistory";
-import Watchlist from "../components/Watchlist";
-import Watchlistform from "../components/Watchlistform";
-import EditWatchlistForm from "../components/EditWatchlistForm";
-import PageNotFound from "../components/Errors/PageNotFound";
-import ErrorBoundary from "../components/Errors/ErrorBoundary";
+import Main from "../components/pages/Main";
+import EmployeeHistory from "../components/pages/EmployeeHistory";
+import Watchlistform from "../components/pages/Watchlistform";
+import EditWatchlistForm from "../components/pages/EditWatchlistForm";
+// import Main from "../components/pages/Main";
+// import EmployeeHistory from "../components/pages/EmployeeHistory";
+import Watchlist from "../components/pages/Watchlist";
+// import Watchlistform from "../components/pages/Watchlistform";
+// import EditWatchlistForm from "../components/pages/EditWatchlistForm";
+import PageNotFound from "../components/errors/PageNotFound";
+ import ErrorBoundary from "../components/errors/ErrorBoundary";
 
 const ApplictionRoutes = ({ userRoles, username }) => {
   return (

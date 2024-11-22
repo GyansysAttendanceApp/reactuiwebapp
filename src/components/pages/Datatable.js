@@ -27,8 +27,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useMsal } from "@azure/msal-react";
-import UserContext from "../context/UserContext";
-import DateComponent from "./common/DateComponent";
+import UserContext from "../../context/UserContext";
+import DateComponent from "../common/DateComponent";
 import dayjs from "dayjs";
  
 function Datatable() {
@@ -320,8 +320,8 @@ function Datatable() {
             alignItems: "center",
           }}
         >
-          Today's Attendance Count: {totalTodaysCount} / {totalExpectedCount}{" "}
-          (as on: {selectedFormatedWatchListDate} {currentTime})
+          Today's attendance count: {totalTodaysCount} / {totalExpectedCount}{" "}
+          as on {selectedFormatedWatchListDate} 
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -378,15 +378,15 @@ function Datatable() {
                 </TableHead>
                 <TableBody>
                   {departmentData.map((department) => (
-                    <TableRow key={department.EmpID}>
-                      <TableCell>{department.DeptName}</TableCell>
-                      <TableCell>{department.ExpectedCount}</TableCell>
-                      <TableCell>{department.TodaysCount}</TableCell>
-                      <TableCell>
+                    <TableRow  key={department.EmpID}>
+                      <TableCell style={{height:"2vh"}}>{department.DeptName}</TableCell>
+                      <TableCell style={{height:"2vh"}}>{department.ExpectedCount}</TableCell>
+                      <TableCell style={{height:"2vh"}}>{department.TodaysCount}</TableCell>
+                      <TableCell style={{height:"2vh"}}>
                         {parseInt(department.ExpectedCount) -
                           parseInt(department.TodaysCount)}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{height:"2vh"}}>
                         {calculatePercentage(
                           parseInt(department.ExpectedCount),
                           parseInt(department.TodaysCount)

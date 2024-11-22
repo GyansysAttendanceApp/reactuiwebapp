@@ -1,6 +1,6 @@
 import { CenterFocusStrong } from "@mui/icons-material";
 import React, { useEffect } from "react";
-import { loginRequest } from "../authConfig";
+import { loginRequest } from "../../authConfig";
 import { useMsal } from '@azure/msal-react';
 import { Navigate, useNavigate } from "react-router-dom";
 

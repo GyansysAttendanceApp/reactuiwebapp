@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+
+import Footer from "../common/Footer";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -99,15 +99,15 @@ function EmployeeHistory() {
            top="64px"
            zIndex="100"
         >
-          <Box>
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <Button variant="contained" color="primary">
+          <Box>            
+               Attendance History of Employee ID: {empId}            
+          </Box>
+          <Typography variant="h6" fontWeight="bold">       
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button variant="contained" color="primary">
                 Back to home page
               </Button>
-            </Link>
-          </Box>
-          <Typography variant="h6" fontWeight="bold">
-            Attendance History of Employee ID: {empId}
+              </Link>
           </Typography>
         </Box>
 
@@ -242,7 +242,7 @@ function EmployeeHistory() {
           </Table>
         </Box>
       </div>
-      <Footer style={{ position: "fixed", bottom: "0", width: "100%" }} />
+      {/* <Footer style={{ position: "fixed", bottom: "0", width: "100%" }} /> */}
     </>
   );
 }

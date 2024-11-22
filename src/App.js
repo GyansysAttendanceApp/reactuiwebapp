@@ -9,10 +9,9 @@ import {
 } from "@azure/msal-react";
 
 import ApplictionRoutes from "./routes/ApplictionRoutes";
-import { ProtectRoute } from "./routes/ProtectRoute";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/common/Navbar" ;
 import UserContext from "./context/UserContext";
-import MFALogin from "./components/MFALogin";
+import MFALogin from "./components/pages/MFALogin";
 import axios from "axios";
 
 function App() {
@@ -49,6 +48,8 @@ function App() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Navbar />
+      {/* <ApplictionRoutes /> */}
+
       <AuthenticatedTemplate>
         <ApplictionRoutes />
       </AuthenticatedTemplate>

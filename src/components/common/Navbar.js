@@ -5,7 +5,7 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import { Link } from "react-router-dom";
 import { useMsal } from "@azure/msal-react";
-import UserContext from "../context/UserContext";
+import UserContext from "../../context/UserContext";
 
 function Navbar() {
   const { instance, accounts } = useMsal();

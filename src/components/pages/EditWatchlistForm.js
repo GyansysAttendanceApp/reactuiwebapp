@@ -4,8 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, Autocomplete, Chip } from '@mui/material';
 import { useMsal } from '@azure/msal-react';
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Footer from "../../components/common/Footer";
 
 function EditWatchlistForm({ username }) {
   const { id } = useParams();
@@ -211,7 +210,7 @@ const validateForm = () => {
             </Box>
     </form>
   </Box>
-  <Footer />
+  {/* <Footer /> */}
 </>
 );
 }

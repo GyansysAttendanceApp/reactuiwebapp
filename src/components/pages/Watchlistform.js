@@ -1,8 +1,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -305,8 +304,8 @@ function Watchlistform({ username }) {
           </Box>
         </Box>
       </Box>
-
-      <Footer />
+{/* 
+      <Footer /> */}
 
     </>
   );

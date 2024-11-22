@@ -1,7 +1,7 @@
 import react, { Suspense } from "react";
 import Datatable from "./Datatable";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+
+import Footer from "../common/Footer";
 
 import {
   BrowserRouter as Router,
@@ -9,14 +9,13 @@ import {
   Routes,
   BrowserRouter,
 } from "react-router-dom";
-import UserContext from "../context/UserContext";
+import UserContext from "../../context/UserContext";
 
 const Main = () => {
   return (
     <div>
       {/* <Navbar username ={username} showWatchlist ={showWatchlist} />  */}
       <Datatable />
-
       <Footer />
     </div>
   );
