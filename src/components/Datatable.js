@@ -30,7 +30,7 @@ import { useMsal } from "@azure/msal-react";
 import UserContext from "../context/UserContext";
 import DateComponent from "./common/DateComponent";
 import dayjs from "dayjs";
-
+ 
 function Datatable() {
   const { instance, accounts } = useMsal();
   console.log(accounts, "datatable");
@@ -50,7 +50,7 @@ function Datatable() {
   const [currentTime, setCurrentTime] = useState(""); // for current time
   const [fetchHistoryError, setFetchHistoryError] = useState("");
   // const [showWatchlist, setShowWatchlist] = useState(false);
-
+ 
   const [watchlist, setWatchlist] = useState([]);
   const [selectedWatchListDate, setSelectedWatchListDate] = useState(
     dayjs(new Date())
@@ -58,29 +58,29 @@ function Datatable() {
   const [selectedFormatedWatchListDate, setSelectedFormatedWatchListDate] = useState(
     dayjs(new Date()).format('YYYY-MM-DD')
   );
-
+ 
   const handleSelectedWatchListDate = (event) => {
     setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
     setSelectedWatchListDate(event)
     console.log('date is',dayjs(event).format('DD-MM-YYYY'));
   };
-
+ 
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
-
+ 
   const navigate = useNavigate();
-
+ 
   const { showWatchlist } = useContext(UserContext);
-
+ 
   // Function to clear errors after 2 seconds
   useEffect(() => {
     const clearErrors = setTimeout(() => {
       setError("");
       setFetchHistoryError("");
     }, 2000);
-
+ 
     return () => clearTimeout(clearErrors);
   }, [error, fetchHistoryError]);
-
+ 
   // Fetch current time
   useEffect(() => {
     const getCurrentTime = () => {
@@ -90,24 +90,24 @@ function Datatable() {
       const seconds = now.getSeconds().toString().padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
     };
-
+ 
     setCurrentTime(getCurrentTime());
   }, []);
-
+ 
   const getCurrentDate = () => {
     const today = new Date();
-
+ 
     const yyyy = today.getFullYear();
     let mm = today.getMonth() + 1; // Months start at 0!
     let dd = today.getDate();
-
+ 
     if (dd < 10) dd = "0" + dd;
     if (mm < 10) mm = "0" + mm;
-
+ 
     let formattedDate = `${yyyy}-${mm}-${dd}`;
     return formattedDate;
   };
-
+ 
   /// api call for nameSuggestions
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -116,7 +116,7 @@ function Datatable() {
           setSuggestions([]);
           return;
         }
-
+ 
         const response = await axios.get(`${url}/employees?name=${query}`);
         const data = response.data;
         console.log(" segg contain dataEMployeeID", data);
@@ -127,10 +127,10 @@ function Datatable() {
         console.error("Error fetching suggestions:", error);
       }
     };
-
+ 
     fetchSuggestions();
   }, [query]);
-
+ 
   useEffect(() => {
     //const date = "2024-11-15"; // it may work in local to fetch the data while deploying we need to commit this one
     const date = getCurrentDate(); // this one we need to uncommit while deploying to get the current data and it start working
@@ -138,10 +138,10 @@ function Datatable() {
     const dateFormat = formattedDateDate.toDateString();
     setDtCurrentDate(dateFormat);
     setCurDate(date);
-
+ 
     fetchDepartmentData(selectedFormatedWatchListDate);
   }, [selectedFormatedWatchListDate]);
-
+ 
   const fetchDepartmentData = async (date) => {
     try {
       const response = await axios.get(`${url}/dept?date=${date}`);
@@ -150,17 +150,17 @@ function Datatable() {
       console.error("Error fetching department data:", error);
     }
   };
-
+ 
   const handleSearch = async () => {
     try {
       if (!query) {
         setError("Please enter a username.");
         return;
       }
-
+ 
       if (masterData.length > 0) {
         const response = await axios.get(
-          `${url}/attendance/${masterData[0].EmpID}/${CurDate}`
+          `${url}/attendance/${masterData[0].EmpID}/${selectedFormatedWatchListDate}`
         );
         const result = response.data;
         if (result && result.length > 0) {
@@ -177,13 +177,13 @@ function Datatable() {
       console.error("Error searching employees:", error);
     }
   };
-
+ 
   const handleReset = () => {
     setQuery("");
     setSelectedItem(null);
     setSelectedItemAllEntries(null);
   };
-
+ 
   const handleFetchHistory = () => {
     if (!masterData || masterData.length === 0) {
       setFetchHistoryError("Please Enter a name first.");
@@ -194,7 +194,7 @@ function Datatable() {
       navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`);
     }
   };
-
+ 
   const handleSort = (column) => {
     const newSortOrder = {
       column: column,
@@ -203,9 +203,9 @@ function Datatable() {
           ? "desc"
           : "asc",
     };
-
+ 
     setSortOrder(newSortOrder);
-
+ 
     const sortedData = [...departmentData].sort((a, b) => {
       if (newSortOrder.direction === "asc") {
         return a[column] - b[column];
@@ -213,10 +213,10 @@ function Datatable() {
         return b[column] - a[column];
       }
     });
-
+ 
     setDepartmentData(sortedData);
   };
-
+ 
   const calculateExpectedTotalCount = () => {
     let totalExpectedCount = 0;
     departmentData.forEach((department) => {
@@ -224,7 +224,7 @@ function Datatable() {
     });
     return totalExpectedCount;
   };
-
+ 
   const calculateTodaysTotalCount = () => {
     let totalTodaysCount = 0;
     departmentData.forEach((department) => {
@@ -232,20 +232,20 @@ function Datatable() {
     });
     return totalTodaysCount;
   };
-
+ 
   useEffect(() => {
     setTotalExpectedCount(calculateExpectedTotalCount());
   }, [departmentData]);
-
+ 
   useEffect(() => {
     setTotalTodaysCount(calculateTodaysTotalCount());
   }, [departmentData]);
-
+ 
   // Function to calculate percentage
   const calculatePercentage = (expected, today) => {
     return expected !== 0 ? ((today / expected) * 100).toFixed() : 0;
   };
-
+ 
   // Group watchlist Names by WatchListName
   const groupedWatchlist =
     watchlist.length &&
@@ -256,7 +256,7 @@ function Datatable() {
       acc[curr.WatchListName].push(curr);
       return acc;
     }, {});
-
+ 
   // This API is show and hide the watchlist
   // useEffect(() => {
   //   const fetchUserRole = async () => {
@@ -272,12 +272,12 @@ function Datatable() {
   //       console.error("Error fetching user roles: ", error);
   //     }
   //   };
-
+ 
   //   if (accounts[0]?.username) {
   //     fetchUserRole();
   //   }
   // }, [accounts]);
-
+ 
   // useEffect(() => {
   //   if (userRoles && userRoles.length > 0) {
   //     // if (userRoles.length > 0) {
@@ -287,7 +287,7 @@ function Datatable() {
   //     setShowWatchlist(hasAccess);
   //   }
   // }, [userRoles]);
-
+ 
   // Function to fetch watchlist data from the API
   useEffect(() => {
     const fetchWatchlistData = async () => {
@@ -295,7 +295,7 @@ function Datatable() {
         const date = getCurrentDate();
         const email = accounts[0].username;
         console.log("getwatchlist data in datatable API", email);
-        const response = await fetch(`${url}/watchlist/${email}/${date}`);
+        const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
         const data = await response.json();
         console.log("getwatchlist data in datatable API", data);
         setWatchlist(data);
@@ -304,8 +304,8 @@ function Datatable() {
       }
     };
     fetchWatchlistData();
-  }, [accounts]);
-
+  }, [accounts,selectedFormatedWatchListDate]);
+ 
   return (
     <Box sx={{ flexGrow: 1, minHeight: "80vh" }}>
       <Paper elevation={3} sx={{ p: 1 }}>
@@ -444,7 +444,7 @@ function Datatable() {
                       onchange={(e) => handleSelectedWatchListDate(e)}
                     />
                   </Grid>
-
+ 
                   {/* <TextField
                     id="year-month-picker-uy"
                     type="date"
@@ -680,5 +680,5 @@ function Datatable() {
     </Box>
   );
 }
-
+ 
 export default Datatable;
