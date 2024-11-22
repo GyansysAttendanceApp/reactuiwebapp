@@ -1,22 +1,29 @@
-    import react from "react"
-    import Datatable from "./Datatable"
-    import Navbar from "./Navbar"
-    import Footer from "./Footer"
- 
-    import {BrowserRouter as  Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import react, { Suspense } from "react";
+import Datatable from "./Datatable";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  BrowserRouter,
+} from "react-router-dom";
 import UserContext from "../context/UserContext";
 
-    const Main = () =>{
-        return(
-    <div> 
-        {/* <Navbar username ={username} showWatchlist ={showWatchlist} />  */}
-        <Datatable/>
-        <Footer/>  
-    </div>
-        )
-    }
-    export default Main
+const Main = () => {
+  return (
+    <div>
+      {/* <Navbar username ={username} showWatchlist ={showWatchlist} />  */}
+      <Suspense fallback={<div>Loading watchlist...</div>}>
+        <Datatable />
+      </Suspense>
 
+      <Footer />
+    </div>
+  );
+};
+export default Main;
 
 // import React, { useState, useEffect } from "react";
 // import axios from 'axios';
@@ -60,13 +67,13 @@ import UserContext from "../context/UserContext";
 //   }, [accounts]);
 
 //   return (
-    
+
 //       <div>
 //         <Navbar username={username} showWatchlist={showWatchlist} />
 //         <Datatable userRoles={userRoles} />
 //         <Footer />
 //       </div>
-    
+
 //   );
 // };
 

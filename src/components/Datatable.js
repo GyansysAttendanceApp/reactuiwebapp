@@ -321,7 +321,7 @@ function Datatable() {
           }}
         >
           Today's Attendance Count: {totalTodaysCount} / {totalExpectedCount}{" "}
-          (as on: {dtCurrentDate} {currentTime})
+          (as on: {selectedFormatedWatchListDate} {currentTime})
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>

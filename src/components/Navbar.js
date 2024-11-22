@@ -1,60 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Tooltip from '@mui/material/Tooltip';
-import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
-// import Avatar from '@mui/material/Avatar';
-import { Link } from 'react-router-dom';
-import { useMsal } from '@azure/msal-react';
+import Tooltip from "@mui/material/Tooltip";
+import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
+import { Link } from "react-router-dom";
+import { useMsal } from "@azure/msal-react";
 import UserContext from "../context/UserContext";
 
 function Navbar() {
-  const { instance} = useMsal();
+  const { instance, accounts } = useMsal();
 
-  const {user,showWatchlist}=useContext(UserContext);
-  // const user=accounts[0]&&accounts[0].name;
-
-  // console.log({user});
-  
-
-  // const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
-
-
-  // const [username, setUsername] = useState(localStorage.getItem("username") || null);
-  // const [showWatchlist, setShowWatchlist] = useState(false);
-  // const [showWatchlistIcon, setShowWatchlistIcon] = useState(false);
-
-
-  /// Below code is Icon show and hide///////////
- 
-   /// Reference code 
-  // useEffect(() => {
-  //   const fetchUserRole = async () => {
-  //     const email = accounts[0]?.username;
-  //     try {
-  //       const response = await axios.get(`http://localhost:5000/api/userroles?email=${email}`);
-  //       const roles = response.data;
-  //       if (roles.some(role => role.RoleID === 1 || role.RoleID === 3)) {
-  //         setShowWatchlistIcon(true);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching user roles: ', error);
-  //     }
-  //   };
-
-  //   if (accounts[0]?.username) {
-  //     fetchUserRole();
-  //   }
-  // }, [accounts]);
-
-
-  // useEffect(() =>{
-
-  //   if(instance){
-  //     instance.loginRedirect();
-  //   }
-    
-  // }, [instance])
+  const { user, showWatchlist } = useContext(UserContext);
+  const userName =( user || (accounts[0] && accounts[0].name));
 
   const handleLoginRedirect = () => {
     instance.loginRedirect();
@@ -73,27 +30,42 @@ function Navbar() {
           alignItems: "center",
           padding: "20px",
           backgroundColor: "#1670b9",
-          color: "white"
+          color: "white",
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: "bold", cursor: "pointer" }}>
-          <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
             GyanSys India - Attendance Tracker
           </Link>
         </Typography>
 
         <div style={{ display: "flex", alignItems: "center" }}>
-          {showWatchlist && (   
-            <Link to="/watchlist" style={{ textDecoration: 'none', color: 'white', marginRight: "20px" }}>
+          {showWatchlist && (
+            <Link
+              to="/watchlist"
+              style={{
+                textDecoration: "none",
+                color: "white",
+                marginRight: "20px",
+              }}
+            >
               <Tooltip title="Watch List">
                 <PersonSearchOutlinedIcon />
               </Tooltip>
             </Link>
           )}
-          {user && (
+          {userName && (
             <>
-              <Typography variant="h6" sx={{ fontWeight: "bold", cursor: "pointer", color: "white", marginRight: "20px" }}>
-                {user}
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  color: "white",
+                  marginRight: "20px",
+                }}
+              >
+                {userName}
               </Typography>
             </>
           )}
@@ -107,36 +79,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

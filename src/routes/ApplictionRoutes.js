@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Main from "../components/Main";
 import EmployeeHistory from "../components/EmployeeHistory";
@@ -22,7 +22,9 @@ const ApplictionRoutes = ({ userRoles, username }) => {
           />
           <Route
             path="/watchlist"
-            element={<Watchlist username={username} />}
+            element={ <Suspense fallback={<div>Loading watchlist...</div>}>
+            <Watchlist username={username} />
+          </Suspense>}
           />
           <Route
             path="/watchlistform"
