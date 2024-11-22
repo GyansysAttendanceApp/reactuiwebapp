@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -27,8 +27,9 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useMsal } from "@azure/msal-react";
+import UserContext from "../context/UserContext";
 
-function Datatable({ userRoles }) {
+function Datatable() {
   const { instance, accounts } = useMsal();
   console.log(accounts, "datatable");
   console.log(instance, "INdatatable");
@@ -46,15 +47,16 @@ function Datatable({ userRoles }) {
   const [totalTodaysCount, setTotalTodaysCount] = useState(0);
   const [currentTime, setCurrentTime] = useState(""); // for current time
   const [fetchHistoryError, setFetchHistoryError] = useState("");
-  const [showWatchlist, setShowWatchlist] = useState(false);
+  // const [showWatchlist, setShowWatchlist] = useState(false);
 
   const [watchlist, setWatchlist] = useState([]);
 
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
-  console.log("API URL is.....: " + url);
 
   const navigate = useNavigate();
+
+  const { showWatchlist } = useContext(UserContext);
 
   // Function to clear errors after 2 seconds
   useEffect(() => {
@@ -243,34 +245,35 @@ function Datatable({ userRoles }) {
     }, {});
 
   // This API is show and hide the watchlist
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      const email = accounts[0]?.username;
-      console.log("datatableEMail", email);
-      try {
-        const response = await axios.get(`${url}/userroles?email=${email}`);
-        const roles = response.data;
-        if (roles.some((role) => role.RoleID === 1 || role.RoleID === 3)) {
-          setShowWatchlist(true);
-        }
-      } catch (error) {
-        console.error("Error fetching user roles: ", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserRole = async () => {
+  //     const email = accounts[0]?.username;
+  //     console.log("datatableEMail", email);
+  //     try {
+  //       const response = await axios.get(`${url}/userroles?email=${email}`);
+  //       const roles = response.data;
+  //       if (roles.some((role) => role.RoleID === 1 || role.RoleID === 3)) {
+  //         setShowWatchlist(true);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching user roles: ", error);
+  //     }
+  //   };
 
-    if (accounts[0]?.username) {
-      fetchUserRole();
-    }
-  }, [accounts]);
+  //   if (accounts[0]?.username) {
+  //     fetchUserRole();
+  //   }
+  // }, [accounts]);
 
-  useEffect(() => {
-    if (userRoles && userRoles.length > 0) {
-      const hasAccess = userRoles.some(
-        (role) => role.RoleID === 1 || role.RoleID === 3
-      );
-      setShowWatchlist(hasAccess);
-    }
-  }, [userRoles]);
+  // useEffect(() => {
+  //   if (userRoles && userRoles.length > 0) {
+  //     // if (userRoles.length > 0) {
+  //     const hasAccess = userRoles.some(
+  //       (role) => role.RoleID === 1 || role.RoleID === 3
+  //     );
+  //     setShowWatchlist(hasAccess);
+  //   }
+  // }, [userRoles]);
 
   // Function to fetch watchlist data from the API
   useEffect(() => {

@@ -1,19 +1,15 @@
 import React from "react";
-
-import { useNavigate } from "react-router-dom";
 import MFALogin from "../components/MFALogin";
-import { useMsal } from "@azure/msal-react";
+import UserContext from "../context/UserContext";
 
-export default function ProtectRoute ({children , username ,}) {
+export const ProtectRoute=({ children })=> {
+  const { user } = UserContext;
+  console.log({user});
+  
 
-  const navigate = useNavigate();
-
-  const { instance } = useMsal();
-
-  if (!username) {
-    return <MFALogin/>
+  if (!user) {
+    return <MFALogin />;
   }
-
   return <>{children}</>;
 };
-
+React.memo(ProtectRoute)

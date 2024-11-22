@@ -1,20 +1,23 @@
-
-
-
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Tooltip from '@mui/material/Tooltip';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 import { Link } from 'react-router-dom';
 import { useMsal } from '@azure/msal-react';
-import axios from 'axios';
+import UserContext from "../context/UserContext";
 
-function Navbar({username , showWatchlist}) {
-  const { instance, accounts } = useMsal();
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
+function Navbar() {
+  const { instance} = useMsal();
+
+  const {user,showWatchlist}=useContext(UserContext);
+  // const user=accounts[0]&&accounts[0].name;
+
+  // console.log({user});
+  
+
+  // const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
 
 
   // const [username, setUsername] = useState(localStorage.getItem("username") || null);
@@ -87,10 +90,10 @@ function Navbar({username , showWatchlist}) {
               </Tooltip>
             </Link>
           )}
-          {username && (
+          {user && (
             <>
               <Typography variant="h6" sx={{ fontWeight: "bold", cursor: "pointer", color: "white", marginRight: "20px" }}>
-                {username}
+                {user}
               </Typography>
             </>
           )}

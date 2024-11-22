@@ -18,8 +18,7 @@ import { FcOk } from "react-icons/fc";
 import { FcHighPriority } from "react-icons/fc";
 import { useMsal } from '@azure/msal-react';
 
-function EmployeeHistory({username}) {
-  const { instance, accounts } = useMsal();
+function EmployeeHistory() {
   const { empId, year, month } = useParams();
   const [employeeData, setEmployeeData] = useState([]);
   const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`);

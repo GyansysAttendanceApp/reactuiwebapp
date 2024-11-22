@@ -4,13 +4,13 @@
     import Footer from "./Footer"
  
     import {BrowserRouter as  Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import UserContext from "../context/UserContext";
 
-    const Main = ({username , showWatchlist , userRoles}) =>{
-
+    const Main = () =>{
         return(
     <div> 
         {/* <Navbar username ={username} showWatchlist ={showWatchlist} />  */}
-        <Datatable userRoles={userRoles}/>
+        <Datatable/>
         <Footer/>  
     </div>
         )
