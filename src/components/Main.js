@@ -1,22 +1,27 @@
-    import react from "react"
-    import Datatable from "./Datatable"
-    import Navbar from "./Navbar"
-    import Footer from "./Footer"
-    import NextComponents from "./NextComponents"
-    import {BrowserRouter as  Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import react, { Suspense } from "react";
+import Datatable from "./Datatable";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
-    const Main = ({username , showWatchlist , userRoles}) =>{
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  BrowserRouter,
+} from "react-router-dom";
+import UserContext from "../context/UserContext";
 
-        return(
-    <div> 
-        {/* <Navbar username ={username} showWatchlist ={showWatchlist} />  */}
-        <Datatable userRoles={userRoles}/>
-        <Footer/>  
+const Main = () => {
+  return (
+    <div>
+      {/* <Navbar username ={username} showWatchlist ={showWatchlist} />  */}
+      <Datatable />
+
+      <Footer />
     </div>
-        )
-    }
-    export default Main
-
+  );
+};
+export default Main;
 
 // import React, { useState, useEffect } from "react";
 // import axios from 'axios';
@@ -60,13 +65,13 @@
 //   }, [accounts]);
 
 //   return (
-    
+
 //       <div>
 //         <Navbar username={username} showWatchlist={showWatchlist} />
 //         <Datatable userRoles={userRoles} />
 //         <Footer />
 //       </div>
-    
+
 //   );
 // };
 

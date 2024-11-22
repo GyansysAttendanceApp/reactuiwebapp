@@ -21,7 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-function Watchlist({ username }) {
+function Watchlist() {
   const { instance, accounts } = useMsal();
   const [watchlist, setWatchlist] = useState([]);
   const email = accounts[0].username;
