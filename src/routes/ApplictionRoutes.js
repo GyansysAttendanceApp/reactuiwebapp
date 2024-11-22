@@ -16,6 +16,8 @@ const ApplictionRoutes = ({ userRoles, username }) => {
           <Route path="/" element={<Main />} />
           <Route
             path="/EmpHistory/:empId/:year/:month"
+            // path="/"
+
             element={<EmployeeHistory/>}
           />
           <Route

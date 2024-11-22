@@ -53,7 +53,6 @@ function Datatable() {
 
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
-
   const navigate = useNavigate();
 
   const { showWatchlist } = useContext(UserContext);
@@ -404,23 +403,36 @@ function Datatable() {
           </Grid>
           <Grid item xs={12} sm={6} mt={1}>
             <Box id="searchBox">
-              <Autocomplete
-                fullWidth
-                value={query}
-                onChange={(event, value) => setQuery(value || "")}
-                inputValue={query}
-                onInputChange={(event, newInputValue) => {
-                  setQuery(newInputValue || "");
-                }}
-                options={suggestions}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Search by Employee Name"
-                    variant="outlined"
+              <Grid item xs={12} sm={12}>
+                <Box display={'flex'} gap={2}>
+                  <Autocomplete
+                    fullWidth
+                    value={query}
+                    onChange={(event, value) => setQuery(value || "")}
+                    inputValue={query}
+                    onInputChange={(event, newInputValue) => {
+                      setQuery(newInputValue || "");
+                    }}
+                    options={suggestions}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Search by Employee Name"
+                        variant="outlined"
+                      />
+                    )}
                   />
-                )}
-              />
+                  <TextField
+                    id="year-month-picker"
+                    type="date"
+                    value={""}
+                    onChange={() => {}}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
               <Box mt={2}>
                 <Button
                   variant="contained"
