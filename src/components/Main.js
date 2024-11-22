@@ -15,9 +15,7 @@ const Main = () => {
   return (
     <div>
       {/* <Navbar username ={username} showWatchlist ={showWatchlist} />  */}
-      <Suspense fallback={<div>Loading watchlist...</div>}>
-        <Datatable />
-      </Suspense>
+      <Datatable />
 
       <Footer />
     </div>

@@ -16,15 +16,12 @@ const ApplictionRoutes = ({ userRoles, username }) => {
           <Route path="/" element={<Main />} />
           <Route
             path="/EmpHistory/:empId/:year/:month"
-            // path="/"
 
-            element={<EmployeeHistory/>}
+            element={<EmployeeHistory />}
           />
           <Route
             path="/watchlist"
-            element={ <Suspense fallback={<div>Loading watchlist...</div>}>
-            <Watchlist username={username} />
-          </Suspense>}
+            element={<Watchlist username={username} />}
           />
           <Route
             path="/watchlistform"
