@@ -28,6 +28,8 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useMsal } from "@azure/msal-react";
 import UserContext from "../context/UserContext";
+import DateComponent from "./common/DateComponent";
+import dayjs from "dayjs";
 
 function Datatable() {
   const { instance, accounts } = useMsal();
@@ -50,6 +52,18 @@ function Datatable() {
   // const [showWatchlist, setShowWatchlist] = useState(false);
 
   const [watchlist, setWatchlist] = useState([]);
+  const [selectedWatchListDate, setSelectedWatchListDate] = useState(
+    dayjs(new Date())
+  );
+  const [selectedFormatedWatchListDate, setSelectedFormatedWatchListDate] = useState(
+    dayjs(new Date()).format('YYYY-MM-DD')
+  );
+
+  const handleSelectedWatchListDate = (event) => {
+    setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
+    setSelectedWatchListDate(event)
+    console.log('date is',dayjs(event).format('DD-MM-YYYY'));
+  };
 
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
@@ -125,8 +139,8 @@ function Datatable() {
     setDtCurrentDate(dateFormat);
     setCurDate(date);
 
-    fetchDepartmentData(date);
-  }, []);
+    fetchDepartmentData(selectedFormatedWatchListDate);
+  }, [selectedFormatedWatchListDate]);
 
   const fetchDepartmentData = async (date) => {
     try {
@@ -404,33 +418,42 @@ function Datatable() {
           <Grid item xs={12} sm={6} mt={1}>
             <Box id="searchBox">
               <Grid item xs={12} sm={12}>
-                <Box display={'flex'} gap={2}>
-                  <Autocomplete
-                    fullWidth
-                    value={query}
-                    onChange={(event, value) => setQuery(value || "")}
-                    inputValue={query}
-                    onInputChange={(event, newInputValue) => {
-                      setQuery(newInputValue || "");
-                    }}
-                    options={suggestions}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Search by Employee Name"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                  <TextField
-                    id="year-month-picker"
+                <Box display={"flex"} gap={2}>
+                  <Grid item xs={12} sm={9}>
+                    <Autocomplete
+                      fullWidth
+                      value={query}
+                      onChange={(event, value) => setQuery(value || "")}
+                      inputValue={query}
+                      onInputChange={(event, newInputValue) => {
+                        setQuery(newInputValue || "");
+                      }}
+                      options={suggestions}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Search by Employee Name"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <DateComponent
+                      value={selectedWatchListDate}
+                      onchange={(e) => handleSelectedWatchListDate(e)}
+                    />
+                  </Grid>
+
+                  {/* <TextField
+                    id="year-month-picker-uy"
                     type="date"
-                    value={""}
-                    onChange={() => {}}
+                    value={selectedWatchListDate}
+                    onChange={(e)=>handleSelectedWatchListDate(e)}
                     InputLabelProps={{
                       shrink: true,
                     }}
-                  />
+                  /> */}
                 </Box>
               </Grid>
               <Box mt={2}>
