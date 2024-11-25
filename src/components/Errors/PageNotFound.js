@@ -1,7 +1,7 @@
-import React from 'react';
-import { Container, Typography, Button, Box } from '@mui/material';
-import { Link } from 'react-router-dom'; // If you are using React Router for navigation
-import { Home as HomeIcon } from '@mui/icons-material';
+import React from 'react'
+import { Container, Typography, Button, Box } from '@mui/material'
+import { Link } from 'react-router-dom' // If you are using React Router for navigation
+import { Home as HomeIcon } from '@mui/icons-material'
 
 const PageNotFound = () => {
   return (
@@ -12,9 +12,9 @@ const PageNotFound = () => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '85vh',
-    //     textAlign: 'center',
-    //     backgroundColor: '#f5f5f5',
-    //     padding: 3,
+        //     textAlign: 'center',
+        //     backgroundColor: '#f5f5f5',
+        //     padding: 3,
       }}
     >
       <Box
@@ -74,7 +74,7 @@ const PageNotFound = () => {
         </Button>
       </Box>
     </Container>
-  );
-};
+  )
+}
 
-export default PageNotFound;
+export default PageNotFound

@@ -1,25 +1,21 @@
-import React, { useContext, useEffect } from "react";
-import Box from "@mui/material/Box";
+import React, { useContext, useEffect } from 'react'
+import Box from '@mui/material/Box'
 
-import {
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
-  useMsal,
-} from "@azure/msal-react";
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react'
 
-import ApplictionRoutes from "./routes/ApplictionRoutes";
-import Navbar from "./components/common/Navbar";
-import UserContext from "./context/UserContext";
-import MFALogin from "./components/pages/MFALogin";
-import axios from "axios";
-import { Typography } from "@mui/material";
-import { setCssVariables } from "./colors/colorsVariables";
+import ApplictionRoutes from './routes/ApplictionRoutes'
+import Navbar from './components/common/Navbar'
+import UserContext from './context/UserContext'
+import MFALogin from './components/pages/MFALogin'
+import axios from 'axios'
+import { Typography } from '@mui/material'
+import { setCssVariables } from './colors/colorsVariables'
 
 function App() {
-  const { accounts } = useMsal();
-  const { setUserRoles, setShowWatchlist } = useContext(UserContext);
+  const { accounts } = useMsal()
+  const { setUserRoles, setShowWatchlist } = useContext(UserContext)
 
-  const url = process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL;
+  const url = process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL
 
   useEffect(() => {
     if (accounts.length > 0) {
@@ -27,23 +23,21 @@ function App() {
         try {
           const response = await axios.get(`${url}/userroles`, {
             params: { email: accounts[0].username },
-          });
-          const roles = response.data;
-          setUserRoles(roles);
-          const hasAccess = roles.some(
-            (role) => role.RoleID === 1 || role.RoleID === 3
-          );
-          setShowWatchlist(hasAccess);
+          })
+          const roles = response.data
+          setUserRoles(roles)
+          const hasAccess = roles.some((role) => role.RoleID === 1 || role.RoleID === 3)
+          setShowWatchlist(hasAccess)
         } catch (error) {
-          console.error("Error fetching user roles:", error);
+          console.error('Error fetching user roles:', error)
         }
-      };
+      }
 
-      fetchUserRole();
+      fetchUserRole()
     } else {
-      setShowWatchlist(false);
+      setShowWatchlist(false)
     }
-  }, [JSON.stringify(accounts)]);
+  }, [JSON.stringify(accounts)])
 
   return (
     <>
@@ -58,7 +52,7 @@ function App() {
       </UnauthenticatedTemplate>
       {/* <Typography variant="h6">hi I am devendra kumar rathore</Typography> */}
     </>
-  );
+  )
 }
 
-export default App;
+export default App

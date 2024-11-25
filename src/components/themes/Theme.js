@@ -1,5 +1,5 @@
-import { createTheme } from "@mui/material/styles";
-import { colors } from "../../colors/Color";
+import { createTheme } from '@mui/material/styles'
+import { colors } from '../../colors/Color'
 
 const theme = createTheme({
   palette: {
@@ -24,12 +24,12 @@ const theme = createTheme({
     },
 
     background: {
-      default: "#f5f5f5",
-      paper: "#ffffff", 
+      default: '#f5f5f5',
+      paper: '#ffffff',
     },
     text: {
       primary: colors.textColor,
-      secondary: "#777777",
+      secondary: '#777777',
     },
   },
 
@@ -38,47 +38,47 @@ const theme = createTheme({
     // fontSize: "0.875rem",
     // fontWeight: 400,
     h1: {
-      fontSize: "2.5rem",
+      fontSize: '2.5rem',
       fontWeight: 500,
     },
     h2: {
-      fontSize: "2rem",
+      fontSize: '2rem',
       fontWeight: 500,
     },
     h3: {
-      fontSize: "1.75rem",
+      fontSize: '1.75rem',
       fontWeight: 500,
     },
     h4: {
-      fontSize: "1.5rem",
+      fontSize: '1.5rem',
       fontWeight: 500,
     },
     h5: {
-      fontSize: "1.25rem",
+      fontSize: '1.25rem',
       fontWeight: 600,
     },
     h6: {
-      fontSize: "1rem",
+      fontSize: '1rem',
       fontWeight: 600,
     },
     body1: {
-      fontSize: "1rem",
+      fontSize: '1rem',
       fontWeight: 400,
     },
     body2: {
-      fontSize: "0.875rem",
+      fontSize: '0.875rem',
       fontWeight: 400,
     },
     subtitle1: {
-      fontSize: "1rem",
+      fontSize: '1rem',
       fontWeight: 300,
     },
     subtitle2: {
-      fontSize: "0.875rem",
+      fontSize: '0.875rem',
       fontWeight: 300,
     },
     button: {
-      textTransform: "none", // Prevent button text from being capitalized
+      textTransform: 'none', // Prevent button text from being capitalized
     },
   },
 
@@ -119,20 +119,17 @@ const theme = createTheme({
     //   },
     // },
 
-  
-
     MuiTableCell: {
       styleOverrides: {
         root: {
-      padding:'0.6rem'
+          padding: '0.6rem',
         },
         head: {
-          background:'#f0f0f0',
-          padding:'0.8rem'
+          background: '#f0f0f0',
+          padding: '0.8rem',
         },
         body: {
-        
-          padding:'0.4rem'
+          padding: '0.4rem',
         },
       },
     },
@@ -140,9 +137,9 @@ const theme = createTheme({
     MuiTableHead: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1670b9",
+          backgroundColor: '#1670b9',
           // padding:'1rem !important',
-          textTransform: "capitalize",
+          textTransform: 'capitalize',
         },
       },
     },
@@ -160,13 +157,13 @@ const theme = createTheme({
     MuiTableSortLabel: {
       styleOverrides: {
         root: {
-          "&.Mui-active": {
-            color: "#1670b9", // Custom primary color when active
+          '&.Mui-active': {
+            color: '#1670b9', // Custom primary color when active
           },
         },
       },
     },
   },
-});
+})
 
-export default theme;
+export default theme

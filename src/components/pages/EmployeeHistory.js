@@ -1,89 +1,85 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
-import Footer from "../common/Footer";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Table from "@mui/material/Table";
-import Tooltip from "@mui/material/Tooltip";
-import TableHead from "@mui/material/TableHead";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { FcOk } from "react-icons/fc";
-import { FcHighPriority } from "react-icons/fc";
-import { useMsal } from "@azure/msal-react";
+import Footer from '../common/Footer'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Table from '@mui/material/Table'
+import Tooltip from '@mui/material/Tooltip'
+import TableHead from '@mui/material/TableHead'
+import TableBody from '@mui/material/TableBody'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import { FcOk } from 'react-icons/fc'
+import { FcHighPriority } from 'react-icons/fc'
+import { useMsal } from '@azure/msal-react'
 
 function EmployeeHistory() {
-  const { empId, year, month } = useParams();
-  const [employeeData, setEmployeeData] = useState([]);
-  const [selectedYearMonth, setSelectedYearMonth] = useState(
-    `${year}-${month}`
-  );
-  const [searchQuery, setSearchQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
-  const navigate = useNavigate();
+  const { empId, year, month } = useParams()
+  const [employeeData, setEmployeeData] = useState([])
+  const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [suggestions, setSuggestions] = useState([])
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchEmployeeHistory = async () => {
       try {
-        const response = await axios.get(
-          `${url}/attendance/${empId}/${year}/${month}`
-        );
-        setEmployeeData(response.data);
+        const response = await axios.get(`${url}/attendance/${empId}/${year}/${month}`)
+        setEmployeeData(response.data)
       } catch (error) {
-        console.error("Error fetching employee history:", error);
+        console.error('Error fetching employee history:', error)
       }
-    };
+    }
 
-    fetchEmployeeHistory();
-  }, [empId, year, month]);
+    fetchEmployeeHistory()
+  }, [empId, year, month])
 
   const handleYearMonthChange = (event) => {
-    const selectedMonth = event.target.value;
-    setSelectedYearMonth(selectedMonth);
-    const [selectedYear, selectedMonthValue] = selectedMonth.split("-");
-    navigate(`/EmpHistory/${empId}/${selectedYear}/${selectedMonthValue}`);
-  };
+    const selectedMonth = event.target.value
+    setSelectedYearMonth(selectedMonth)
+    const [selectedYear, selectedMonthValue] = selectedMonth.split('-')
+    navigate(`/EmpHistory/${empId}/${selectedYear}/${selectedMonthValue}`)
+  }
 
   const handleSearchInputChange = async (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
+    const query = event.target.value
+    setSearchQuery(query)
     try {
-      if (query.trim() === "") {
-        setSuggestions([]);
-        return;
+      if (query.trim() === '') {
+        setSuggestions([])
+        return
       }
-      const response = await axios.get(`${url}/employees?name=${query}`);
-      setSuggestions(response.data);
+      const response = await axios.get(`${url}/employees?name=${query}`)
+      setSuggestions(response.data)
     } catch (error) {
-      console.error("Error fetching suggestions:", error);
+      console.error('Error fetching suggestions:', error)
     }
-  };
+  }
 
   const handleSuggestionClick = (employee) => {
-    setSearchQuery(employee.EmpName);
-    setSuggestions([]);
-  };
+    setSearchQuery(employee.EmpName)
+    setSuggestions([])
+  }
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`${url}/employees?name=${searchQuery}`);
-      const data = response.data;
+      const response = await axios.get(`${url}/employees?name=${searchQuery}`)
+      const data = response.data
       if (data.length > 0) {
-        const empId = data[0].EmpID;
-        navigate(`/EmpHistory/${empId}/${year}/${month}`);
+        const empId = data[0].EmpID
+        navigate(`/EmpHistory/${empId}/${year}/${month}`)
       } else {
-        console.log("Employee not found");
+        console.log('Employee not found')
       }
     } catch (error) {
-      console.error("Error fetching employee:", error);
+      console.error('Error fetching employee:', error)
     }
-  };
+  }
 
   return (
     <>
@@ -100,13 +96,8 @@ function EmployeeHistory() {
           top="0"
           zIndex="100"
         >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            gap="1rem"
-          >
-            <Link to="/" style={{ textDecoration: "none" }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" gap="1rem">
+            <Link to="/" style={{ textDecoration: 'none' }}>
               <Button variant="contained" color="primary">
                 Back to home page
               </Button>
@@ -136,7 +127,7 @@ function EmployeeHistory() {
                 shrink: true,
               }}
               size="small"
-              style={{ minWidth: "150px", backgroundColor: "white" }}
+              style={{ minWidth: '150px', backgroundColor: 'white' }}
             />
             <Box>
               <TextField
@@ -146,9 +137,9 @@ function EmployeeHistory() {
                 variant="outlined"
                 size="small"
                 style={{
-                  marginRight: "8px",
-                  width: "300px",
-                  backgroundColor: "white",
+                  marginRight: '8px',
+                  width: '300px',
+                  backgroundColor: 'white',
                 }}
               />
               <Button variant="contained" onClick={handleSearch}>
@@ -158,13 +149,13 @@ function EmployeeHistory() {
               {suggestions.length > 0 && (
                 <Box
                   style={{
-                    position: "absolute",
-                    backgroundColor: "#fff",
-                    boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.75)",
-                    borderRadius: "5px",
-                    maxHeight: "200px",
-                    overflowY: "auto",
-                    width: "300px",
+                    position: 'absolute',
+                    backgroundColor: '#fff',
+                    boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)',
+                    borderRadius: '5px',
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                    width: '300px',
                   }}
                 >
                   {suggestions.map((employee) => (
@@ -173,8 +164,8 @@ function EmployeeHistory() {
                       fullWidth
                       onClick={() => handleSuggestionClick(employee)}
                       style={{
-                        justifyContent: "flex-start",
-                        textTransform: "none",
+                        justifyContent: 'flex-start',
+                        textTransform: 'none',
                       }}
                     >
                       {employee.EmpName}
@@ -188,12 +179,12 @@ function EmployeeHistory() {
 
         <Box
           sx={{
-            overflowX: "auto",
-            height: "75vh",
+            overflowX: 'auto',
+            height: '75vh',
           }}
         >
           <Table>
-            <TableHead sx={{ position: "sticky", top: 0, background: "white" }}>
+            <TableHead sx={{ position: 'sticky', top: 0, background: 'white' }}>
               <TableRow>
                 <TableCell>
                   <b>Date</b>
@@ -229,17 +220,13 @@ function EmployeeHistory() {
                 <TableRow
                   key={employee.Date}
                   style={{
-                    backgroundColor: employee.IsHoliday ? "#8abec2" : "",
+                    backgroundColor: employee.IsHoliday ? '#8abec2' : '',
                   }}
                 >
                   <TableCell>{employee.AttDateText}</TableCell>
                   <TableCell>{employee.AttDay}</TableCell>
                   <TableCell>
-                    {employee.IsWeekDay
-                      ? employee.IsHoliday
-                        ? "Holiday"
-                        : "Workday"
-                      : "Weekend"}
+                    {employee.IsWeekDay ? (employee.IsHoliday ? 'Holiday' : 'Workday') : 'Weekend'}
                   </TableCell>
                   <TableCell>{employee.EmpName}</TableCell>
                   <TableCell>{employee.DeptName}</TableCell>
@@ -251,20 +238,20 @@ function EmployeeHistory() {
                       employee.HolidayText
                     ) : (
                       <Tooltip
-                        title={employee.FirstIn ? "Present" : "Absent"}
+                        title={employee.FirstIn ? 'Present' : 'Absent'}
                         arrow
                         placement="top"
                       >
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                           {employee.FirstIn ? (
                             <>
                               <FcOk />
-                              <span style={{ marginLeft: "5px" }}></span>
+                              <span style={{ marginLeft: '5px' }}></span>
                             </>
                           ) : (
                             <>
                               <FcHighPriority />
-                              <span style={{ marginLeft: "5px" }}></span>
+                              <span style={{ marginLeft: '5px' }}></span>
                             </>
                           )}
                         </div>
@@ -278,7 +265,7 @@ function EmployeeHistory() {
         </Box>
       </div>
     </>
-  );
+  )
 }
 
-export default EmployeeHistory;
+export default EmployeeHistory
