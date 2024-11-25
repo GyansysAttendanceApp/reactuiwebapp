@@ -360,7 +360,7 @@ function Datatable() {
                         onClick={() => handleSort("TodaysCount")}
                       >
                         <Typography variant="h10" fontWeight="bold">
-                          TODAYS COUNT
+                        REPORTED   COUNT
                         </Typography>
                       </TableSortLabel>
                     </TableCell>
@@ -371,7 +371,7 @@ function Datatable() {
                     </TableCell>
                     <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
                       <Typography variant="h10" fontWeight="bold">
-                        %
+                       ACHIVEMENT  %
                       </Typography>
                     </TableCell>
                   </TableRow>

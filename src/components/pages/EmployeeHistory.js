@@ -90,8 +90,8 @@ function EmployeeHistory() {
         <Box
           bgcolor="#E0E0E0"
           borderBottom="1px solid #ccc"
-          py="8px"
-          px="16px"
+          py="0px"
+          px="10px"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
@@ -99,31 +99,32 @@ function EmployeeHistory() {
            top="64px"
            zIndex="100"
         >
-          <Box>            
-               Attendance History of Employee ID: {empId}            
-          </Box>
-          <Typography variant="h6" fontWeight="bold">       
-          <Link to="/" style={{ textDecoration: "none" }}>
+           <Link to="/" style={{ textDecoration: "none" }}>
             <Button variant="contained" color="primary">
                 Back to home page
               </Button>
               </Link>
+        
+          <Typography variant="h6" fontWeight="bold">       
+    
+          {/* <Box>             */}
+               Attendance History of Employee ID: {empId}            
+          {/* </Box> */}
           </Typography>
-        </Box>
+          {/* </Box> */}
 
         <Box
-          bgcolor="white"
+          // bgcolor="white"
           borderBottom="1px solid #ccc"
-          py="5px"
+          py="6px"
           px="16px"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
           position="sticky"
-           top="120px"
+             top="120px"
             zIndex="100"
-                    
-          
+            gap="16px"
         >
           <TextField
             id="year-month-picker"
@@ -133,6 +134,9 @@ function EmployeeHistory() {
             InputLabelProps={{
               shrink: true,
             }}
+
+             size="small"
+             style={{ minWidth: "150px" , backgroundColor: "white" }}
           />
           <Box>
             <TextField
@@ -140,11 +144,13 @@ function EmployeeHistory() {
               value={searchQuery}
               onChange={handleSearchInputChange}
               variant="outlined"
-              style={{ marginRight: "8px", width: "300px" }}
+               size="small"
+              style={{ marginRight: "8px", width: "300px" , backgroundColor: "white" }}
             />
-            <Button variant="contained" onClick={handleSearch} sx={{  height: "54px" }}>
+            <Button variant="contained" onClick={handleSearch} >
               Search
             </Button>
+            {/* </Box> */}
             {suggestions.length > 0 && (
               <Box
                 style={{
@@ -171,15 +177,22 @@ function EmployeeHistory() {
             )}
           </Box>
         </Box>
+        </Box>
 
-        <Box sx={{
+      <Box sx={{
            overflowX:"auto",
-         //  padding: "8px",
-       //  maxHeight: "calc(100vh - 128px - 48px)",
+          padding: "1px",
+        maxHeight: "calc(100vh - 128px - 48px)",
         }} >
           <Table>
             <TableHead>
-              <TableRow>
+            <TableRow  sx={{
+            position: "sticky",
+            top: 0,
+            backgroundColor: "#E0E0E0", 
+            zIndex: 2, // Ensures it stays above table rows
+          size:"small"
+          }}>
                 <TableCell><b>Date</b></TableCell>
                 <TableCell><b>Day</b></TableCell>
                 <TableCell><b>Type</b></TableCell>

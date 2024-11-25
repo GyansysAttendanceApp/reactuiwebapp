@@ -9,8 +9,10 @@ import EditWatchlistForm from "../components/pages/EditWatchlistForm";
 import Watchlist from "../components/pages/Watchlist";
 // import Watchlistform from "../components/pages/Watchlistform";
 // import EditWatchlistForm from "../components/pages/EditWatchlistForm";
-import PageNotFound from "../components/errors/PageNotFound";
- import ErrorBoundary from "../components/errors/ErrorBoundary";
+// import PageNotFound from "../components/errors/PageNotFound";
+//  import ErrorBoundary from "../components/errors/ErrorBoundary";
+import PageNotFound from "../components/Errors/PageNotFound"
+import ErrorBoundary from "../components/Errors/ErrorBoundary"
 
 const ApplictionRoutes = ({ userRoles, username }) => {
   return (
