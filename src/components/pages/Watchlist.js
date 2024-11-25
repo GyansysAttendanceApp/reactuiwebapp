@@ -137,7 +137,7 @@ function Watchlist() {
           </Link>
         </Box>
 
-        <Box sx={{ overflowX: "auto", width: "95%", margin: "auto", minHeight: "80vh" }}>
+        <Box sx={{ overflowX: "auto", width: "95%", margin: "auto", minHeight: "68vh"}}>
           <Table>
             <TableHead>
               <TableRow>
@@ -173,7 +173,6 @@ function Watchlist() {
           </Table>
         </Box>
       </div>
-      {/* <Footer /> */}
     </>
   );
 }

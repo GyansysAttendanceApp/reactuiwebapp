@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 
-
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
@@ -9,20 +8,21 @@ import {
 } from "@azure/msal-react";
 
 import ApplictionRoutes from "./routes/ApplictionRoutes";
-import Navbar from "./components/common/Navbar" ;
+import Navbar from "./components/common/Navbar";
 import UserContext from "./context/UserContext";
 import MFALogin from "./components/pages/MFALogin";
 import axios from "axios";
+import { Typography } from "@mui/material";
+import { setCssVariables } from "./colors/colorsVariables";
 
 function App() {
-  const {accounts}=useMsal();
-  const {setUserRoles,setShowWatchlist}=useContext(UserContext);
+  const { accounts } = useMsal();
+  const { setUserRoles, setShowWatchlist } = useContext(UserContext);
 
   const url = process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL;
 
   useEffect(() => {
     if (accounts.length > 0) {
-
       const fetchUserRole = async () => {
         try {
           const response = await axios.get(`${url}/userroles`, {
@@ -46,8 +46,8 @@ function App() {
   }, [JSON.stringify(accounts)]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Navbar />
+    <>
+      {/* <Navbar /> */}
       {/* <ApplictionRoutes /> */}
 
       <AuthenticatedTemplate>
@@ -56,7 +56,8 @@ function App() {
       <UnauthenticatedTemplate>
         <MFALogin />
       </UnauthenticatedTemplate>
-    </Box>
+      {/* <Typography variant="h6">hi I am devendra kumar rathore</Typography> */}
+    </>
   );
 }
 

@@ -1,39 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
+import constraints from "../../constraints";
+import "../../style/Footer.scss";
 
 function Footer() {
- const currentYear = new Date().getFullYear();
-  const scrollToSearchBox = () => {
-    const searchBox = document.getElementById("searchBox");
-    searchBox.scrollIntoView({ behavior: "smooth" });
-  };
-
+  const currentYear = new Date().getFullYear();
   return (
-    <div>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          p: 1,      
-          backgroundColor: "#1670b9",
-        }}
-      >
-        <Typography
-          
-          sx={{ fontWeight: "thin",  color: "white" }}
-        >
-        @ Copyright {currentYear} - GyanSys Infotech Pvt Ltd.
-        </Typography>
-      </Box>
-      
-    </div>
+    <Box className="footer_container">
+      <Typography variant="boday2" sx={{ color: "white" }}>
+        {constraints.FOOTER.COPY_RIGHT.TITLE} {currentYear}
+        {constraints.FOOTER.COPY_RIGHT.COMPANY_NAME}
+      </Typography>
+    </Box>
   );
 }
 
 export default Footer;
-
-
-

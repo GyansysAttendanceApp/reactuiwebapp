@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -16,21 +15,25 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import { FcOk } from "react-icons/fc";
 import { FcHighPriority } from "react-icons/fc";
-import { useMsal } from '@azure/msal-react';
+import { useMsal } from "@azure/msal-react";
 
 function EmployeeHistory() {
   const { empId, year, month } = useParams();
   const [employeeData, setEmployeeData] = useState([]);
-  const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`);
+  const [selectedYearMonth, setSelectedYearMonth] = useState(
+    `${year}-${month}`
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployeeHistory = async () => {
       try {
-        const response = await axios.get(`${url}/attendance/${empId}/${year}/${month}`);
+        const response = await axios.get(
+          `${url}/attendance/${empId}/${year}/${month}`
+        );
         setEmployeeData(response.data);
       } catch (error) {
         console.error("Error fetching employee history:", error);
@@ -84,11 +87,9 @@ function EmployeeHistory() {
 
   return (
     <>
-     {/* <Navbar username={username} /> */}
-      <div style={{ minHeight: "calc(100vh - 128px)" }}>
-      
+      <div>
         <Box
-          bgcolor="#E0E0E0"
+          bgcolor="#d9d8d8"
           borderBottom="1px solid #ccc"
           py="0px"
           px="10px"
@@ -96,119 +97,133 @@ function EmployeeHistory() {
           justifyContent="space-between"
           alignItems="center"
           position="sticky"
-           top="64px"
-           zIndex="100"
+          top="0"
+          zIndex="100"
         >
-           <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/" style={{ textDecoration: "none" }}>
             <Button variant="contained" color="primary">
-                Back to home page
-              </Button>
-              </Link>
-        
-          <Typography variant="h6" fontWeight="bold">       
-    
-          {/* <Box>             */}
-               Attendance History of Employee ID: {empId}            
-          {/* </Box> */}
-          </Typography>
-          {/* </Box> */}
+              Back to home page
+            </Button>
+          </Link>
 
-        <Box
-          // bgcolor="white"
-          borderBottom="1px solid #ccc"
-          py="6px"
-          px="16px"
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          position="sticky"
-             top="120px"
+          <Typography variant="h6" fontWeight="bold">
+            Attendance History of Employee ID: {empId}
+          </Typography>
+
+          <Box
+            padding="0.7rem 0"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            position="sticky"
+            top="0px"
             zIndex="100"
             gap="16px"
-        >
-          <TextField
-            id="year-month-picker"
-            type="month"
-            value={selectedYearMonth}
-            onChange={handleYearMonthChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-
-             size="small"
-             style={{ minWidth: "150px" , backgroundColor: "white" }}
-          />
-          <Box>
+          >
             <TextField
-              label="Search by Employee name"
-              value={searchQuery}
-              onChange={handleSearchInputChange}
-              variant="outlined"
-               size="small"
-              style={{ marginRight: "8px", width: "300px" , backgroundColor: "white" }}
+              id="year-month-picker"
+              type="month"
+              value={selectedYearMonth}
+              onChange={handleYearMonthChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              size="small"
+              style={{ minWidth: "150px", backgroundColor: "white" }}
             />
-            <Button variant="contained" onClick={handleSearch} >
-              Search
-            </Button>
-            {/* </Box> */}
-            {suggestions.length > 0 && (
-              <Box
+            <Box>
+              <TextField
+                label="Search by Employee name"
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                variant="outlined"
+                size="small"
                 style={{
-                  position: "absolute",
-                  backgroundColor: "#fff",
-                  boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.75)",
-                  borderRadius: "5px",
-                  maxHeight: "200px",
-                  overflowY: "auto",
+                  marginRight: "8px",
                   width: "300px",
+                  backgroundColor: "white",
                 }}
-              >
-                {suggestions.map((employee) => (
-                  <Button
-                    key={employee.EmpID}
-                    fullWidth
-                    onClick={() => handleSuggestionClick(employee)}
-                    style={{ justifyContent: "flex-start", textTransform: "none" }}
-                  >
-                    {employee.EmpName}
-                  </Button>
-                ))}
-              </Box>
-            )}
+              />
+              <Button variant="contained" onClick={handleSearch}>
+                Search
+              </Button>
+              {/* </Box> */}
+              {suggestions.length > 0 && (
+                <Box
+                  style={{
+                    position: "absolute",
+                    backgroundColor: "#fff",
+                    boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.75)",
+                    borderRadius: "5px",
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                    width: "300px",
+                  }}
+                >
+                  {suggestions.map((employee) => (
+                    <Button
+                      key={employee.EmpID}
+                      fullWidth
+                      onClick={() => handleSuggestionClick(employee)}
+                      style={{
+                        justifyContent: "flex-start",
+                        textTransform: "none",
+                      }}
+                    >
+                      {employee.EmpName}
+                    </Button>
+                  ))}
+                </Box>
+              )}
+            </Box>
           </Box>
         </Box>
-        </Box>
 
-      <Box sx={{
-           overflowX:"auto",
-          padding: "1px",
-        maxHeight: "calc(100vh - 128px - 48px)",
-        }} >
+        <Box
+          sx={{
+            overflowX: "auto",
+            height: "75vh",
+          }}
+        >
           <Table>
-            <TableHead>
-            <TableRow  sx={{
-            position: "sticky",
-            top: 0,
-            backgroundColor: "#E0E0E0", 
-            zIndex: 2, // Ensures it stays above table rows
-          size:"small"
-          }}>
-                <TableCell><b>Date</b></TableCell>
-                <TableCell><b>Day</b></TableCell>
-                <TableCell><b>Type</b></TableCell>
-                <TableCell><b>Emp Name</b></TableCell>
-                <TableCell><b>Department</b></TableCell>
-                <TableCell><b>First In</b></TableCell>
-                <TableCell><b>Last Out</b></TableCell>
-                <TableCell><b>Duration</b></TableCell>
-                <TableCell><b>Remarks</b></TableCell>
+            <TableHead sx={{ position: "sticky", top: 0, background: "white" }}>
+              <TableRow>
+                <TableCell>
+                  <b>Date</b>
+                </TableCell>
+                <TableCell>
+                  <b>Day</b>
+                </TableCell>
+                <TableCell>
+                  <b>Type</b>
+                </TableCell>
+                <TableCell>
+                  <b>Emp Name</b>
+                </TableCell>
+                <TableCell>
+                  <b>Department</b>
+                </TableCell>
+                <TableCell>
+                  <b>First In</b>
+                </TableCell>
+                <TableCell>
+                  <b>Last Out</b>
+                </TableCell>
+                <TableCell>
+                  <b>Duration</b>
+                </TableCell>
+                <TableCell>
+                  <b>Remarks</b>
+                </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody sx={{}}>
               {employeeData.map((employee) => (
                 <TableRow
                   key={employee.Date}
-                  style={{ backgroundColor: employee.IsHoliday ? "#8abec2" : "" }}
+                  style={{
+                    backgroundColor: employee.IsHoliday ? "#8abec2" : "",
+                  }}
                 >
                   <TableCell>{employee.AttDateText}</TableCell>
                   <TableCell>{employee.AttDay}</TableCell>
@@ -255,39 +270,8 @@ function EmployeeHistory() {
           </Table>
         </Box>
       </div>
-      {/* <Footer style={{ position: "fixed", bottom: "0", width: "100%" }} /> */}
     </>
   );
 }
 
 export default EmployeeHistory;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

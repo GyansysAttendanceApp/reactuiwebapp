@@ -30,7 +30,9 @@ import { useMsal } from "@azure/msal-react";
 import UserContext from "../../context/UserContext";
 import DateComponent from "../common/DateComponent";
 import dayjs from "dayjs";
- 
+import constraints from "../../constraints";
+import { CircularProgress } from "@mui/material";
+
 function Datatable() {
   const { instance, accounts } = useMsal();
   console.log(accounts, "datatable");
@@ -49,38 +51,39 @@ function Datatable() {
   const [totalTodaysCount, setTotalTodaysCount] = useState(0);
   const [currentTime, setCurrentTime] = useState(""); // for current time
   const [fetchHistoryError, setFetchHistoryError] = useState("");
+  const [departmentDataLoading, setDepartmentDataLoading] = useState(true);
+  const [employeeDetailsLoading, setEmployeeDetailsLoading] = useState(true);
   // const [showWatchlist, setShowWatchlist] = useState(false);
- 
+
   const [watchlist, setWatchlist] = useState([]);
   const [selectedWatchListDate, setSelectedWatchListDate] = useState(
     dayjs(new Date())
   );
-  const [selectedFormatedWatchListDate, setSelectedFormatedWatchListDate] = useState(
-    dayjs(new Date()).format('YYYY-MM-DD')
-  );
- 
+  const [selectedFormatedWatchListDate, setSelectedFormatedWatchListDate] =
+    useState(dayjs(new Date()).format("YYYY-MM-DD"));
+
   const handleSelectedWatchListDate = (event) => {
-    setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
-    setSelectedWatchListDate(event)
-    console.log('date is',dayjs(event).format('DD-MM-YYYY'));
+    setSelectedFormatedWatchListDate(dayjs(event).format("YYYY-MM-DD"));
+    setSelectedWatchListDate(event);
+    console.log("date is", dayjs(event).format("DD-MM-YYYY"));
   };
- 
+
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
- 
+
   const navigate = useNavigate();
- 
+
   const { showWatchlist } = useContext(UserContext);
- 
+
   // Function to clear errors after 2 seconds
   useEffect(() => {
     const clearErrors = setTimeout(() => {
       setError("");
       setFetchHistoryError("");
     }, 2000);
- 
+
     return () => clearTimeout(clearErrors);
   }, [error, fetchHistoryError]);
- 
+
   // Fetch current time
   useEffect(() => {
     const getCurrentTime = () => {
@@ -90,24 +93,24 @@ function Datatable() {
       const seconds = now.getSeconds().toString().padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
     };
- 
+
     setCurrentTime(getCurrentTime());
   }, []);
- 
+
   const getCurrentDate = () => {
     const today = new Date();
- 
+
     const yyyy = today.getFullYear();
     let mm = today.getMonth() + 1; // Months start at 0!
     let dd = today.getDate();
- 
+
     if (dd < 10) dd = "0" + dd;
     if (mm < 10) mm = "0" + mm;
- 
+
     let formattedDate = `${yyyy}-${mm}-${dd}`;
     return formattedDate;
   };
- 
+
   /// api call for nameSuggestions
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -116,7 +119,7 @@ function Datatable() {
           setSuggestions([]);
           return;
         }
- 
+
         const response = await axios.get(`${url}/employees?name=${query}`);
         const data = response.data;
         console.log(" segg contain dataEMployeeID", data);
@@ -127,10 +130,10 @@ function Datatable() {
         console.error("Error fetching suggestions:", error);
       }
     };
- 
+
     fetchSuggestions();
   }, [query]);
- 
+
   useEffect(() => {
     //const date = "2024-11-15"; // it may work in local to fetch the data while deploying we need to commit this one
     const date = getCurrentDate(); // this one we need to uncommit while deploying to get the current data and it start working
@@ -138,27 +141,35 @@ function Datatable() {
     const dateFormat = formattedDateDate.toDateString();
     setDtCurrentDate(dateFormat);
     setCurDate(date);
- 
+    setDepartmentData([]);
+
     fetchDepartmentData(selectedFormatedWatchListDate);
   }, [selectedFormatedWatchListDate]);
- 
+
   const fetchDepartmentData = async (date) => {
     try {
+      setDepartmentDataLoading(true);
+
       const response = await axios.get(`${url}/dept?date=${date}`);
       setDepartmentData(response.data);
+      setDepartmentDataLoading(false);
     } catch (error) {
+      setDepartmentDataLoading(false);
+
       console.error("Error fetching department data:", error);
     }
   };
- 
+
   const handleSearch = async () => {
     try {
       if (!query) {
         setError("Please enter a username.");
+        setEmployeeDetailsLoading(false);
         return;
       }
- 
+
       if (masterData.length > 0) {
+        setEmployeeDetailsLoading(true);
         const response = await axios.get(
           `${url}/attendance/${masterData[0].EmpID}/${selectedFormatedWatchListDate}`
         );
@@ -166,25 +177,30 @@ function Datatable() {
         if (result && result.length > 0) {
           setSelectedItem(result[0]);
           setSelectedItemAllEntries(result);
+          setEmployeeDetailsLoading(false);
         } else {
           setSelectedItem(null);
           setSelectedItemAllEntries([]);
+          setEmployeeDetailsLoading(false);
         }
       } else {
         setError("Employee not found!");
       }
     } catch (error) {
       console.error("Error searching employees:", error);
+      setEmployeeDetailsLoading(false);
     }
   };
- 
+
   const handleReset = () => {
     setQuery("");
     setSelectedItem(null);
     setSelectedItemAllEntries(null);
   };
- 
+
   const handleFetchHistory = () => {
+    console.log("calling fetch logic :::::::::");
+
     if (!masterData || masterData.length === 0) {
       setFetchHistoryError("Please Enter a name first.");
     } else {
@@ -194,7 +210,7 @@ function Datatable() {
       navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`);
     }
   };
- 
+
   const handleSort = (column) => {
     const newSortOrder = {
       column: column,
@@ -203,9 +219,9 @@ function Datatable() {
           ? "desc"
           : "asc",
     };
- 
+
     setSortOrder(newSortOrder);
- 
+
     const sortedData = [...departmentData].sort((a, b) => {
       if (newSortOrder.direction === "asc") {
         return a[column] - b[column];
@@ -213,10 +229,10 @@ function Datatable() {
         return b[column] - a[column];
       }
     });
- 
+
     setDepartmentData(sortedData);
   };
- 
+
   const calculateExpectedTotalCount = () => {
     let totalExpectedCount = 0;
     departmentData.forEach((department) => {
@@ -224,7 +240,7 @@ function Datatable() {
     });
     return totalExpectedCount;
   };
- 
+
   const calculateTodaysTotalCount = () => {
     let totalTodaysCount = 0;
     departmentData.forEach((department) => {
@@ -232,20 +248,20 @@ function Datatable() {
     });
     return totalTodaysCount;
   };
- 
+
   useEffect(() => {
     setTotalExpectedCount(calculateExpectedTotalCount());
   }, [departmentData]);
- 
+
   useEffect(() => {
     setTotalTodaysCount(calculateTodaysTotalCount());
   }, [departmentData]);
- 
+
   // Function to calculate percentage
   const calculatePercentage = (expected, today) => {
     return expected !== 0 ? ((today / expected) * 100).toFixed() : 0;
   };
- 
+
   // Group watchlist Names by WatchListName
   const groupedWatchlist =
     watchlist.length &&
@@ -256,7 +272,7 @@ function Datatable() {
       acc[curr.WatchListName].push(curr);
       return acc;
     }, {});
- 
+
   // This API is show and hide the watchlist
   // useEffect(() => {
   //   const fetchUserRole = async () => {
@@ -272,12 +288,12 @@ function Datatable() {
   //       console.error("Error fetching user roles: ", error);
   //     }
   //   };
- 
+
   //   if (accounts[0]?.username) {
   //     fetchUserRole();
   //   }
   // }, [accounts]);
- 
+
   // useEffect(() => {
   //   if (userRoles && userRoles.length > 0) {
   //     // if (userRoles.length > 0) {
@@ -287,7 +303,7 @@ function Datatable() {
   //     setShowWatchlist(hasAccess);
   //   }
   // }, [userRoles]);
- 
+
   // Function to fetch watchlist data from the API
   useEffect(() => {
     const fetchWatchlistData = async () => {
@@ -295,7 +311,9 @@ function Datatable() {
         const date = getCurrentDate();
         const email = accounts[0].username;
         console.log("getwatchlist data in datatable API", email);
-        const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
+        const response = await fetch(
+          `${url}/watchlist/${email}/${selectedFormatedWatchListDate}`
+        );
         const data = await response.json();
         console.log("getwatchlist data in datatable API", data);
         setWatchlist(data);
@@ -304,37 +322,47 @@ function Datatable() {
       }
     };
     fetchWatchlistData();
-  }, [accounts,selectedFormatedWatchListDate]);
- 
+    setSelectedItem(null);
+    setSelectedItemAllEntries([]);
+    handleSearch();
+    // handleFetchHistory();
+  }, [accounts, selectedFormatedWatchListDate]);
+
   return (
-    <Box sx={{ flexGrow: 1, minHeight: "80vh" }}>
-      <Paper elevation={3} sx={{ p: 1 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: "bold",
-            padding: "8px",
-            backgroundColor: "#D6EEEE",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          Today's attendance count: {totalTodaysCount} / {totalExpectedCount}{" "}
-          as on {selectedFormatedWatchListDate} 
-        </Typography>
+    <Box>
+      {/* <Paper elevation={3} sx={{ p: 1 }}> */}
+      <Typography
+        variant="body1"
+        sx={{
+          fontWeight: "bold",
+          padding: "8px",
+          backgroundColor: "#D6EEEE",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {constraints.DATATABLE.ATTENDANCE_COUNT} {totalTodaysCount} /{" "}
+        {totalExpectedCount} {constraints.DATATABLE.AS_ON}{" "}
+        {selectedFormatedWatchListDate}
+      </Typography>
+      <Box style={{ padding: "0.5vh 0.5vw 0 0.5vw" }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <TableContainer component={Paper}>
+            <TableContainer
+              component={Paper}
+              sx={{ maxHeight: "77vh", overflow: "none" }}
+              ś
+            >
               <Table>
-                <TableHead>
+                <TableHead sx={{ position: "sticky", top: 0 }}>
                   <TableRow>
-                    <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
-                      <Typography variant="h10" fontWeight="bold">
-                        DEPARTMENT NAME
+                    <TableCell>
+                      <Typography variant="body2" fontWeight="bold">
+                        {constraints.DATATABLE.DEPARTMENT_NAME}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
+                    <TableCell>
                       <TableSortLabel
                         active={sortOrder.column == "ExpectedCount"}
                         direction={
@@ -344,12 +372,12 @@ function Datatable() {
                         }
                         onClick={() => handleSort("ExpectedCount")}
                       >
-                        <Typography variant="h10" fontWeight="bold">
-                          EXPECTED COUNT
+                        <Typography variant="body2" fontWeight="bold">
+                          {constraints.DATATABLE.EXPECTED_COUNT}
                         </Typography>
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
+                    <TableCell>
                       <TableSortLabel
                         active={sortOrder.column == "TodaysCount"}
                         direction={
@@ -359,51 +387,107 @@ function Datatable() {
                         }
                         onClick={() => handleSort("TodaysCount")}
                       >
-                        <Typography variant="h10" fontWeight="bold">
-                        REPORTED   COUNT
+                        <Typography variant="body2" fontWeight="bold">
+                          {constraints.DATATABLE.REPORTED_COUNT}
                         </Typography>
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
-                      <Typography variant="h10" fontWeight="bold">
-                        ABSENT COUNT
+                    <TableCell>
+                      <Typography variant="body2" fontWeight="bold">
+                        {constraints.DATATABLE.ABSENT_COUNT}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ backgroundColor: "#f0f0f0" }}>
-                      <Typography variant="h10" fontWeight="bold">
-                       ACHIVEMENT  %
+                    <TableCell>
+                      <Typography variant="body2" fontWeight="bold">
+                        {constraints.DATATABLE.ACHIVEMENT_PERCENTAGE}
                       </Typography>
                     </TableCell>
                   </TableRow>
                 </TableHead>
+
                 <TableBody>
-                  {departmentData.map((department) => (
-                    <TableRow  key={department.EmpID}>
-                      <TableCell style={{height:"2vh"}}>{department.DeptName}</TableCell>
-                      <TableCell style={{height:"2vh"}}>{department.ExpectedCount}</TableCell>
-                      <TableCell style={{height:"2vh"}}>{department.TodaysCount}</TableCell>
-                      <TableCell style={{height:"2vh"}}>
-                        {parseInt(department.ExpectedCount) -
-                          parseInt(department.TodaysCount)}
-                      </TableCell>
-                      <TableCell style={{height:"2vh"}}>
-                        {calculatePercentage(
-                          parseInt(department.ExpectedCount),
-                          parseInt(department.TodaysCount)
-                        )}
-                        %
+                  {departmentData &&
+                    departmentData.map((department) => (
+                      <TableRow key={department.EmpID}>
+                        <TableCell style={{ height: "1vh", padding: "0.5rem" }}>
+                          {department.DeptName}
+                        </TableCell>
+                        <TableCell style={{ height: "1vh", padding: "0.5rem" }}>
+                          {department.ExpectedCount}
+                        </TableCell>
+                        <TableCell style={{ height: "1vh", padding: "0.5rem" }}>
+                          {department.TodaysCount}
+                        </TableCell>
+                        <TableCell style={{ height: "1vh", padding: "0.5rem" }}>
+                          {parseInt(department.ExpectedCount) -
+                            parseInt(department.TodaysCount)}
+                        </TableCell>
+                        <TableCell style={{ height: "1vh", padding: "0.5rem" }}>
+                          {calculatePercentage(
+                            parseInt(department.ExpectedCount),
+                            parseInt(department.TodaysCount)
+                          )}
+                          %
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  {departmentDataLoading && (
+                    <TableRow>
+                      <TableCell colSpan={5}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            minHeight: "20vh",
+                            alignItems: "center",
+                            // background: "red",
+                          }}
+                        >
+                          <CircularProgress />
+                        </Box>
                       </TableCell>
                     </TableRow>
-                  ))}
-                  <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
-                    <TableCell>Total</TableCell>
-                    <TableCell>{totalExpectedCount}</TableCell>
-                    <TableCell>{totalTodaysCount}</TableCell>
-                    <TableCell>
+                  )}
+                  {!departmentDataLoading && departmentData.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={5}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            minHeight: "20vh",
+                            alignItems: "center",
+                            // background: "red",
+                          }}
+                        >
+                          <Typography variant="body1">
+                            {constraints.DATATABLE.NO_DATA_FOUND}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  <TableRow
+                    sx={{
+                      position: "sticky",
+                      bottom: "-1px",
+                      backgroundColor: "#f0f0f0",
+                    }}
+                  >
+                    <TableCell sx={{ height: "1vh", padding: "0.5rem" }}>
+                      Total
+                    </TableCell>
+                    <TableCell sx={{ height: "1vh", padding: "0.5rem" }}>
+                      {totalExpectedCount}
+                    </TableCell>
+                    <TableCell sx={{ height: "1vh", padding: "0.5rem" }}>
+                      {totalTodaysCount}
+                    </TableCell>
+                    <TableCell sx={{ height: "1vh", padding: "0.5rem" }}>
                       {parseInt(totalExpectedCount) -
                         parseInt(totalTodaysCount)}
                     </TableCell>
-                    <TableCell>
+                    <TableCell sx={{ height: "1vh", padding: "0.5rem" }}>
                       {calculatePercentage(
                         totalExpectedCount,
                         totalTodaysCount
@@ -415,67 +499,52 @@ function Datatable() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid item xs={12} sm={6} mt={1}>
+          <Grid item xs={12} sm={6}>
             <Box id="searchBox">
-              <Grid item xs={12} sm={12}>
-                <Box display={"flex"} gap={2}>
-                  <Grid item xs={12} sm={9}>
-                    <Autocomplete
-                      fullWidth
-                      value={query}
-                      onChange={(event, value) => setQuery(value || "")}
-                      inputValue={query}
-                      onInputChange={(event, newInputValue) => {
-                        setQuery(newInputValue || "");
-                      }}
-                      options={suggestions}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Search by Employee Name"
-                          variant="outlined"
-                        />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <DateComponent
-                      value={selectedWatchListDate}
-                      onchange={(e) => handleSelectedWatchListDate(e)}
-                    />
-                  </Grid>
- 
-                  {/* <TextField
-                    id="year-month-picker-uy"
-                    type="date"
-                    value={selectedWatchListDate}
-                    onChange={(e)=>handleSelectedWatchListDate(e)}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  /> */}
+              <Paper sx={{ padding: "0.8rem" }}>
+                <Grid item xs={12} sm={12}>
+                  <Box display={"flex"} gap={2}>
+                    <Grid item xs={12} sm={9}>
+                      <Autocomplete
+                        fullWidth
+                        value={query}
+                        onChange={(event, value) => setQuery(value || "")}
+                        inputValue={query}
+                        onInputChange={(event, newInputValue) => {
+                          setQuery(newInputValue || "");
+                        }}
+                        options={suggestions}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={constraints.DATATABLE.SEARCH.LABEL}
+                            variant="outlined"
+                            size="small"
+                          />
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <DateComponent
+                        value={selectedWatchListDate}
+                        onchange={(e) => handleSelectedWatchListDate(e)}
+                      />
+                    </Grid>
+                  </Box>
+                </Grid>
+
+                <Box mt={2} display={"flex"} gap={"0.8rem"}>
+                  <Button variant="contained" onClick={handleSearch}>
+                    {constraints.DATATABLE.BUTTON.FETCH}
+                  </Button>
+                  <Button variant="contained" onClick={handleFetchHistory}>
+                    {constraints.DATATABLE.BUTTON.FETCH_HISTORY}
+                  </Button>
+                  <Button variant="contained" onClick={handleReset}>
+                    {constraints.DATATABLE.BUTTON.CLEAR}
+                  </Button>
                 </Box>
-              </Grid>
-              <Box mt={2}>
-                <Button
-                  variant="contained"
-                  onClick={handleSearch}
-                  sx={{ mr: 1 }}
-                >
-                  Fetch
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={handleFetchHistory}
-                  sx={{ mr: 1 }}
-                >
-                  FETCH HISTORY
-                </Button>{" "}
-                &nbsp;
-                <Button variant="contained" onClick={handleReset}>
-                  Clear
-                </Button>
-              </Box>
+              </Paper>
             </Box>
             <Box mt={2}>
               {selectedItem ? (
@@ -489,7 +558,7 @@ function Datatable() {
                         : "#90EE90",
                   }}
                 >
-                  <CardContent>
+                  <CardContent sx={{ overflow: "auto", maxHeight: "54vh" }}>
                     <Typography variant="h6">Search Result</Typography>
                     <Box display="flex" alignItems="center">
                       {selectedItem.EmpGender === "Male" ? (
@@ -582,6 +651,19 @@ function Datatable() {
                   )}
                 </>
               )}
+              {employeeDetailsLoading && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    minHeight: "20vh",
+                    alignItems: "center",
+                    // background: "red",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              )}
             </Box>
             {showWatchlist && (
               <Box mt={2}>
@@ -592,8 +674,8 @@ function Datatable() {
                     id="panel1a-header"
                     sx={{ backgroundColor: "#5DADE2" }}
                   >
-                    <Typography sx={{ color: "#FFFFFF" }}>
-                      <b>WATCH LISTS</b>
+                    <Typography variant="h5" sx={{ color: "#FFFFFF" }}>
+                      {constraints.DATATABLE.WATCH_LIST.TITLE}
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
@@ -621,13 +703,28 @@ function Datatable() {
                                   <TableHead>
                                     <TableRow>
                                       <TableCell>
-                                        <b>Employee Name</b>
+                                        <Typography variant="h6">
+                                          {
+                                            constraints.DATATABLE.WATCH_LIST
+                                              .EMPLOYEE_NAME
+                                          }
+                                        </Typography>
                                       </TableCell>
                                       <TableCell align="right">
-                                        <b>In Time</b>
+                                        <Typography variant="h6">
+                                          {
+                                            constraints.DATATABLE.WATCH_LIST
+                                              .IN_TIME
+                                          }
+                                        </Typography>
                                       </TableCell>
                                       <TableCell align="right">
-                                        <b>Out Time</b>
+                                        <Typography variant="h6">
+                                          {
+                                            constraints.DATATABLE.WATCH_LIST
+                                              .OUT_TIME
+                                          }
+                                        </Typography>
                                       </TableCell>
                                     </TableRow>
                                   </TableHead>
@@ -676,9 +773,10 @@ function Datatable() {
             )}
           </Grid>
         </Grid>
-      </Paper>
+        {/* </Paper> */}
+      </Box>
     </Box>
   );
 }
- 
+
 export default Datatable;

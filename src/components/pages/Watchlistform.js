@@ -174,7 +174,7 @@ function Watchlistform({ username }) {
         <Typography variant="h6">Watch List Maintenance</Typography>
       </Box>
 
-      <Box px={2} pt={2} textAlign="" minHeight="calc(100vh - 128px)">
+      <Box px={2} pt={2}>
         <Typography variant="h5" gutterBottom>
           New Watchlist Creation
         </Typography>
@@ -304,9 +304,6 @@ function Watchlistform({ username }) {
           </Box>
         </Box>
       </Box>
-{/* 
-      <Footer /> */}
-
     </>
   );
 }

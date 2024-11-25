@@ -210,7 +210,6 @@ const validateForm = () => {
             </Box>
     </form>
   </Box>
-  {/* <Footer /> */}
 </>
 );
 }

@@ -10,12 +10,15 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
+import { useTheme } from "@mui/material/styles";
+import "../../style/Navbar.scss";
+import constraints from "../../constraints";
 
 function Navbar() {
-  const { instance, accounts } = useMsal();
-
+  const { accounts } = useMsal();
   const { user, showWatchlist } = useContext(UserContext);
-  const userName =( user || (accounts[0] && accounts[0].name));
+  const userName = user || (accounts[0] && accounts[0].name);
+  const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
@@ -29,34 +32,16 @@ function Navbar() {
     setAnchorEl(null);
   };
 
-  const handleLoginRedirect = () => {
-    instance.loginRedirect();
-  };
-
-  const handleLogoutRedirect = () => {
-    instance.logout();
-  };
-
   return (
-    <div style={{ position: "sticky", top: 0, zIndex: 100 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "20px",
-          backgroundColor: "#1670b9",
-          color: "white",
-        }}
-      >
-      <div style={{display:"flex" , alignItems:"center" ,gap:"10px"}}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", cursor: "pointer" }}>
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
-            GyanSys India - Attendance Tracker
-          </Link>
-        </Typography>
-        {/* <Box> */}
-          <IconButton
+    <div className="navbar">
+      <Box className="navbar-container">
+       <Box className='navbar-left-header'>
+       <Link to="/" className="navbar-link">
+          <Typography variant="h5" className="navbar-title">
+            {constraints.NAVBAR.TITLE}
+          </Typography>
+        </Link>
+        <IconButton
             color="inherit"
             onClick={handleMenuClick}
        
@@ -94,47 +79,22 @@ function Navbar() {
               </Link>
             </MenuItem>
           </Menu>
-         </div>
-        {/* </Box> */}
-  
-        {/* <Typography sx={{display:"flex" , alignItems:"center" ,}}>
-          <AdminPanelSettingsIcon/>Admin
-        </Typography> */}
-        
-
-        <div style={{ display: "flex", alignItems: "center" }}>
+       </Box>
+        <div className="navbar-actions">
           {showWatchlist && (
-            <Link
-              to="/watchlist"
-              style={{
-                textDecoration: "none",
-                color: "white",
-                marginRight: "20px",
-              }}
-            >
-              <Tooltip title="Watch List">
-                <PersonSearchOutlinedIcon />
+            <Link to="/watchlist" className="navbar-link">
+              <Tooltip title="Watch List" className="navbar-tooltip">
+                <PersonSearchOutlinedIcon className="navbar-icon" />
               </Tooltip>
             </Link>
           )}
           {userName && (
             <>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  color: "white",
-                  marginRight: "20px",
-                }}
-              >
+              <Typography variant="h6" className="navbar-username">
                 {userName}
               </Typography>
             </>
           )}
-          {/* {!username && (
-            <button onClick={handleLoginRedirect}>Login</button>
-          )} */}
         </div>
       </Box>
     </div>
