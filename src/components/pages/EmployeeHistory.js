@@ -100,15 +100,22 @@ function EmployeeHistory() {
           top="0"
           zIndex="100"
         >
-          <Link to="/" style={{ textDecoration: "none" }}>
-            <Button variant="contained" color="primary">
-              Back to home page
-            </Button>
-          </Link>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            gap="1rem"
+          >
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <Button variant="contained" color="primary">
+                Back to home page
+              </Button>
+            </Link>
 
-          <Typography variant="h6" fontWeight="bold">
-            Attendance History of Employee ID: {empId}
-          </Typography>
+            <Typography variant="h6" fontWeight="bold">
+              Attendance History of Employee ID: {empId}
+            </Typography>
+          </Box>
 
           <Box
             padding="0.7rem 0"
