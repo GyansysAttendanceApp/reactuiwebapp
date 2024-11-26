@@ -40,8 +40,7 @@ function App() {
   }, [JSON.stringify(accounts)])
 
   return (
-    <>
-      {/* <Navbar /> */}
+    <>     
       {/* <ApplictionRoutes /> */}
 
       <AuthenticatedTemplate>
@@ -49,8 +48,7 @@ function App() {
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <MFALogin />
-      </UnauthenticatedTemplate>
-      {/* <Typography variant="h6">hi I am devendra kumar rathore</Typography> */}
+      </UnauthenticatedTemplate>     
     </>
   )
 }
