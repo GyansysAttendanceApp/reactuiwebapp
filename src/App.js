@@ -12,6 +12,7 @@ import { Typography } from '@mui/material'
 import { setCssVariables } from './colors/colorsVariables'
 import Layout from './components/common/Layout'
 
+
 function App() {
   const { accounts } = useMsal()
   const { setUserRoles, setShowWatchlist } = useContext(UserContext)
@@ -41,20 +42,18 @@ function App() {
   }, [JSON.stringify(accounts)])
 
   return (
-    <>
-      {/* <Navbar /> */}
-      {/* <ApplictionRoutes /> */}
-      <Layout>
-        <AuthenticatedTemplate>
+    <> 
+    <Layout>      
           <ApplictionRoutes />
-        </AuthenticatedTemplate>
-        {/* <UnauthenticatedTemplate>
-          <MFALogin />
-        </UnauthenticatedTemplate> */}
-      </Layout>
 
-      {/* <Typography variant="h6">hi I am devendra kumar rathore</Typography> */}
-    </>
+          {/* <AuthenticatedTemplate>
+            <ApplictionRoutes />
+          </AuthenticatedTemplate>
+          <UnauthenticatedTemplate>
+            <MFALogin />
+          </UnauthenticatedTemplate>      */}
+      </Layout>    
+    </>    
   )
 }
 

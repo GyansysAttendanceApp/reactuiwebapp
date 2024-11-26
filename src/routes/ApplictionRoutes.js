@@ -13,18 +13,22 @@ const ApplictionRoutes = () => {
   const { user: username, userRoles } = useContext(UserContext)
   return (
     <>
-      <ErrorBoundary>
-        <Routes>
-          <Route path="/" element={<Datatable />} />
-          <Route path="/EmpHistory/:empId/:year/:month" element={<EmployeeHistory />} />
-          <Route path="/watchlist" element={<Watchlist username={username} />} />
-          <Route
-            path="/watchlistform"
-            element={<Watchlistform username={username} userRoles={userRoles} />}
-          />
-          <Route path="/watchlistform/:id" element={<EditWatchlistForm username={username} />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
+      <ErrorBoundary>       
+          <Routes>
+            <Route path="/" element={<Datatable />} />
+            <Route path="/EmpHistory/:empId/:year/:month" element={<EmployeeHistory />} />
+            <Route
+              // path="/"
+              path="/watchlist"
+              element={<Watchlist username={username} />}
+            />
+            <Route
+              path="/watchlistform"
+              element={<Watchlistform username={username} userRoles={userRoles} />}
+            />
+            <Route path="/watchlistform/:id" element={<EditWatchlistForm username={username} />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>       
       </ErrorBoundary>
     </>
   )
