@@ -1,0 +1,52 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 10vh;
+  background-color: var(--primary-color);
+  color: var(--text-light-color);
+  .navbar-left-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: white;
+}
+
+.navbar-title {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-username {
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  margin-right: 20px;
+}
+
+.navbar-icon {
+  color: white;
+  margin-right: 20px;
+}
+
+.navbar-tooltip {
+  display: flex;
+  align-items: center;
+}
