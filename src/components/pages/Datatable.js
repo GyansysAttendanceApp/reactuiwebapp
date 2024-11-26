@@ -520,193 +520,197 @@ function Datatable() {
                 </Box>
               </Paper>
             </Box>
-            <Box mt={2}>
-              {selectedItem ? (
-                <Card
-                  variant="outlined"
-                  sx={{
-                    boxShadow: 2,
-                    bgcolor: selectedItem.SwipeDateTime === 'ABSENT' ? '#f43636d4' : '#90EE90',
-                  }}
-                >
-                  <CardContent sx={{ overflow: 'auto', maxHeight: '54vh' }}>
-                    <Typography variant="h6">Search Result</Typography>
-                    <Box display="flex" alignItems="center">
-                      {selectedItem.EmpGender === 'Male' ? (
-                        <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
-                      ) : (
-                        <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
-                      )}
-                      <Typography>
-                        {selectedItem.EmpName} ({selectedItem.EmpID})
-                      </Typography>
-                    </Box>
-                    <Box display="flex" alignItems="center">
-                      <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
-                      <Typography>
-                        &nbsp;
-                        <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
-                          {selectedItem.EmpEmail}
-                        </a>
-                      </Typography>
-                    </Box>
-                    <Box display="flex" alignItems="center">
-                      <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
-                      <Typography>&nbsp;{selectedItem.DeptName}</Typography>
-                    </Box>
-                    <Box display="flex" alignItems="center">
-                      <PiMicrosoftTeamsLogoFill size={20} sx={{ backgroundColor: '#d6338f' }} />
-                      <Typography>
-                        &nbsp;
-                        <a
-                          href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
-                          target="_blank"
-                        >
-                          Chat
-                        </a>
-                      </Typography>
-                    </Box>
-                    <Box display="flex" alignItems="center">
-                      &nbsp;
-                    </Box>
-                    {selectedItem.SwipeDateTime === 'ABSENT' ? (
+            <Box sx={{ overflow: 'auto', maxHeight: '58.5vh', paddingRight: '0.5rem' }}>
+              <Box mt={2}>
+                {selectedItem ? (
+                  <Card
+                    variant="outlined"
+                    sx={{
+                      boxShadow: 2,
+                      bgcolor: selectedItem.SwipeDateTime === 'ABSENT' ? '#f43636d4' : '#90EE90',
+                    }}
+                  >
+                    <CardContent sx={{ overflow: 'auto', maxHeight: '35vh' }}>
+                      <Typography variant="h6">Search Result</Typography>
                       <Box display="flex" alignItems="center">
-                        <Typography>&nbsp;ABSENT</Typography>
+                        {selectedItem.EmpGender === 'Male' ? (
+                          <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
+                        ) : (
+                          <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
+                        )}
+                        <Typography>
+                          {selectedItem.EmpName} ({selectedItem.EmpID})
+                        </Typography>
                       </Box>
-                    ) : (
-                      <>
+                      <Box display="flex" alignItems="center">
+                        <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
+                        <Typography>
+                          &nbsp;
+                          <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
+                            {selectedItem.EmpEmail}
+                          </a>
+                        </Typography>
+                      </Box>
+                      <Box display="flex" alignItems="center">
+                        <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
+                        <Typography>&nbsp;{selectedItem.DeptName}</Typography>
+                      </Box>
+                      <Box display="flex" alignItems="center">
+                        <PiMicrosoftTeamsLogoFill size={20} sx={{ backgroundColor: '#d6338f' }} />
+                        <Typography>
+                          &nbsp;
+                          <a
+                            href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
+                            target="_blank"
+                          >
+                            Chat
+                          </a>
+                        </Typography>
+                      </Box>
+                      <Box display="flex" alignItems="center">
+                        &nbsp;
+                      </Box>
+                      {selectedItem.SwipeDateTime === 'ABSENT' ? (
                         <Box display="flex" alignItems="center">
-                          <table>
-                            <tbody>
-                              {selectedItemAllEntries.map((item, index) => {
-                                return (
-                                  <tr key={index}>
-                                    <td>
-                                      {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
-                                    </td>
-                                  </tr>
-                                )
-                              })}
-                            </tbody>
-                          </table>
+                          <Typography>&nbsp;ABSENT</Typography>
                         </Box>
-                      </>
-                    )}
-                  </CardContent>
-                </Card>
-              ) : (
-                <>
-                  <Typography variant="body1" color="red">
-                    {error}
-                  </Typography>
-                  {fetchHistoryError && (
-                    <Typography variant="contained" color="error">
-                      {fetchHistoryError}
+                      ) : (
+                        <>
+                          <Box display="flex" alignItems="center">
+                            <table>
+                              <tbody>
+                                {selectedItemAllEntries.map((item, index) => {
+                                  return (
+                                    <tr key={index}>
+                                      <td>
+                                        {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
+                                      </td>
+                                    </tr>
+                                  )
+                                })}
+                              </tbody>
+                            </table>
+                          </Box>
+                        </>
+                      )}
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <>
+                    <Typography variant="body1" color="red">
+                      {error}
                     </Typography>
-                  )}
-                </>
-              )}
-              {employeeDetailsLoading && (
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    minHeight: '20vh',
-                    alignItems: 'center',
-                    // background: "red",
-                  }}
-                >
-                  <CircularProgress />
+                    {fetchHistoryError && (
+                      <Typography variant="contained" color="error">
+                        {fetchHistoryError}
+                      </Typography>
+                    )}
+                  </>
+                )}
+                {employeeDetailsLoading && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      minHeight: '20vh',
+                      alignItems: 'center',
+                      // background: "red",
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                )}
+              </Box>
+              {showWatchlist && (
+                <Box mt={2}>
+                  <Accordion sx={{ backgroundColor: '' }}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                      sx={{ backgroundColor: '#5DADE2' }}
+                    >
+                      <Typography variant="h5" sx={{ color: '#FFFFFF' }}>
+                        {constraints.DATATABLE.WATCH_LIST.TITLE}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box>
+                        {Object.entries(groupedWatchlist).map(
+                          ([watchlistName, employees], index) => (
+                            <Accordion key={index} sx={{ marginBottom: '10px' }} defaultExpanded>
+                              <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls={`${watchlistName}-content`}
+                                id={`${watchlistName}-header`}
+                                sx={{ backgroundColor: '#ECF0F1' }}
+                              >
+                                <Typography>
+                                  <em>{watchlistName}</em>
+                                </Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <TableContainer sx={{ marginTop: '5px' }}>
+                                  <Table>
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell>
+                                          <Typography variant="h6">
+                                            {constraints.DATATABLE.WATCH_LIST.EMPLOYEE_NAME}
+                                          </Typography>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          <Typography variant="h6">
+                                            {constraints.DATATABLE.WATCH_LIST.IN_TIME}
+                                          </Typography>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          <Typography variant="h6">
+                                            {constraints.DATATABLE.WATCH_LIST.OUT_TIME}
+                                          </Typography>
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {employees.map((employee, i) => (
+                                        <TableRow key={i}>
+                                          <TableCell>
+                                            <a
+                                              href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
+                                              target="_blank"
+                                            >
+                                              <PiMicrosoftTeamsLogoFill
+                                                size={20}
+                                                sx={{
+                                                  backgroundColor: '#d6338f',
+                                                }}
+                                              />
+                                            </a>
+                                            &nbsp;
+                                            <a
+                                              href={`mailto:${employee.EmployeeEmail}`}
+                                              style={{ textDecoration: 'none' }}
+                                            >
+                                              {employee.EmployeeName}
+                                            </a>
+                                          </TableCell>
+                                          <TableCell align="right">{employee.InTime}</TableCell>
+                                          <TableCell align="right">{employee.OutTime}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                              </AccordionDetails>
+                            </Accordion>
+                          ),
+                        )}
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
                 </Box>
               )}
             </Box>
-            {showWatchlist && (
-              <Box mt={2}>
-                <Accordion sx={{ backgroundColor: '' }}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    sx={{ backgroundColor: '#5DADE2' }}
-                  >
-                    <Typography variant="h5" sx={{ color: '#FFFFFF' }}>
-                      {constraints.DATATABLE.WATCH_LIST.TITLE}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Box>
-                      {Object.entries(groupedWatchlist).map(([watchlistName, employees], index) => (
-                        <Accordion key={index} sx={{ marginBottom: '10px' }} defaultExpanded>
-                          <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls={`${watchlistName}-content`}
-                            id={`${watchlistName}-header`}
-                            sx={{ backgroundColor: '#ECF0F1' }}
-                          >
-                            <Typography>
-                              <em>{watchlistName}</em>
-                            </Typography>
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <TableContainer sx={{ marginTop: '5px' }}>
-                              <Table>
-                                <TableHead>
-                                  <TableRow>
-                                    <TableCell>
-                                      <Typography variant="h6">
-                                        {constraints.DATATABLE.WATCH_LIST.EMPLOYEE_NAME}
-                                      </Typography>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      <Typography variant="h6">
-                                        {constraints.DATATABLE.WATCH_LIST.IN_TIME}
-                                      </Typography>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                      <Typography variant="h6">
-                                        {constraints.DATATABLE.WATCH_LIST.OUT_TIME}
-                                      </Typography>
-                                    </TableCell>
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {employees.map((employee, i) => (
-                                    <TableRow key={i}>
-                                      <TableCell>
-                                        <a
-                                          href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
-                                          target="_blank"
-                                        >
-                                          <PiMicrosoftTeamsLogoFill
-                                            size={20}
-                                            sx={{
-                                              backgroundColor: '#d6338f',
-                                            }}
-                                          />
-                                        </a>
-                                        &nbsp;
-                                        <a
-                                          href={`mailto:${employee.EmployeeEmail}`}
-                                          style={{ textDecoration: 'none' }}
-                                        >
-                                          {employee.EmployeeName}
-                                        </a>
-                                      </TableCell>
-                                      <TableCell align="right">{employee.InTime}</TableCell>
-                                      <TableCell align="right">{employee.OutTime}</TableCell>
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
-                            </TableContainer>
-                          </AccordionDetails>
-                        </Accordion>
-                      ))}
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-            )}
           </Grid>
         </Grid>
         {/* </Paper> */}
