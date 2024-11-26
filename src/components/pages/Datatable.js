@@ -1,79 +1,80 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
-import Autocomplete from '@mui/material/Autocomplete'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
-import TableContainer from '@mui/material/TableContainer'
-import Table from '@mui/material/Table'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-import TableSortLabel from '@mui/material/TableSortLabel'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import { BiMale, BiFemale } from 'react-icons/bi'
-import { GoMail } from 'react-icons/go'
-import { VscOrganization } from 'react-icons/vsc'
-import { PiMicrosoftTeamsLogoFill } from 'react-icons/pi'
-import { useNavigate } from 'react-router-dom'
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { useMsal } from '@azure/msal-react'
-import UserContext from '../../context/UserContext'
-import DateComponent from '../common/DateComponent'
-import dayjs from 'dayjs'
-import constraints from '../../constraints'
-import { CircularProgress } from '@mui/material'
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { BiMale, BiFemale } from 'react-icons/bi';
+import { GoMail } from 'react-icons/go';
+import { VscOrganization } from 'react-icons/vsc';
+import { PiMicrosoftTeamsLogoFill } from 'react-icons/pi';
+import { useNavigate } from 'react-router-dom';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useMsal } from '@azure/msal-react';
+import UserContext from '../../context/UserContext';
+import DateComponent from '../common/DateComponent';
+import dayjs from 'dayjs';
+import constraints from '../../constraints';
+import { CircularProgress } from '@mui/material';
+import '../../style/Datatable.scss';
 
 function Datatable() {
-  const { instance, accounts } = useMsal()
-  console.log(accounts, 'datatable')
-  console.log(instance, 'INdatatable')
-  const [query, setQuery] = useState('')
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [selectedItemAllEntries, setSelectedItemAllEntries] = useState([])
-  const [suggestions, setSuggestions] = useState([])
-  const [masterData, setMasterData] = useState([])
+  const { instance, accounts } = useMsal();
+  console.log(accounts, 'datatable');
+  console.log(instance, 'INdatatable');
+  const [query, setQuery] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItemAllEntries, setSelectedItemAllEntries] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [masterData, setMasterData] = useState([]);
   // const [CurDate, setCurDate] = useState("");
-  const [departmentData, setDepartmentData] = useState([])
-  const [sortOrder, setSortOrder] = useState({ column: '', direction: '' })
-  const [error, setError] = useState('')
+  const [departmentData, setDepartmentData] = useState([]);
+  const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
+  const [error, setError] = useState('');
   // const [dtCurrentDate, setDtCurrentDate] = useState("");
-  const [totalExpectedCount, setTotalExpectedCount] = useState(0)
-  const [totalTodaysCount, setTotalTodaysCount] = useState(0)
+  const [totalExpectedCount, setTotalExpectedCount] = useState(0);
+  const [totalTodaysCount, setTotalTodaysCount] = useState(0);
   // const [currentTime, setCurrentTime] = useState(""); // for current time
-  const [fetchHistoryError, setFetchHistoryError] = useState('')
-  const [departmentDataLoading, setDepartmentDataLoading] = useState(true)
-  const [employeeDetailsLoading, setEmployeeDetailsLoading] = useState(true)
+  const [fetchHistoryError, setFetchHistoryError] = useState('');
+  const [departmentDataLoading, setDepartmentDataLoading] = useState(true);
+  const [employeeDetailsLoading, setEmployeeDetailsLoading] = useState(true);
   // const [showWatchlist, setShowWatchlist] = useState(false);
 
-  const [watchlist, setWatchlist] = useState([])
-  const [selectedWatchListDate, setSelectedWatchListDate] = useState(dayjs(new Date()))
+  const [watchlist, setWatchlist] = useState([]);
+  const [selectedWatchListDate, setSelectedWatchListDate] = useState(dayjs(new Date()));
   const [selectedFormatedWatchListDate, setSelectedFormatedWatchListDate] = useState(
     dayjs(new Date()).format('YYYY-MM-DD'),
-  )
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
+  );
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { showWatchlist } = useContext(UserContext)
+  const { showWatchlist } = useContext(UserContext);
 
   // Function to clear errors after 2 seconds
   useEffect(() => {
     const clearErrors = setTimeout(() => {
-      setError('')
-      setFetchHistoryError('')
-    }, 2000)
+      setError('');
+      setFetchHistoryError('');
+    }, 2000);
 
-    return () => clearTimeout(clearErrors)
-  }, [error, fetchHistoryError])
+    return () => clearTimeout(clearErrors);
+  }, [error, fetchHistoryError]);
 
   // Fetch current time
   // useEffect(() => {
@@ -107,23 +108,23 @@ function Datatable() {
     const fetchSuggestions = async () => {
       try {
         if (!query) {
-          setSuggestions([])
-          return
+          setSuggestions([]);
+          return;
         }
 
-        const response = await axios.get(`${url}/employees?name=${query}`)
-        const data = response.data
-        console.log(' segg contain dataEMployeeID', data)
-        setMasterData(data)
-        const suggestions = data.map((item) => item.EmpName)
-        setSuggestions(suggestions)
+        const response = await axios.get(`${url}/employees?name=${query}`);
+        const data = response.data;
+        console.log(' segg contain dataEMployeeID', data);
+        setMasterData(data);
+        const suggestions = data.map((item) => item.EmpName);
+        setSuggestions(suggestions);
       } catch (error) {
-        console.error('Error fetching suggestions:', error)
+        console.error('Error fetching suggestions:', error);
       }
-    }
+    };
 
-    fetchSuggestions()
-  }, [query])
+    fetchSuggestions();
+  }, [query]);
 
   useEffect(() => {
     //const date = "2024-11-15"; // it may work in local to fetch the data while deploying we need to commit this one
@@ -132,161 +133,161 @@ function Datatable() {
     // const dateFormat = formattedDateDate.toDateString();
     // setDtCurrentDate(dateFormat);
     // setCurDate(date);
-    setDepartmentData([])
+    setDepartmentData([]);
 
-    fetchDepartmentData(selectedFormatedWatchListDate)
-  }, [selectedFormatedWatchListDate])
+    fetchDepartmentData(selectedFormatedWatchListDate);
+  }, [selectedFormatedWatchListDate]);
 
   useEffect(() => {
-    setTotalExpectedCount(calculateExpectedTotalCount())
-    setTotalTodaysCount(calculateTodaysTotalCount())
-  }, [departmentData])
+    setTotalExpectedCount(calculateExpectedTotalCount());
+    setTotalTodaysCount(calculateTodaysTotalCount());
+  }, [departmentData]);
 
   useEffect(() => {
     const fetchWatchlistData = async () => {
       try {
         // const date = getCurrentDate();
-        const email = accounts[0].username
-        console.log('getwatchlist data in datatable API', email)
-        const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`)
-        const data = await response.json()
-        console.log('getwatchlist data in datatable API', data)
-        setWatchlist(data)
+        const email = accounts[0].username;
+        console.log('getwatchlist data in datatable API', email);
+        const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
+        const data = await response.json();
+        console.log('getwatchlist data in datatable API', data);
+        setWatchlist(data);
       } catch (error) {
-        console.error('Error fetching watchlist data:', error)
+        console.error('Error fetching watchlist data:', error);
       }
-    }
-    fetchWatchlistData()
-    setSelectedItem(null)
-    setSelectedItemAllEntries([])
-    handleSearch()
+    };
+    fetchWatchlistData();
+    setSelectedItem(null);
+    setSelectedItemAllEntries([]);
+    handleSearch();
     // handleFetchHistory();
-  }, [accounts, selectedFormatedWatchListDate])
+  }, [accounts, selectedFormatedWatchListDate]);
 
   const handleSelectedWatchListDate = (event) => {
-    setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'))
-    setSelectedWatchListDate(event)
-    console.log('date is', dayjs(event).format('DD-MM-YYYY'))
-  }
+    setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
+    setSelectedWatchListDate(event);
+    console.log('date is', dayjs(event).format('DD-MM-YYYY'));
+  };
 
   const fetchDepartmentData = async (date) => {
     try {
-      setDepartmentDataLoading(true)
+      setDepartmentDataLoading(true);
 
-      const response = await axios.get(`${url}/dept?date=${date}`)
-      setDepartmentData(response.data)
-      setDepartmentDataLoading(false)
+      const response = await axios.get(`${url}/dept?date=${date}`);
+      setDepartmentData(response.data);
+      setDepartmentDataLoading(false);
     } catch (error) {
-      setDepartmentDataLoading(false)
+      setDepartmentDataLoading(false);
 
-      console.error('Error fetching department data:', error)
+      console.error('Error fetching department data:', error);
     }
-  }
+  };
 
   const handleSearch = async () => {
     try {
       if (!query) {
-        setError('Please enter a username.')
-        setEmployeeDetailsLoading(false)
-        return
+        setError('Please enter a username.');
+        setEmployeeDetailsLoading(false);
+        return;
       }
 
       if (masterData.length > 0) {
-        setEmployeeDetailsLoading(true)
+        setEmployeeDetailsLoading(true);
         const response = await axios.get(
           `${url}/attendance/${masterData[0].EmpID}/${selectedFormatedWatchListDate}`,
-        )
-        const result = response.data
+        );
+        const result = response.data;
         if (result && result.length > 0) {
-          setSelectedItem(result[0])
-          setSelectedItemAllEntries(result)
-          setEmployeeDetailsLoading(false)
+          setSelectedItem(result[0]);
+          setSelectedItemAllEntries(result);
+          setEmployeeDetailsLoading(false);
         } else {
-          setSelectedItem(null)
-          setSelectedItemAllEntries([])
-          setEmployeeDetailsLoading(false)
+          setSelectedItem(null);
+          setSelectedItemAllEntries([]);
+          setEmployeeDetailsLoading(false);
         }
       } else {
-        setError('Employee not found!')
+        setError('Employee not found!');
       }
     } catch (error) {
-      console.error('Error searching employees:', error)
-      setEmployeeDetailsLoading(false)
+      console.error('Error searching employees:', error);
+      setEmployeeDetailsLoading(false);
     }
-  }
+  };
 
   const handleReset = () => {
-    setQuery('')
-    setSelectedItem(null)
-    setSelectedItemAllEntries(null)
-  }
+    setQuery('');
+    setSelectedItem(null);
+    setSelectedItemAllEntries(null);
+  };
 
   const handleFetchHistory = () => {
-    console.log('calling fetch logic :::::::::')
+    console.log('calling fetch logic :::::::::');
 
     if (!masterData || masterData.length === 0) {
-      setFetchHistoryError('Please Enter a name first.')
+      setFetchHistoryError('Please Enter a name first.');
     } else {
-      const date = new Date()
-      const year = date.getFullYear()
-      const month = (date.getMonth() + 1).toString().padStart(2, '0')
-      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`)
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`);
     }
-  }
+  };
 
   const handleSort = (column) => {
     const newSortOrder = {
       column: column,
       direction: sortOrder.column === column && sortOrder.direction === 'asc' ? 'desc' : 'asc',
-    }
+    };
 
-    setSortOrder(newSortOrder)
+    setSortOrder(newSortOrder);
 
     const sortedData = [...departmentData].sort((a, b) => {
       if (newSortOrder.direction === 'asc') {
-        return a[column] - b[column]
+        return a[column] - b[column];
       } else {
-        return b[column] - a[column]
+        return b[column] - a[column];
       }
-    })
+    });
 
-    setDepartmentData(sortedData)
-  }
+    setDepartmentData(sortedData);
+  };
 
   const calculateExpectedTotalCount = () => {
-    let totalExpectedCount = 0
+    let totalExpectedCount = 0;
     departmentData.forEach((department) => {
-      totalExpectedCount += parseInt(department.ExpectedCount)
-    })
-    return totalExpectedCount
-  }
+      totalExpectedCount += parseInt(department.ExpectedCount);
+    });
+    return totalExpectedCount;
+  };
 
   const calculateTodaysTotalCount = () => {
-    let totalTodaysCount = 0
+    let totalTodaysCount = 0;
     departmentData.forEach((department) => {
-      totalTodaysCount += parseInt(department.TodaysCount)
-    })
-    return totalTodaysCount
-  }
+      totalTodaysCount += parseInt(department.TodaysCount);
+    });
+    return totalTodaysCount;
+  };
 
   // useEffect(() => {
   // }, [departmentData]);
 
   // Function to calculate percentage
   const calculatePercentage = (expected, today) => {
-    return expected !== 0 ? ((today / expected) * 100).toFixed() : 0
-  }
+    return expected !== 0 ? ((today / expected) * 100).toFixed() : 0;
+  };
 
   // Group watchlist Names by WatchListName
   const groupedWatchlist =
     watchlist.length &&
     watchlist.reduce((acc, curr) => {
       if (!acc[curr.WatchListName]) {
-        acc[curr.WatchListName] = []
+        acc[curr.WatchListName] = [];
       }
-      acc[curr.WatchListName].push(curr)
-      return acc
-    }, {})
+      acc[curr.WatchListName].push(curr);
+      return acc;
+    }, {});
 
   // This API is show and hide the watchlist
   // useEffect(() => {
@@ -485,7 +486,7 @@ function Datatable() {
                         onChange={(event, value) => setQuery(value || '')}
                         inputValue={query}
                         onInputChange={(event, newInputValue) => {
-                          setQuery(newInputValue || '')
+                          setQuery(newInputValue || '');
                         }}
                         options={suggestions}
                         renderInput={(params) => (
@@ -499,10 +500,12 @@ function Datatable() {
                       />
                     </Grid>
                     <Grid item xs={12} sm={3}>
-                      <DateComponent
-                        value={selectedWatchListDate}
-                        onchange={(e) => handleSelectedWatchListDate(e)}
-                      />
+                      <Box className="datePicker">
+                        <DateComponent
+                          value={selectedWatchListDate}
+                          onchange={(e) => handleSelectedWatchListDate(e)}
+                        />
+                      </Box>
                     </Grid>
                   </Box>
                 </Grid>
@@ -586,7 +589,7 @@ function Datatable() {
                                         {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
                                       </td>
                                     </tr>
-                                  )
+                                  );
                                 })}
                               </tbody>
                             </table>
@@ -716,7 +719,7 @@ function Datatable() {
         {/* </Paper> */}
       </Box>
     </Box>
-  )
+  );
 }
 
-export default Datatable
+export default Datatable;
