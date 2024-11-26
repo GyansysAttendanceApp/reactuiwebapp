@@ -1,6 +1,10 @@
-.datePicker{
-    .MuiOutlinedInput-input{
-        padding: 8.5px 14px !important;
-        padding-right: 0 !important;
-      }
+.datePicker {
+  background-color: white;
+  border-radius: 0.4rem;
+  width: 11vw;
+  .MuiOutlinedInput-input {
+    padding: 8.5px 14px !important;
+    padding-right: 0 !important;
+
+  }
 }

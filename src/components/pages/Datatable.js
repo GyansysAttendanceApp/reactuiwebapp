@@ -32,6 +32,8 @@ import dayjs from 'dayjs';
 import constraints from '../../constraints';
 import { CircularProgress } from '@mui/material';
 import '../../style/Datatable.scss';
+import FadeLoader from 'react-spinners/FadeLoader';
+import { colors } from '../../colors/Color';
 
 function Datatable() {
   const { instance, accounts } = useMsal();
@@ -328,7 +330,7 @@ function Datatable() {
       <Box
         sx={{
           // fontWeight: 'bold',
-          padding: ' 0.5rem  0.5rem ',
+          padding: ' 0.5rem  0.8rem ',
           backgroundColor: '#D6EEEE',
           display: 'flex',
           justifyContent: 'space-between',
@@ -339,7 +341,7 @@ function Datatable() {
           {constraints.DATATABLE.ATTENDANCE_COUNT} {totalTodaysCount} / {totalExpectedCount}{' '}
           {constraints.DATATABLE.AS_ON} {selectedFormatedWatchListDate}
         </Typography>
-        <Box>
+        <Box className="datePicker">
           <DateComponent
             value={selectedWatchListDate}
             onchange={(e) => handleSelectedWatchListDate(e)}
@@ -349,7 +351,7 @@ function Datatable() {
       <Box style={{ padding: '0.5vh 0.5vw 0 0.5vw' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <TableContainer component={Paper} sx={{ maxHeight: '77vh', overflow: 'none' }} ś>
+            <TableContainer component={Paper} sx={{ maxHeight: '74vh', overflow: 'none' }} ś>
               <Table>
                 <TableHead sx={{ position: 'sticky', top: 0 }}>
                   <TableRow>
@@ -432,7 +434,7 @@ function Datatable() {
                             // background: "red",
                           }}
                         >
-                          <CircularProgress />
+                          <FadeLoader width={3} height={16} color={colors.primaryColor} />
                         </Box>
                       </TableCell>
                     </TableRow>
@@ -486,7 +488,7 @@ function Datatable() {
               <Paper sx={{ padding: '0.8rem' }}>
                 <Grid item xs={12} sm={12}>
                   <Box display={'flex'} gap={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Box display={'flex'} flexGrow={1}>
                       <Autocomplete
                         fullWidth
                         value={query}
@@ -505,28 +507,24 @@ function Datatable() {
                           />
                         )}
                       />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
+                    </Box>
 
-                    <Box  display={'flex'} gap={'0.8rem'}>
-                  <Button variant="contained" onClick={handleSearch}>
-                    {constraints.DATATABLE.BUTTON.FETCH}
-                  </Button>
-                  <Button variant="contained" onClick={handleFetchHistory}>
-                    {constraints.DATATABLE.BUTTON.FETCH_HISTORY}
-                  </Button>
-                  <Button variant="contained" onClick={handleReset}>
-                    {constraints.DATATABLE.BUTTON.CLEAR}
-                  </Button>
-                </Box>
-                    </Grid>
+                    <Box display={'flex'} gap={'0.8rem'} padding={'2px'}>
+                      <Button variant="contained" onClick={handleSearch}>
+                        {constraints.DATATABLE.BUTTON.FETCH}
+                      </Button>
+                      <Button variant="contained" onClick={handleFetchHistory}>
+                        {constraints.DATATABLE.BUTTON.FETCH_HISTORY}
+                      </Button>
+                      <Button variant="contained" onClick={handleReset}>
+                        {constraints.DATATABLE.BUTTON.CLEAR}
+                      </Button>
+                    </Box>
                   </Box>
                 </Grid>
-
-               
               </Paper>
             </Box>
-            <Box sx={{ overflow: 'auto', maxHeight: '58.5vh', paddingRight: '0.5rem' }}>
+            <Box sx={{ overflow: 'auto', maxHeight: '63vh', paddingRight: '0.5rem' }}>
               <Box mt={2}>
                 {selectedItem ? (
                   <Card
@@ -626,7 +624,7 @@ function Datatable() {
                       // background: "red",
                     }}
                   >
-                    <CircularProgress />
+                    <FadeLoader width={3} height={16} color={colors.primaryColor} />
                   </Box>
                 )}
               </Box>
