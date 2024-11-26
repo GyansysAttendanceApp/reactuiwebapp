@@ -11,6 +11,7 @@ import axios from 'axios'
 import { Typography } from '@mui/material'
 import { setCssVariables } from './colors/colorsVariables'
 
+
 function App() {
   const { accounts } = useMsal()
   const { setUserRoles, setShowWatchlist } = useContext(UserContext)
@@ -42,14 +43,14 @@ function App() {
   return (
     <> 
     <Layout>      
-      <ApplictionRoutes />
-      
-      {/* <AuthenticatedTemplate>
-        <ApplictionRoutes />
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <MFALogin />
-      </UnauthenticatedTemplate>      */}
+          <ApplictionRoutes />
+
+          {/* <AuthenticatedTemplate>
+            <ApplictionRoutes />
+          </AuthenticatedTemplate>
+          <UnauthenticatedTemplate>
+            <MFALogin />
+          </UnauthenticatedTemplate>      */}
       </Layout>    
     </>    
   )
