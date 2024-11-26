@@ -40,16 +40,18 @@ function App() {
   }, [JSON.stringify(accounts)])
 
   return (
-    <>     
-      {/* <ApplictionRoutes /> */}
-
-      <AuthenticatedTemplate>
+    <> 
+    <Layout>      
+      <ApplictionRoutes />
+      
+      {/* <AuthenticatedTemplate>
         <ApplictionRoutes />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <MFALogin />
-      </UnauthenticatedTemplate>     
-    </>
+      </UnauthenticatedTemplate>      */}
+      </Layout>    
+    </>    
   )
 }
 
