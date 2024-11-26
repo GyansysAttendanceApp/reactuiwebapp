@@ -17,7 +17,7 @@ const ApplictionRoutes = ({ userRoles, username }) => {
   return (
     <>
       <ErrorBoundary>
-        <Layout>
+        {/* <Layout> */}
           <Routes>
             <Route path="/" element={<Datatable />} />
             <Route path="/EmpHistory/:empId/:year/:month" element={<EmployeeHistory />} />
@@ -33,7 +33,7 @@ const ApplictionRoutes = ({ userRoles, username }) => {
             <Route path="/watchlistform/:id" element={<EditWatchlistForm username={username} />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
-        </Layout>
+        {/* </Layout> */}
       </ErrorBoundary>
     </>
   )

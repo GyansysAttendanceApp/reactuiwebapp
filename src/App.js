@@ -10,6 +10,7 @@ import MFALogin from './components/pages/MFALogin'
 import axios from 'axios'
 import { Typography } from '@mui/material'
 import { setCssVariables } from './colors/colorsVariables'
+import Layout from './components/common/Layout'
 
 function App() {
   const { accounts } = useMsal()
@@ -40,17 +41,19 @@ function App() {
   }, [JSON.stringify(accounts)])
 
   return (
-    <>
+    <> 
+    <Layout>
       {/* <Navbar /> */}
-      {/* <ApplictionRoutes /> */}
+      <ApplictionRoutes />
 
-      <AuthenticatedTemplate>
+      {/* <AuthenticatedTemplate>
         <ApplictionRoutes />
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
         <MFALogin />
-      </UnauthenticatedTemplate>
+      </UnauthenticatedTemplate> */}
       {/* <Typography variant="h6">hi I am devendra kumar rathore</Typography> */}
+      </Layout>
     </>
   )
 }

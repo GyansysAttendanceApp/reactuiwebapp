@@ -324,20 +324,27 @@ function Datatable() {
   return (
     <Box>
       {/* <Paper elevation={3} sx={{ p: 1 }}> */}
-      <Typography
-        variant="body1"
+      <Box
         sx={{
-          fontWeight: 'bold',
-          padding: '8px',
+          // fontWeight: 'bold',
+          padding: ' 0.5rem  0.5rem ',
           backgroundColor: '#D6EEEE',
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
-        {constraints.DATATABLE.ATTENDANCE_COUNT} {totalTodaysCount} / {totalExpectedCount}{' '}
-        {constraints.DATATABLE.AS_ON} {selectedFormatedWatchListDate}
-      </Typography>
+        <Typography variant="h6">
+          {constraints.DATATABLE.ATTENDANCE_COUNT} {totalTodaysCount} / {totalExpectedCount}{' '}
+          {constraints.DATATABLE.AS_ON} {selectedFormatedWatchListDate}
+        </Typography>
+        <Box>
+          <DateComponent
+            value={selectedWatchListDate}
+            onchange={(e) => handleSelectedWatchListDate(e)}
+          />
+        </Box>
+      </Box>
       <Box style={{ padding: '0.5vh 0.5vw 0 0.5vw' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -478,7 +485,7 @@ function Datatable() {
               <Paper sx={{ padding: '0.8rem' }}>
                 <Grid item xs={12} sm={12}>
                   <Box display={'flex'} gap={2}>
-                    <Grid item xs={12} sm={9}>
+                    <Grid item xs={12} sm={6}>
                       <Autocomplete
                         fullWidth
                         value={query}
@@ -498,16 +505,9 @@ function Datatable() {
                         )}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={3}>
-                      <DateComponent
-                        value={selectedWatchListDate}
-                        onchange={(e) => handleSelectedWatchListDate(e)}
-                      />
-                    </Grid>
-                  </Box>
-                </Grid>
+                    <Grid item xs={12} sm={6}>
 
-                <Box mt={2} display={'flex'} gap={'0.8rem'}>
+                    <Box  display={'flex'} gap={'0.8rem'}>
                   <Button variant="contained" onClick={handleSearch}>
                     {constraints.DATATABLE.BUTTON.FETCH}
                   </Button>
@@ -518,6 +518,11 @@ function Datatable() {
                     {constraints.DATATABLE.BUTTON.CLEAR}
                   </Button>
                 </Box>
+                    </Grid>
+                  </Box>
+                </Grid>
+
+               
               </Paper>
             </Box>
             <Box sx={{ overflow: 'auto', maxHeight: '58.5vh', paddingRight: '0.5rem' }}>
@@ -531,68 +536,71 @@ function Datatable() {
                     }}
                   >
                     <CardContent sx={{ overflow: 'auto', maxHeight: '35vh' }}>
-                      <Typography variant="h6">Search Result</Typography>
-                      <Box display="flex" alignItems="center">
-                        {selectedItem.EmpGender === 'Male' ? (
-                          <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
-                        ) : (
-                          <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
-                        )}
-                        <Typography>
-                          {selectedItem.EmpName} ({selectedItem.EmpID})
-                        </Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
-                        <Typography>
-                          &nbsp;
-                          <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
-                            {selectedItem.EmpEmail}
-                          </a>
-                        </Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
-                        <Typography>&nbsp;{selectedItem.DeptName}</Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        <PiMicrosoftTeamsLogoFill size={20} sx={{ backgroundColor: '#d6338f' }} />
-                        <Typography>
-                          &nbsp;
-                          <a
-                            href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
-                            target="_blank"
-                          >
-                            Chat
-                          </a>
-                        </Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        &nbsp;
-                      </Box>
-                      {selectedItem.SwipeDateTime === 'ABSENT' ? (
-                        <Box display="flex" alignItems="center">
-                          <Typography>&nbsp;ABSENT</Typography>
-                        </Box>
-                      ) : (
-                        <>
-                          <Box display="flex" alignItems="center">
+                      {/* <Typography variant="h6">Search Result</Typography> */}
+                      <Grid container spacing={2}>
+                        {/* User Info Section */}
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6">User Information</Typography>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            {selectedItem.EmpGender === 'Male' ? (
+                              <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
+                            ) : (
+                              <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
+                            )}
+                            <Typography>
+                              {selectedItem.EmpName} ({selectedItem.EmpID})
+                            </Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
+                            <Typography>
+                              &nbsp;
+                              <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
+                                {selectedItem.EmpEmail}
+                              </a>
+                            </Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
+                            <Typography>&nbsp;{selectedItem.DeptName}</Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            <PiMicrosoftTeamsLogoFill
+                              size={20}
+                              sx={{ backgroundColor: '#d6338f' }}
+                            />
+                            <Typography>
+                              &nbsp;
+                              <a
+                                href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
+                                target="_blank"
+                              >
+                                Chat
+                              </a>
+                            </Typography>
+                          </Box>
+                        </Grid>
+
+                        {/* Swipe Info Section */}
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6">Swipe Information</Typography>
+                          {selectedItem.SwipeDateTime === 'ABSENT' ? (
+                            <Typography sx={{ color: 'red' }}>ABSENT</Typography>
+                          ) : (
                             <table>
                               <tbody>
-                                {selectedItemAllEntries.map((item, index) => {
-                                  return (
-                                    <tr key={index}>
-                                      <td>
-                                        {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
-                                      </td>
-                                    </tr>
-                                  )
-                                })}
+                                {selectedItemAllEntries.map((item, index) => (
+                                  <tr key={index}>
+                                    <td>
+                                      {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
-                          </Box>
-                        </>
-                      )}
+                          )}
+                        </Grid>
+                      </Grid>
                     </CardContent>
                   </Card>
                 ) : (

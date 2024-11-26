@@ -11,7 +11,7 @@ const constraints = {
   DATATABLE: {
     ATTENDANCE_COUNT: "Today's attendance count:",
     AS_ON: 'as on ',
-    DEPARTMENT_NAME: 'Department Name',
+    DEPARTMENT_NAME: 'Department',
     EXPECTED_COUNT: 'Expected Count',
     ABSENT_COUNT: 'Absent Count',
     REPORTED_COUNT: 'Reported Count',
