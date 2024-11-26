@@ -42,19 +42,17 @@ function App() {
 
   return (
     <> 
-    <Layout>
-      {/* <Navbar /> */}
-      <ApplictionRoutes />
+    <Layout>      
+          <ApplictionRoutes />
 
-      {/* <AuthenticatedTemplate>
-        <ApplictionRoutes />
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <MFALogin />
-      </UnauthenticatedTemplate> */}
-      {/* <Typography variant="h6">hi I am devendra kumar rathore</Typography> */}
-      </Layout>
-    </>
+          {/* <AuthenticatedTemplate>
+            <ApplictionRoutes />
+          </AuthenticatedTemplate>
+          <UnauthenticatedTemplate>
+            <MFALogin />
+          </UnauthenticatedTemplate>      */}
+      </Layout>    
+    </>    
   )
 }
 
