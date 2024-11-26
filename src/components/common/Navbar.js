@@ -13,6 +13,7 @@ import Menu from '@mui/material/Menu'
 import { useTheme } from '@mui/material/styles'
 import '../../style/Navbar.scss'
 import constraints from '../../constraints'
+// import { IoIosArrowDropdownCircle } from "react-icons/io"
 
 function Navbar() {
   const { accounts } = useMsal()
@@ -43,6 +44,7 @@ function Navbar() {
           <IconButton color="inherit" onClick={handleMenuClick} sx={{ marginLeft: '0px' }}>
             <AdminPanelSettingsIcon />
             <Typography>Admin</Typography>
+            {/* <IoIosArrowDropdownCircle />  */}
           </IconButton>
           <Menu
             anchorEl={anchorEl}

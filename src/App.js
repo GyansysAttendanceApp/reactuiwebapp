@@ -10,6 +10,7 @@ import MFALogin from './components/pages/MFALogin'
 import axios from 'axios'
 import { Typography } from '@mui/material'
 import { setCssVariables } from './colors/colorsVariables'
+import Layout from './components/common/Layout'
 
 
 function App() {

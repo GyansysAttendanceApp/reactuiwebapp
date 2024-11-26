@@ -81,6 +81,24 @@ function EmployeeHistory() {
     }
   }
 
+  // sorting as per thr duration need to be done
+  // const handleSort = (key) => {
+  //   setSortConfig((prev) => ({
+  //     key,
+  //     direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+  //   }));
+  // };
+
+  // const sortedData = [...employeeData].sort((a, b) => {
+  //   const { key, direction } = sortConfig;
+  //   const valueA = key === 'Duration' ? parseDuration(a[key]) : a[key];
+  //   const valueB = key === 'Duration' ? parseDuration(b[key]) : b[key];
+
+  //   if (valueA < valueB) return direction === 'asc' ? -1 : 1;
+  //   if (valueA > valueB) return direction === 'asc' ? 1 : -1;
+  //   return 0;
+  // });
+
   return (
     <>
       <div>
@@ -131,7 +149,7 @@ function EmployeeHistory() {
             />
             <Box>
               <TextField
-                label="Search by Employee name"
+                // label="Search by Employee name"
                 value={searchQuery}
                 onChange={handleSearchInputChange}
                 variant="outlined"

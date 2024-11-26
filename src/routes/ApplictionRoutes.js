@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { useContext } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import EmployeeHistory from '../components/pages/EmployeeHistory'
 import Watchlistform from '../components/pages/Watchlistform'
@@ -7,8 +7,10 @@ import Watchlist from '../components/pages/Watchlist'
 import PageNotFound from '../components/errors/PageNotFound'
 import ErrorBoundary from '../components/errors/ErrorBoundary'
 import Datatable from '../components/pages/Datatable'
+import UserContext from '../context/UserContext'
 
-const ApplictionRoutes = ({ userRoles, username }) => {
+const ApplictionRoutes = () => {
+  const { user: username, userRoles } = useContext(UserContext)
   return (
     <>
       <ErrorBoundary>       
