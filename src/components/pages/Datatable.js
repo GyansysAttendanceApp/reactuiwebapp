@@ -36,39 +36,39 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import { colors } from '../../colors/Color';
 
 function Datatable() {
-  const { instance, accounts } = useMsal();
-  console.log(accounts, 'datatable');
-  console.log(instance, 'INdatatable');
-  const [query, setQuery] = useState('');
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedItemAllEntries, setSelectedItemAllEntries] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
-  const [masterData, setMasterData] = useState([]);
-  // const [CurDate, setCurDate] = useState("");
-  const [departmentData, setDepartmentData] = useState([]);
   const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
   const [error, setError] = useState('');
-  // const [dtCurrentDate, setDtCurrentDate] = useState("");
   const [totalExpectedCount, setTotalExpectedCount] = useState(0);
   const [totalTodaysCount, setTotalTodaysCount] = useState(0);
-  // const [currentTime, setCurrentTime] = useState(""); // for current time
   const [fetchHistoryError, setFetchHistoryError] = useState('');
-  const [departmentDataLoading, setDepartmentDataLoading] = useState(true);
-  const [employeeDetailsLoading, setEmployeeDetailsLoading] = useState(true);
-  // const [showWatchlist, setShowWatchlist] = useState(false);
-
+  const [suggestions, setSuggestions] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
-  const [selectedWatchListDate, setSelectedWatchListDate] = useState(dayjs(new Date()));
-  const [selectedFormatedWatchListDate, setSelectedFormatedWatchListDate] = useState(
-    dayjs(new Date()).format('YYYY-MM-DD'),
-  );
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
   const navigate = useNavigate();
+  const { instance, accounts } = useMsal();
+  const {
+    departmentData,
+    setDepartmentData,
+    query,
+    setQuery,
+    showWatchlist,
+    selectedItem,
+    selectedItemAllEntries,
+    masterData,
+    setMasterData,
+    setSelectedItem,
+    setSelectedItemAllEntries,
+    selectedWatchListDate,
+    setSelectedWatchListDate,
+    selectedFormatedWatchListDate,
+    setSelectedFormatedWatchListDate,
+    employeeDetailsLoading,
+    departmentDataLoading,
+    setEmployeeDetailsLoading,
+    setDepartmentDataLoading,
+  } = useContext(UserContext);
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
-  const { showWatchlist } = useContext(UserContext);
-
-  // Function to clear errors after 2 seconds
   useEffect(() => {
     const clearErrors = setTimeout(() => {
       setError('');
@@ -78,34 +78,6 @@ function Datatable() {
     return () => clearTimeout(clearErrors);
   }, [error, fetchHistoryError]);
 
-  // Fetch current time
-  // useEffect(() => {
-  //   const getCurrentTime = () => {
-  //     const now = new Date();
-  //     const hours = now.getHours().toString().padStart(2, "0");
-  //     const minutes = now.getMinutes().toString().padStart(2, "0");
-  //     const seconds = now.getSeconds().toString().padStart(2, "0");
-  //     return `${hours}:${minutes}:${seconds}`;
-  //   };
-
-  //   setCurrentTime(getCurrentTime());
-  // }, []);
-
-  // const getCurrentDate = () => {
-  //   const today = new Date();
-
-  //   const yyyy = today.getFullYear();
-  //   let mm = today.getMonth() + 1; // Months start at 0!
-  //   let dd = today.getDate();
-
-  //   if (dd < 10) dd = "0" + dd;
-  //   if (mm < 10) mm = "0" + mm;
-
-  //   let formattedDate = `${yyyy}-${mm}-${dd}`;
-  //   return formattedDate;
-  // };
-
-  /// api call for nameSuggestions
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
@@ -124,31 +96,22 @@ function Datatable() {
         console.error('Error fetching suggestions:', error);
       }
     };
-
-    fetchSuggestions();
+      fetchSuggestions();
   }, [query]);
 
   useEffect(() => {
-    //const date = "2024-11-15"; // it may work in local to fetch the data while deploying we need to commit this one
-    // const date = getCurrentDate(); // this one we need to uncommit while deploying to get the current data and it start working
-    // const formattedDateDate = new Date(date);
-    // const dateFormat = formattedDateDate.toDateString();
-    // setDtCurrentDate(dateFormat);
-    // setCurDate(date);
-    setDepartmentData([]);
-
-    fetchDepartmentData(selectedFormatedWatchListDate);
+      setDepartmentData([]);
+      fetchDepartmentData(selectedFormatedWatchListDate);
   }, [selectedFormatedWatchListDate]);
 
   useEffect(() => {
-    setTotalExpectedCount(calculateExpectedTotalCount());
-    setTotalTodaysCount(calculateTodaysTotalCount());
+      setTotalExpectedCount(calculateExpectedTotalCount());
+      setTotalTodaysCount(calculateTodaysTotalCount());
   }, [departmentData]);
 
   useEffect(() => {
     const fetchWatchlistData = async () => {
       try {
-        // const date = getCurrentDate();
         const email = accounts[0].username;
         console.log('getwatchlist data in datatable API', email);
         const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
@@ -159,12 +122,13 @@ function Datatable() {
         console.error('Error fetching watchlist data:', error);
       }
     };
-    fetchWatchlistData();
-    setSelectedItem(null);
-    setSelectedItemAllEntries([]);
-    handleSearch();
-    // handleFetchHistory();
+      setSelectedItem(null);
+      setSelectedItemAllEntries([]);
+      fetchWatchlistData();
+      handleSearch();
+
   }, [accounts, selectedFormatedWatchListDate]);
+  console.log({ selectedItem }, { masterData });
 
   const handleSelectedWatchListDate = (event) => {
     setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
@@ -272,15 +236,10 @@ function Datatable() {
     return totalTodaysCount;
   };
 
-  // useEffect(() => {
-  // }, [departmentData]);
-
-  // Function to calculate percentage
   const calculatePercentage = (expected, today) => {
     return expected !== 0 ? ((today / expected) * 100).toFixed() : 0;
   };
 
-  // Group watchlist Names by WatchListName
   const groupedWatchlist =
     watchlist.length &&
     watchlist.reduce((acc, curr) => {
@@ -291,42 +250,8 @@ function Datatable() {
       return acc;
     }, {});
 
-  // This API is show and hide the watchlist
-  // useEffect(() => {
-  //   const fetchUserRole = async () => {
-  //     const email = accounts[0]?.username;
-  //     console.log("datatableEMail", email);
-  //     try {
-  //       const response = await axios.get(`${url}/userroles?email=${email}`);
-  //       const roles = response.data;
-  //       if (roles.some((role) => role.RoleID === 1 || role.RoleID === 3)) {
-  //         setShowWatchlist(true);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching user roles: ", error);
-  //     }
-  //   };
-
-  //   if (accounts[0]?.username) {
-  //     fetchUserRole();
-  //   }
-  // }, [accounts]);
-
-  // useEffect(() => {
-  //   if (userRoles && userRoles.length > 0) {
-  //     // if (userRoles.length > 0) {
-  //     const hasAccess = userRoles.some(
-  //       (role) => role.RoleID === 1 || role.RoleID === 3
-  //     );
-  //     setShowWatchlist(hasAccess);
-  //   }
-  // }, [userRoles]);
-
-  // Function to fetch watchlist data from the API
-
   return (
     <Box>
-      {/* <Paper elevation={3} sx={{ p: 1 }}> */}
       <Box
         sx={{
           // fontWeight: 'bold',
@@ -422,7 +347,7 @@ function Datatable() {
                         </TableCell>
                       </TableRow>
                     ))}
-                  {departmentDataLoading && (
+                  {departmentData.length === 0 && departmentDataLoading && (
                     <TableRow>
                       <TableCell colSpan={5}>
                         <Box
@@ -614,7 +539,7 @@ function Datatable() {
                     )}
                   </>
                 )}
-                {employeeDetailsLoading && (
+                {selectedItem?.length === 0 && employeeDetailsLoading && (
                   <Box
                     sx={{
                       display: 'flex',
