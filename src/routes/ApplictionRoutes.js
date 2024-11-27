@@ -8,6 +8,7 @@ import PageNotFound from '../components/errors/PageNotFound'
 import ErrorBoundary from '../components/errors/ErrorBoundary'
 import Datatable from '../components/pages/Datatable'
 import UserContext from '../context/UserContext'
+import Updatepage from '../components/pages/Updatepage'
 
 const ApplictionRoutes = () => {
   const { user: username, userRoles } = useContext(UserContext)
@@ -25,6 +26,11 @@ const ApplictionRoutes = () => {
             <Route
               path="/watchlistform"
               element={<Watchlistform username={username} userRoles={userRoles} />}
+            />
+
+               <Route
+              path="/Updatepage"
+              element={<Updatepage username={username} userRoles={userRoles} />}
             />
             <Route path="/watchlistform/:id" element={<EditWatchlistForm username={username} />} />
             <Route path="*" element={<PageNotFound />} />

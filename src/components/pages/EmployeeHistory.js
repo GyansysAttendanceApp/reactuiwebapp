@@ -141,6 +141,7 @@ function EmployeeHistory() {
             top="0px"
             zIndex="100"
             gap="16px"
+           
           >
             <TextField
               id="year-month-picker"
@@ -151,11 +152,11 @@ function EmployeeHistory() {
                 shrink: true,
               }}
               size="small"
-              style={{ minWidth: '150px', backgroundColor: 'white' }}
+              style={{ minWidth: '150px', backgroundColor: 'white' , borderRadius :"4px" ,  height:"1.4375em;"}}
             />
             <Box>
               <TextField
-                // label="Search by Employee name"
+                placeholder="Search by Employee name"
                 value={searchQuery}
                 onChange={handleSearchInputChange}
                 variant="outlined"
@@ -164,6 +165,11 @@ function EmployeeHistory() {
                   marginRight: '8px',
                   width: '300px',
                   backgroundColor: 'white',
+                  borderRadius :"4px",
+                  height:"1.4375em;"
+                    // height: "40px"
+                  
+
                 }}
               />
               <Button variant="contained" onClick={handleSearch}>
