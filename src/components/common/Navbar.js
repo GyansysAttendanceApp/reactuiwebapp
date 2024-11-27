@@ -60,7 +60,7 @@ function Navbar() {
             }}
           >
             <MenuItem onClick={handleMenuClose}>
-              <Link to="/configuration-master" style={{ textDecoration: 'none', color: 'black' }}>
+              <Link to="/Updatepage" style={{ textDecoration: 'none', color: 'black' }}>
                 Configuration Master
               </Link>
             </MenuItem>

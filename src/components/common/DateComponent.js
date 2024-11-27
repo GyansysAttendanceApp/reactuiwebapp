@@ -14,7 +14,7 @@ export default function DatePickerValue({ value, onchange }) {
       <DemoContainer components={['DatePicker']} sx={{ padding: 0 }}>
         <Stack sx={{ width: '100%' }}>
           <DatePicker
-            // label="Controlled picker"
+            // label="Select Date"
             value={value}
             onChange={(newValue) => onchange(newValue)}
             renderInput={(params) => (
