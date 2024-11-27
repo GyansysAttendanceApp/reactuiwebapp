@@ -12,7 +12,6 @@ import { Typography } from '@mui/material'
 import { setCssVariables } from './colors/colorsVariables'
 import Layout from './components/common/Layout'
 
-
 function App() {
   const { accounts } = useMsal()
   const { setUserRoles, setShowWatchlist } = useContext(UserContext)

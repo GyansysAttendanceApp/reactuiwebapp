@@ -32,6 +32,8 @@ import dayjs from 'dayjs';
 import constraints from '../../constraints';
 import { CircularProgress } from '@mui/material';
 import '../../style/Datatable.scss';
+import FadeLoader from 'react-spinners/FadeLoader';
+import { colors } from '../../colors/Color';
 
 function Datatable() {
   const { instance, accounts } = useMsal();
@@ -325,24 +327,31 @@ function Datatable() {
   return (
     <Box>
       {/* <Paper elevation={3} sx={{ p: 1 }}> */}
-      <Typography
-        variant="body1"
+      <Box
         sx={{
-          fontWeight: 'bold',
-          padding: '8px',
+          // fontWeight: 'bold',
+          padding: ' 0.5rem  0.8rem ',
           backgroundColor: '#D6EEEE',
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
-        {constraints.DATATABLE.ATTENDANCE_COUNT} {totalTodaysCount} / {totalExpectedCount}{' '}
-        {constraints.DATATABLE.AS_ON} {selectedFormatedWatchListDate}
-      </Typography>
+        <Typography variant="h6">
+          {constraints.DATATABLE.ATTENDANCE_COUNT} {totalTodaysCount} / {totalExpectedCount}{' '}
+          {constraints.DATATABLE.AS_ON} {selectedFormatedWatchListDate}
+        </Typography>
+        <Box className="datePicker">
+          <DateComponent
+            value={selectedWatchListDate}
+            onchange={(e) => handleSelectedWatchListDate(e)}
+          />
+        </Box>
+      </Box>
       <Box style={{ padding: '0.5vh 0.5vw 0 0.5vw' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <TableContainer component={Paper} sx={{ maxHeight: '77vh', overflow: 'none' }} ś>
+            <TableContainer component={Paper} sx={{ maxHeight: '74vh', overflow: 'none' }} ś>
               <Table>
                 <TableHead sx={{ position: 'sticky', top: 0 }}>
                   <TableRow>
@@ -425,7 +434,7 @@ function Datatable() {
                             // background: "red",
                           }}
                         >
-                          <CircularProgress />
+                          <FadeLoader width={3} height={16} color={colors.primaryColor} />
                         </Box>
                       </TableCell>
                     </TableRow>
@@ -479,7 +488,7 @@ function Datatable() {
               <Paper sx={{ padding: '0.8rem' }}>
                 <Grid item xs={12} sm={12}>
                   <Box display={'flex'} gap={2}>
-                    <Grid item xs={12} sm={9}>
+                    <Box display={'flex'} flexGrow={1}>
                       <Autocomplete
                         fullWidth
                         value={query}
@@ -498,32 +507,24 @@ function Datatable() {
                           />
                         )}
                       />
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                      <Box className="datePicker">
-                        <DateComponent
-                          value={selectedWatchListDate}
-                          onchange={(e) => handleSelectedWatchListDate(e)}
-                        />
-                      </Box>
-                    </Grid>
+                    </Box>
+
+                    <Box display={'flex'} gap={'0.8rem'} padding={'2px'}>
+                      <Button variant="contained" onClick={handleSearch}>
+                        {constraints.DATATABLE.BUTTON.FETCH}
+                      </Button>
+                      <Button variant="contained" onClick={handleFetchHistory}>
+                        {constraints.DATATABLE.BUTTON.FETCH_HISTORY}
+                      </Button>
+                      <Button variant="contained" onClick={handleReset}>
+                        {constraints.DATATABLE.BUTTON.CLEAR}
+                      </Button>
+                    </Box>
                   </Box>
                 </Grid>
-
-                <Box mt={2} display={'flex'} gap={'0.8rem'}>
-                  <Button variant="contained" onClick={handleSearch}>
-                    {constraints.DATATABLE.BUTTON.FETCH}
-                  </Button>
-                  <Button variant="contained" onClick={handleFetchHistory}>
-                    {constraints.DATATABLE.BUTTON.FETCH_HISTORY}
-                  </Button>
-                  <Button variant="contained" onClick={handleReset}>
-                    {constraints.DATATABLE.BUTTON.CLEAR}
-                  </Button>
-                </Box>
               </Paper>
             </Box>
-            <Box sx={{ overflow: 'auto', maxHeight: '58.5vh', paddingRight: '0.5rem' }}>
+            <Box sx={{ overflow: 'auto', maxHeight: '63vh', paddingRight: '0.5rem' }}>
               <Box mt={2}>
                 {selectedItem ? (
                   <Card
@@ -534,68 +535,71 @@ function Datatable() {
                     }}
                   >
                     <CardContent sx={{ overflow: 'auto', maxHeight: '35vh' }}>
-                      <Typography variant="h6">Search Result</Typography>
-                      <Box display="flex" alignItems="center">
-                        {selectedItem.EmpGender === 'Male' ? (
-                          <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
-                        ) : (
-                          <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
-                        )}
-                        <Typography>
-                          {selectedItem.EmpName} ({selectedItem.EmpID})
-                        </Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
-                        <Typography>
-                          &nbsp;
-                          <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
-                            {selectedItem.EmpEmail}
-                          </a>
-                        </Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
-                        <Typography>&nbsp;{selectedItem.DeptName}</Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        <PiMicrosoftTeamsLogoFill size={20} sx={{ backgroundColor: '#d6338f' }} />
-                        <Typography>
-                          &nbsp;
-                          <a
-                            href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
-                            target="_blank"
-                          >
-                            Chat
-                          </a>
-                        </Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        &nbsp;
-                      </Box>
-                      {selectedItem.SwipeDateTime === 'ABSENT' ? (
-                        <Box display="flex" alignItems="center">
-                          <Typography>&nbsp;ABSENT</Typography>
-                        </Box>
-                      ) : (
-                        <>
-                          <Box display="flex" alignItems="center">
+                      {/* <Typography variant="h6">Search Result</Typography> */}
+                      <Grid container spacing={2}>
+                        {/* User Info Section */}
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6">User Information</Typography>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            {selectedItem.EmpGender === 'Male' ? (
+                              <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
+                            ) : (
+                              <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
+                            )}
+                            <Typography>
+                              {selectedItem.EmpName} ({selectedItem.EmpID})
+                            </Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
+                            <Typography>
+                              &nbsp;
+                              <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
+                                {selectedItem.EmpEmail}
+                              </a>
+                            </Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
+                            <Typography>&nbsp;{selectedItem.DeptName}</Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" marginBottom={1}>
+                            <PiMicrosoftTeamsLogoFill
+                              size={20}
+                              sx={{ backgroundColor: '#d6338f' }}
+                            />
+                            <Typography>
+                              &nbsp;
+                              <a
+                                href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
+                                target="_blank"
+                              >
+                                Chat
+                              </a>
+                            </Typography>
+                          </Box>
+                        </Grid>
+
+                        {/* Swipe Info Section */}
+                        <Grid item xs={12} md={6}>
+                          <Typography variant="h6">Swipe Information</Typography>
+                          {selectedItem.SwipeDateTime === 'ABSENT' ? (
+                            <Typography sx={{ color: 'red' }}>ABSENT</Typography>
+                          ) : (
                             <table>
                               <tbody>
-                                {selectedItemAllEntries.map((item, index) => {
-                                  return (
-                                    <tr key={index}>
-                                      <td>
-                                        {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
+                                {selectedItemAllEntries.map((item, index) => (
+                                  <tr key={index}>
+                                    <td>
+                                      {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
-                          </Box>
-                        </>
-                      )}
+                          )}
+                        </Grid>
+                      </Grid>
                     </CardContent>
                   </Card>
                 ) : (
@@ -620,7 +624,7 @@ function Datatable() {
                       // background: "red",
                     }}
                   >
-                    <CircularProgress />
+                    <FadeLoader width={3} height={16} color={colors.primaryColor} />
                   </Box>
                 )}
               </Box>
