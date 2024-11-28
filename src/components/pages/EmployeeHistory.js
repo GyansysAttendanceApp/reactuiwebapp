@@ -165,12 +165,6 @@ function EmployeeHistory() {
                     shrink: true,
                   }}
                   size="small"
-                  style={{
-                    minWidth: '150px',
-                    backgroundColor: 'white',
-                    borderRadius: '4px',
-                    height: '1.4375em;',
-                  }}
                 />
               </Box>
 
