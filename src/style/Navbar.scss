@@ -12,10 +12,33 @@
   height: 10vh;
   background-color: var(--primary-color);
   color: var(--text-light-color);
+  flex-grow: 1;
   .navbar-left-header {
     display: flex;
     gap: 1rem;
     align-items: center;
+    // flex-grow: 1;
+    // border: 1px solid red;
+  }
+  .navbar-middle-header {
+    display: flex;
+    gap: 1rem;
+    align-items:flex-end;
+    justify-content: flex-start;
+    flex-grow: 1;
+    padding-left: 2rem;
+    // border: 1px solid red;
+    height: 9vh;
+    .MuiIconButton-root{
+      padding:0;
+    }
+  }
+  .navbar-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    // flex-grow: 1;
+    // border: 1px solid red;
   }
 }
 
@@ -29,10 +52,7 @@
   font-weight: 600;
 }
 
-.navbar-actions {
-  display: flex;
-  align-items: center;
-}
+
 
 .navbar-username {
   font-weight: bold;

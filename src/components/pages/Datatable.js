@@ -30,7 +30,6 @@ import UserContext from '../../context/UserContext';
 import DateComponent from '../common/DateComponent';
 import dayjs from 'dayjs';
 import constraints from '../../constraints';
-import { CircularProgress } from '@mui/material';
 import '../../style/Datatable.scss';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { colors } from '../../colors/Color';
@@ -45,7 +44,7 @@ function Datatable() {
   const [watchlist, setWatchlist] = useState([]);
 
   const navigate = useNavigate();
-  const { instance, accounts } = useMsal();
+  const { accounts } = useMsal();
   const {
     departmentData,
     setDepartmentData,
@@ -88,7 +87,6 @@ function Datatable() {
 
         const response = await axios.get(`${url}/employees?name=${query}`);
         const data = response.data;
-        console.log(' segg contain dataEMployeeID', data);
         setMasterData(data);
         const suggestions = data.map((item) => item.EmpName);
         setSuggestions(suggestions);
@@ -96,44 +94,39 @@ function Datatable() {
         console.error('Error fetching suggestions:', error);
       }
     };
-      fetchSuggestions();
+    fetchSuggestions();
   }, [query]);
 
   useEffect(() => {
-      setDepartmentData([]);
-      fetchDepartmentData(selectedFormatedWatchListDate);
+    setDepartmentData([]);
+    fetchDepartmentData(selectedFormatedWatchListDate);
   }, [selectedFormatedWatchListDate]);
 
   useEffect(() => {
-      setTotalExpectedCount(calculateExpectedTotalCount());
-      setTotalTodaysCount(calculateTodaysTotalCount());
+    setTotalExpectedCount(calculateExpectedTotalCount());
+    setTotalTodaysCount(calculateTodaysTotalCount());
   }, [departmentData]);
 
   useEffect(() => {
     const fetchWatchlistData = async () => {
       try {
         const email = accounts[0].username;
-        console.log('getwatchlist data in datatable API', email);
         const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
         const data = await response.json();
-        console.log('getwatchlist data in datatable API', data);
         setWatchlist(data);
       } catch (error) {
         console.error('Error fetching watchlist data:', error);
       }
     };
-      setSelectedItem(null);
-      setSelectedItemAllEntries([]);
-      fetchWatchlistData();
-      handleSearch();
-
+    setSelectedItem(null);
+    setSelectedItemAllEntries([]);
+    fetchWatchlistData();
+    handleSearch();
   }, [accounts, selectedFormatedWatchListDate]);
-  console.log({ selectedItem }, { masterData });
 
   const handleSelectedWatchListDate = (event) => {
     setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
     setSelectedWatchListDate(event);
-    console.log('date is', dayjs(event).format('DD-MM-YYYY'));
   };
 
   const fetchDepartmentData = async (date) => {
@@ -189,8 +182,6 @@ function Datatable() {
   };
 
   const handleFetchHistory = () => {
-    console.log('calling fetch logic :::::::::');
-
     if (!masterData || masterData.length === 0) {
       setFetchHistoryError('Please Enter a name first.');
     } else {
@@ -254,12 +245,12 @@ function Datatable() {
     <Box>
       <Box
         sx={{
-          // fontWeight: 'bold',
           padding: ' 0.5rem  0.8rem ',
           backgroundColor: '#D6EEEE',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          height: '8vh',
         }}
       >
         <Typography variant="h6">
@@ -274,9 +265,9 @@ function Datatable() {
         </Box>
       </Box>
       <Box style={{ padding: '0.5vh 0.5vw 0 0.5vw' }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={1.5}>
           <Grid item xs={12} sm={6}>
-            <TableContainer component={Paper} sx={{ maxHeight: '74vh', overflow: 'none' }} ś>
+            <TableContainer component={Paper} sx={{ maxHeight: '76.5vh', overflow: 'none' }} ś>
               <Table>
                 <TableHead sx={{ position: 'sticky', top: 0 }}>
                   <TableRow>
@@ -326,19 +317,13 @@ function Datatable() {
                   {departmentData &&
                     departmentData.map((department) => (
                       <TableRow key={department.EmpID}>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
-                          {department.DeptName}
-                        </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
-                          {department.ExpectedCount}
-                        </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
-                          {department.TodaysCount}
-                        </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
+                        <TableCell>{department.DeptName}</TableCell>
+                        <TableCell>{department.ExpectedCount}</TableCell>
+                        <TableCell>{department.TodaysCount}</TableCell>
+                        <TableCell>
                           {parseInt(department.ExpectedCount) - parseInt(department.TodaysCount)}
                         </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
+                        <TableCell>
                           {calculatePercentage(
                             parseInt(department.ExpectedCount),
                             parseInt(department.TodaysCount),
@@ -376,7 +361,7 @@ function Datatable() {
                             // background: "red",
                           }}
                         >
-                          <Typography variant="body1">
+                          <Typography variant="body3">
                             {constraints.DATATABLE.NO_DATA_FOUND}
                           </Typography>
                         </Box>
@@ -390,17 +375,13 @@ function Datatable() {
                       backgroundColor: '#f0f0f0',
                     }}
                   >
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>Total</TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
-                      {totalExpectedCount}
-                    </TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
-                      {totalTodaysCount}
-                    </TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
+                    <TableCell>Total</TableCell>
+                    <TableCell>{totalExpectedCount}</TableCell>
+                    <TableCell>{totalTodaysCount}</TableCell>
+                    <TableCell>
                       {parseInt(totalExpectedCount) - parseInt(totalTodaysCount)}
                     </TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
+                    <TableCell>
                       {calculatePercentage(totalExpectedCount, totalTodaysCount)}%
                     </TableCell>
                   </TableRow>
@@ -410,9 +391,9 @@ function Datatable() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box id="searchBox">
-              <Paper sx={{ padding: '0.8rem' }}>
+              <Paper sx={{ padding: '0.8rem'}}>
                 <Grid item xs={12} sm={12}>
-                  <Box display={'flex'} gap={2}>
+                  <Box display={'flex'} gap={2} alignItems={'center'}>
                     <Box display={'flex'} flexGrow={1}>
                       <Autocomplete
                         fullWidth
@@ -434,7 +415,7 @@ function Datatable() {
                       />
                     </Box>
 
-                    <Box display={'flex'} gap={'0.8rem'} padding={'2px'}>
+                    <Box display={'flex'} gap={'0.8rem'} alignItems={'center'}>
                       <Button variant="contained" onClick={handleSearch}>
                         {constraints.DATATABLE.BUTTON.FETCH}
                       </Button>
@@ -449,8 +430,8 @@ function Datatable() {
                 </Grid>
               </Paper>
             </Box>
-            <Box sx={{ overflow: 'auto', maxHeight: '63vh', paddingRight: '0.5rem' }}>
-              <Box mt={2}>
+            <Box mt={1.5} sx={{ overflow: 'auto', maxHeight: '64.5vh' }}>
+              <Box >
                 {selectedItem ? (
                   <Card
                     variant="outlined"
@@ -459,25 +440,25 @@ function Datatable() {
                       bgcolor: selectedItem.SwipeDateTime === 'ABSENT' ? '#f43636d4' : '#90EE90',
                     }}
                   >
-                    <CardContent sx={{ overflow: 'auto', maxHeight: '35vh' }}>
+                    <CardContent sx={{  }}>
                       {/* <Typography variant="h6">Search Result</Typography> */}
                       <Grid container spacing={2}>
                         {/* User Info Section */}
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6">User Information</Typography>
+                        <Grid item xs={12} md={5}>
+                          <Typography variant="body2" fontWeight={'bold'} mb={1}>User Information</Typography>
                           <Box display="flex" alignItems="center" marginBottom={1}>
                             {selectedItem.EmpGender === 'Male' ? (
                               <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
                             ) : (
                               <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
                             )}
-                            <Typography>
+                            <Typography variant='body3'>
                               {selectedItem.EmpName} ({selectedItem.EmpID})
                             </Typography>
                           </Box>
                           <Box display="flex" alignItems="center" marginBottom={1}>
                             <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
-                            <Typography>
+                            <Typography variant='body3'>
                               &nbsp;
                               <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
                                 {selectedItem.EmpEmail}
@@ -486,14 +467,14 @@ function Datatable() {
                           </Box>
                           <Box display="flex" alignItems="center" marginBottom={1}>
                             <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
-                            <Typography>&nbsp;{selectedItem.DeptName}</Typography>
+                            <Typography variant='body3'>&nbsp;{selectedItem.DeptName}</Typography>
                           </Box>
                           <Box display="flex" alignItems="center" marginBottom={1}>
                             <PiMicrosoftTeamsLogoFill
                               size={20}
                               sx={{ backgroundColor: '#d6338f' }}
                             />
-                            <Typography>
+                            <Typography variant='body3'>
                               &nbsp;
                               <a
                                 href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
@@ -506,22 +487,22 @@ function Datatable() {
                         </Grid>
 
                         {/* Swipe Info Section */}
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6">Swipe Information</Typography>
+                        <Grid item xs={12} md={7}>
+                          <Typography variant="body2" fontWeight={'bold'} mb={1}>Swipe Information</Typography>
                           {selectedItem.SwipeDateTime === 'ABSENT' ? (
-                            <Typography sx={{ color: 'red' }}>ABSENT</Typography>
+                            <Typography variant='body3' sx={{ color: 'red' }}>ABSENT</Typography>
                           ) : (
-                            <table>
-                              <tbody>
+                            <Table>
+                              <TableBody>
                                 {selectedItemAllEntries.map((item, index) => (
-                                  <tr key={index}>
-                                    <td>
+                                  <TableRow key={index} >
+                                    <TableCell sx={{border:'none'}}>
                                       {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
-                                    </td>
-                                  </tr>
+                                    </TableCell>
+                                  </TableRow>
                                 ))}
-                              </tbody>
-                            </table>
+                              </TableBody>
+                            </Table>
                           )}
                         </Grid>
                       </Grid>
@@ -529,11 +510,11 @@ function Datatable() {
                   </Card>
                 ) : (
                   <>
-                    <Typography variant="body1" color="red">
+                    <Typography variant='body3' color="red">
                       {error}
                     </Typography>
                     {fetchHistoryError && (
-                      <Typography variant="contained" color="error">
+                      <Typography variant='body3' color="error">
                         {fetchHistoryError}
                       </Typography>
                     )}

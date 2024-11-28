@@ -35,7 +35,7 @@ const theme = createTheme({
 
   typography: {
     fontFamily: '"Roboto", "Arial", sans-serif',
-    // fontSize: "0.875rem",
+    // fontSize: "0.8rem",
     // fontWeight: 400,
     h1: {
       fontSize: '2.5rem',
@@ -69,6 +69,10 @@ const theme = createTheme({
       fontSize: '0.875rem',
       fontWeight: 400,
     },
+    body3: {
+      fontSize: '0.8rem',
+      // fontWeight: 400,
+    },
     subtitle1: {
       fontSize: '1rem',
       fontWeight: 300,
@@ -83,53 +87,128 @@ const theme = createTheme({
   },
 
   components: {
-    // MuiButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       padding: "8px 16px",
-    //       borderRadius: 4,
-    //       fontWeight: 600,
-    //     },
-    //   },
-    // },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          padding: "4px 16px",
+          // borderRadius: 4,
+          // fontWeight: 600,
+        },
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        // Style the dropdown options
+        // popper: {
+        //   zIndex: 1300, // Make sure the dropdown has the right zIndex
+        // },
+        // This targets the individual options in the dropdown
+        // listbox: {
+        //   padding: 0,
+        //   maxHeight: '200px',
+        // },
+        // Target individual option styles
+        option: {
+          // padding: '8px 16px',
+          fontSize: '0.8rem',
+          // fontWeight: 'normal',
+          // '&[aria-selected="true"]': {
+          //   backgroundColor: '#b3e0ff', // Highlight selected options
+          //   fontWeight: 'bold',
+          // },
+          // '&:hover': {
+          //   backgroundColor: '#f0f0f0', // Hover effect
+          // },
+        },
+        noOptions: {
+          fontSize:'0.8rem'
+          // color: '#888', // Gray color for the "No options" text
+          // fontStyle: 'italic', // Italicized font
+          // textAlign: 'center', // Center the "No options" text
+          // padding: '8px', // Add padding for the message
+        },
+      },
+    },
+    MuiInputBase: {
+      // styleOverrides: {
+      //   root: {
+      //     // borderRadius: 4,
+      //     // padding: '8px 12px',
+      //     fontSize:'0.8rem'
 
-    // MuiInputBase: {
-    //   styleOverrides: {
-    //     root: {
-    //       borderRadius: 4,
-    //       padding: '8px 12px',
-    //     },
-    //   },
-    // },
+      //   },
+      // },
+      defaultProps: {
+        size: 'small', // Set default size to 'small'
+      },
+      styleOverrides: {
+        root: {
+               fontSize:'0.8rem',
+              //  color:'red',
+              padding: '8px 12px',
+          // Default padding for 'small' size (you can adjust as needed)
+          // padding: '18px',  // Customize the padding here for small size
+        },
+      
+      }
+    },
+    MuiIconButton:{
+      styleOverrides:{
+        root:{
+          padding:'0 8px'
+        }
+      }
+    },
+    MuiOutlinedInput:{
+      styleOverrides: {
+        root: {
+          // borderRadius: 4,
+          padding: '3px 12px',
+          fontSize:'0.8rem',
+          background:'#ffffff'
 
-    // MuiTextField: {
-    //   styleOverrides: {
-    //     root: {
-    //       marginBottom: '16px',
-    //     },
-    //   },
-    // },
+        },
+        input:{
+          padding:'6px 0'
+        }
+      },
+    },
+    MuiInputLabel:{
+      styleOverrides: {
+        root: {
+          // borderRadius: 4,
+          // padding: '3px 12px',
+          fontSize:'0.8rem',
+          // background:'red'
 
-    // MuiDatePicker: {
-    //   styleOverrides: {
-    //     root: {
-    //       backgroundColor: '#ffffff',
-    //       borderRadius: 4,
-    //     },
-    //   },
-    // },
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          boxSizing:"border-box",
+          height:'100%'
+        },
+      },
+    },
+
+   
 
     MuiTableCell: {
       styleOverrides: {
         root: {
           padding: '0.6rem',
+          fontSize: '0.8rem'
         },
         head: {
           background: '#f0f0f0',
-          padding: '0.8rem',
+          padding: '0.4rem',
+          fontSize: '0.875rem'
         },
         body: {
-          padding: '0.4rem',
+          padding: '0.35rem',
+          fontSize: '0.8rem'
         },
       },
     },

@@ -17,6 +17,8 @@ import { FcOk } from 'react-icons/fc';
 import { FcHighPriority } from 'react-icons/fc';
 import { useMsal } from '@azure/msal-react';
 import UserContext from '../../context/UserContext';
+import DateComponent from '../common/DateComponent';
+import dayjs from 'dayjs';
 
 function EmployeeHistory() {
   const { empId, year, month } = useParams();
@@ -100,7 +102,7 @@ function EmployeeHistory() {
   //   if (valueA > valueB) return direction === 'asc' ? 1 : -1;
   //   return 0;
   // });
-  const handleBack = async() => {
+  const handleBack = async () => {
     await setActiveApiCall(false);
     await navigate('/');
   };
@@ -122,9 +124,9 @@ function EmployeeHistory() {
         >
           <Box display="flex" justifyContent="space-between" alignItems="center" gap="1rem">
             {/* <Link to="/" style={{ textDecoration: 'none' }}> */}
-              <Button variant="contained" color="primary" onClick={handleBack}>
-                Back to home page
-              </Button>
+            <Button variant="contained" color="primary" onClick={handleBack}>
+              Back to home page
+            </Button>
             {/* </Link> */}
 
             <Typography variant="h6" fontWeight="bold">
@@ -140,10 +142,19 @@ function EmployeeHistory() {
             position="sticky"
             top="0px"
             zIndex="100"
-            gap="16px"
-           
+            // gap="16px"
           >
-            <TextField
+            <Box display={'flex'} alignItems={'center'} gap={'1rem'}>
+              <Box width={'11vw'}>
+              <DateComponent
+              views={['month','year']}
+              value={dayjs(new Date())}
+              onchange={()=>{}}
+              // style={{width:'9vw'}}
+            />
+              </Box>
+            
+            {/* <TextField
               id="year-month-picker"
               type="month"
               value={selectedYearMonth}
@@ -152,25 +163,28 @@ function EmployeeHistory() {
                 shrink: true,
               }}
               size="small"
-              style={{ minWidth: '150px', backgroundColor: 'white' , borderRadius :"4px" ,  height:"1.4375em;"}}
-            />
-            <Box>
+              style={{
+                minWidth: '150px',
+                backgroundColor: 'white',
+                borderRadius: '4px',
+                height: '1.4375em;',
+              }}
+            /> */}
+            
               <TextField
                 placeholder="Search by Employee name"
                 value={searchQuery}
                 onChange={handleSearchInputChange}
                 variant="outlined"
                 size="small"
-                style={{
-                  marginRight: '8px',
-                  width: '300px',
-                  backgroundColor: 'white',
-                  borderRadius :"4px",
-                  height:"1.4375em;"
-                    // height: "40px"
-                  
-
-                }}
+                // style={{
+                //   marginRight: '8px',
+                //   width: '300px',
+                //   backgroundColor: 'white',
+                //   borderRadius: '4px',
+                //   height: '1.4375em;',
+                //   // height: "40px"
+                // }}
               />
               <Button variant="contained" onClick={handleSearch}>
                 Search
