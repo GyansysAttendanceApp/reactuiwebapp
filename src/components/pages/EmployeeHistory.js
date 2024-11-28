@@ -19,6 +19,8 @@ import { useMsal } from '@azure/msal-react';
 import UserContext from '../../context/UserContext';
 import DateComponent from '../common/DateComponent';
 import dayjs from 'dayjs';
+import Autocomplete from '@mui/material/Autocomplete';
+import constraints from '../../constraints';
 
 function EmployeeHistory() {
   const { empId, year, month } = useParams();
@@ -50,7 +52,7 @@ function EmployeeHistory() {
     navigate(`/EmpHistory/${empId}/${selectedYear}/${selectedMonthValue}`);
   };
 
-  const handleSearchInputChange = async (event) => {
+  const handleSearchInputChange = async (event, value) => {
     const query = event.target.value;
     setSearchQuery(query);
     try {
@@ -145,78 +147,98 @@ function EmployeeHistory() {
             // gap="16px"
           >
             <Box display={'flex'} alignItems={'center'} gap={'1rem'}>
-              <Box width={'11vw'}>
-              <DateComponent
-              views={['month','year']}
-              value={dayjs(new Date())}
-              onchange={()=>{}}
-              // style={{width:'9vw'}}
-            />
+              {/* <Box width={'11vw'}>
+                <DateComponent
+                  views={['month', 'year']}
+                  value={dayjs(new Date())}
+                  onchange={() => {}}
+                  // style={{width:'9vw'}}
+                />
+              </Box> */}
+              <Box>
+                <TextField
+                  id="year-month-picker"
+                  type="month"
+                  value={selectedYearMonth}
+                  onChange={handleYearMonthChange}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  size="small"
+                  style={{
+                    minWidth: '150px',
+                    backgroundColor: 'white',
+                    borderRadius: '4px',
+                    height: '1.4375em;',
+                  }}
+                />
               </Box>
-            
-            {/* <TextField
-              id="year-month-picker"
-              type="month"
-              value={selectedYearMonth}
-              onChange={handleYearMonthChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              size="small"
-              style={{
-                minWidth: '150px',
-                backgroundColor: 'white',
-                borderRadius: '4px',
-                height: '1.4375em;',
-              }}
-            /> */}
-            
-              <TextField
-                placeholder="Search by Employee name"
-                value={searchQuery}
-                onChange={handleSearchInputChange}
-                variant="outlined"
-                size="small"
-                // style={{
-                //   marginRight: '8px',
-                //   width: '300px',
-                //   backgroundColor: 'white',
-                //   borderRadius: '4px',
-                //   height: '1.4375em;',
-                //   // height: "40px"
-                // }}
-              />
+
+              <Box>
+                <TextField
+                  placeholder="Search by Employee name"
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  variant="outlined"
+                  size="small"
+                  style={{
+                    width: '300px',
+                  }}
+                />
+                {suggestions.length > 0 && (
+                  <Box
+                    style={{
+                      position: 'absolute',
+                      top: '9vh',
+                      // right: 0,
+                      backgroundColor: '#fff',
+                      boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)',
+                      borderRadius: '5px',
+                      maxHeight: '200px',
+                      overflowY: 'auto',
+                      width: '300px',
+                    }}
+                  >
+                    {suggestions.map((employee) => (
+                      <Button
+                        key={employee.EmpID}
+                        fullWidth
+                        onClick={() => handleSuggestionClick(employee)}
+                        style={{
+                          justifyContent: 'flex-start',
+                          textTransform: 'none',
+                        }}
+                      >
+                        {employee.EmpName}
+                      </Button>
+                    ))}
+                  </Box>
+                )}
+              </Box>
+              {/* <Box display={'flex'} flexGrow={1} width={'11vh'}>
+                      <Autocomplete
+                        fullWidth
+                        value={searchQuery}
+                        onChange={(event, value) => handleSearchInputChange(value || '')}
+                        inputValue={searchQuery}
+                        onInputChange={(event, newInputValue) => {
+                          setSearchQuery(newInputValue || '');
+                        }}
+                        options={suggestions}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={constraints.DATATABLE.SEARCH.LABEL}
+                            variant="outlined"
+                            size="small"
+                          />
+                        )}
+                      />
+                    </Box> */}
               <Button variant="contained" onClick={handleSearch}>
                 Search
               </Button>
               {/* </Box> */}
-              {suggestions.length > 0 && (
-                <Box
-                  style={{
-                    position: 'absolute',
-                    backgroundColor: '#fff',
-                    boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)',
-                    borderRadius: '5px',
-                    maxHeight: '200px',
-                    overflowY: 'auto',
-                    width: '300px',
-                  }}
-                >
-                  {suggestions.map((employee) => (
-                    <Button
-                      key={employee.EmpID}
-                      fullWidth
-                      onClick={() => handleSuggestionClick(employee)}
-                      style={{
-                        justifyContent: 'flex-start',
-                        textTransform: 'none',
-                      }}
-                    >
-                      {employee.EmpName}
-                    </Button>
-                  ))}
-                </Box>
-              )}
             </Box>
           </Box>
         </Box>
