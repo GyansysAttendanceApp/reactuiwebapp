@@ -27,7 +27,7 @@ const constraints = {
       CLEAR: 'Clear',
     },
     WATCH_LIST: {
-      TITLE: 'WATCH LISTS',
+      TITLE: 'Watch Lists',
       EMPLOYEE_NAME: '',
       IN_TIME: '',
       OUT_TIME: '',

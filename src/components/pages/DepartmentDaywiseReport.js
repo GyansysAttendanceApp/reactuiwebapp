@@ -68,9 +68,10 @@ const DepartmentDayWiseReport = () => {
 
         const response = await fetch(
           `${url}/get-employee-attendance/${operationId}/${date}/${departmentId}`,
-        );
-        if (response.data) {
-          setDepartmentDayWiseData(response.data);
+        ).then((res) => res.json());
+        console.log({ response }, 'response from departmentwise data');
+        if (response) {
+          setDepartmentDayWiseData(response);
         }
       } catch (error) {
         console.log('Error fetching departmrntdata', error);
@@ -208,15 +209,18 @@ const DepartmentDayWiseReport = () => {
             <TableBody sx={{}}>
               {departmentDayWiseData.map((row, index) => (
                 <TableRow key={index}>
-                  <TableCell>{row.date}</TableCell>
-                  <TableCell>{row.day}</TableCell>
-                  <TableCell>{row.type}</TableCell>
-                  <TableCell>{row.empName}</TableCell>
-                  <TableCell>{row.department}</TableCell>
-                  <TableCell>{row.firstIn}</TableCell>
-                  <TableCell>{row.lastOut}</TableCell>
-                  <TableCell>{row.duration}</TableCell>
-                  <TableCell>{row.remarks}</TableCell>
+                  <TableCell>{row.AttDateText}</TableCell>
+                  <TableCell>{row.AttDay}</TableCell>
+                  <TableCell>
+                    {' '}
+                    {row.IsWeekDay ? (row.IsHoliday ? 'Holiday' : 'Workday') : 'Weekend'}
+                  </TableCell>
+                  <TableCell>{row.EmpName}</TableCell>
+                  <TableCell>{row.DeptName}</TableCell>
+                  <TableCell>{row.FirstIn}</TableCell>
+                  <TableCell>{row.LastOut}</TableCell>
+                  <TableCell>{row.Duration}</TableCell>
+                  <TableCell>{row.HolidayText}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

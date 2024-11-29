@@ -19,7 +19,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 const WatchListForAdmin = ({ groupedWatchlist ,selectedItem}) => {
   return (
     <Box sx={{ overflow: 'auto', maxHeight: '68.5vh', marginTop: '0.5rem' }}>
-      {selectedItem && ( //selectedItem
+      {true && ( //selectedItem
         <Box>
           <Accordion sx={{ backgroundColor: '' }}>
             <AccordionSummary
@@ -28,7 +28,7 @@ const WatchListForAdmin = ({ groupedWatchlist ,selectedItem}) => {
               id="panel1a-header"
               sx={{ backgroundColor: '#5DADE2' }}
             >
-              <Typography variant="h5" sx={{ color: '#FFFFFF' }}>
+              <Typography variant="body3" sx={{ color: '#FFFFFF',fontWeight:'bold' }}>
                 {constraints.DATATABLE.WATCH_LIST.TITLE}
               </Typography>
             </AccordionSummary>
