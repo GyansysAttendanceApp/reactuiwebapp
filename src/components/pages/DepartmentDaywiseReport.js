@@ -67,7 +67,7 @@ const DepartmentDayWiseReport = () => {
         const date = queryParams.get('date');
 
         const response = await fetch(
-          `${url}/DepartmentDaywiseReport/${operationId}/${date}/${departmentId}`,
+          `${url}/get-employee-attendance/${operationId}/${date}/${departmentId}`,
         );
         if (response.data) {
           setDepartmentDayWiseData(response.data);
