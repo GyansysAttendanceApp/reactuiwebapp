@@ -8,7 +8,7 @@ function Footer() {
   const currentYear = new Date().getFullYear()
   return (
     <Box className="footer_container">
-      <Typography variant="boday2" sx={{ color: 'white' }}>
+      <Typography variant="body3" sx={{ color: '#ffffff' }}>
         {constraints.FOOTER.COPY_RIGHT.TITLE} {currentYear}
         {constraints.FOOTER.COPY_RIGHT.COMPANY_NAME}
       </Typography>

@@ -30,45 +30,60 @@ import UserContext from '../../context/UserContext';
 import DateComponent from '../common/DateComponent';
 import dayjs from 'dayjs';
 import constraints from '../../constraints';
-import { CircularProgress } from '@mui/material';
 import '../../style/Datatable.scss';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { colors } from '../../colors/Color';
+import AutoCompleteInput from '../common/AutoCompleteInput';
+import UserInformation from './UserInformation';
+import { Tab, Tabs } from '@mui/material';
+import CustomTabPanel from '../common/Tabs';
+import WatchListForAdmin from './WatchListForAdmin';
+import {Link } from "react-router-dom"
 
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 function Datatable() {
-  const { instance, accounts } = useMsal();
-  console.log(accounts, 'datatable');
-  console.log(instance, 'INdatatable');
-  const [query, setQuery] = useState('');
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedItemAllEntries, setSelectedItemAllEntries] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
-  const [masterData, setMasterData] = useState([]);
-  // const [CurDate, setCurDate] = useState("");
-  const [departmentData, setDepartmentData] = useState([]);
   const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
   const [error, setError] = useState('');
-  // const [dtCurrentDate, setDtCurrentDate] = useState("");
   const [totalExpectedCount, setTotalExpectedCount] = useState(0);
   const [totalTodaysCount, setTotalTodaysCount] = useState(0);
-  // const [currentTime, setCurrentTime] = useState(""); // for current time
   const [fetchHistoryError, setFetchHistoryError] = useState('');
-  const [departmentDataLoading, setDepartmentDataLoading] = useState(true);
-  const [employeeDetailsLoading, setEmployeeDetailsLoading] = useState(true);
-  // const [showWatchlist, setShowWatchlist] = useState(false);
-
+  const [suggestions, setSuggestions] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
-  const [selectedWatchListDate, setSelectedWatchListDate] = useState(dayjs(new Date()));
-  const [selectedFormatedWatchListDate, setSelectedFormatedWatchListDate] = useState(
-    dayjs(new Date()).format('YYYY-MM-DD'),
-  );
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
   const navigate = useNavigate();
+  const { accounts } = useMsal();
+  const {
+    departmentData,
+    setDepartmentData,
+    query,
+    setQuery,
+    showWatchlist,
+    selectedItem,
+    selectedItemAllEntries,
+    masterData,
+    setMasterData,
+    setSelectedItem,
+    setSelectedItemAllEntries,
+    selectedWatchListDate,
+    setSelectedWatchListDate,
+    selectedFormatedWatchListDate,
+    setSelectedFormatedWatchListDate,
+    employeeDetailsLoading,
+    departmentDataLoading,
+    setEmployeeDetailsLoading,
+    setDepartmentDataLoading,
+  } = useContext(UserContext);
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
+  const [value, setValue] = React.useState(0);
 
-  const { showWatchlist } = useContext(UserContext);
-
-  // Function to clear errors after 2 seconds
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   useEffect(() => {
     const clearErrors = setTimeout(() => {
       setError('');
@@ -78,34 +93,6 @@ function Datatable() {
     return () => clearTimeout(clearErrors);
   }, [error, fetchHistoryError]);
 
-  // Fetch current time
-  // useEffect(() => {
-  //   const getCurrentTime = () => {
-  //     const now = new Date();
-  //     const hours = now.getHours().toString().padStart(2, "0");
-  //     const minutes = now.getMinutes().toString().padStart(2, "0");
-  //     const seconds = now.getSeconds().toString().padStart(2, "0");
-  //     return `${hours}:${minutes}:${seconds}`;
-  //   };
-
-  //   setCurrentTime(getCurrentTime());
-  // }, []);
-
-  // const getCurrentDate = () => {
-  //   const today = new Date();
-
-  //   const yyyy = today.getFullYear();
-  //   let mm = today.getMonth() + 1; // Months start at 0!
-  //   let dd = today.getDate();
-
-  //   if (dd < 10) dd = "0" + dd;
-  //   if (mm < 10) mm = "0" + mm;
-
-  //   let formattedDate = `${yyyy}-${mm}-${dd}`;
-  //   return formattedDate;
-  // };
-
-  /// api call for nameSuggestions
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
@@ -116,7 +103,6 @@ function Datatable() {
 
         const response = await axios.get(`${url}/employees?name=${query}`);
         const data = response.data;
-        console.log(' segg contain dataEMployeeID', data);
         setMasterData(data);
         const suggestions = data.map((item) => item.EmpName);
         setSuggestions(suggestions);
@@ -124,19 +110,11 @@ function Datatable() {
         console.error('Error fetching suggestions:', error);
       }
     };
-
     fetchSuggestions();
   }, [query]);
 
   useEffect(() => {
-    //const date = "2024-11-15"; // it may work in local to fetch the data while deploying we need to commit this one
-    // const date = getCurrentDate(); // this one we need to uncommit while deploying to get the current data and it start working
-    // const formattedDateDate = new Date(date);
-    // const dateFormat = formattedDateDate.toDateString();
-    // setDtCurrentDate(dateFormat);
-    // setCurDate(date);
     setDepartmentData([]);
-
     fetchDepartmentData(selectedFormatedWatchListDate);
   }, [selectedFormatedWatchListDate]);
 
@@ -148,28 +126,23 @@ function Datatable() {
   useEffect(() => {
     const fetchWatchlistData = async () => {
       try {
-        // const date = getCurrentDate();
         const email = accounts[0].username;
-        console.log('getwatchlist data in datatable API', email);
         const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
         const data = await response.json();
-        console.log('getwatchlist data in datatable API', data);
         setWatchlist(data);
       } catch (error) {
         console.error('Error fetching watchlist data:', error);
       }
     };
-    fetchWatchlistData();
     setSelectedItem(null);
     setSelectedItemAllEntries([]);
+    fetchWatchlistData();
     handleSearch();
-    // handleFetchHistory();
   }, [accounts, selectedFormatedWatchListDate]);
 
   const handleSelectedWatchListDate = (event) => {
     setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
     setSelectedWatchListDate(event);
-    console.log('date is', dayjs(event).format('DD-MM-YYYY'));
   };
 
   const fetchDepartmentData = async (date) => {
@@ -177,6 +150,7 @@ function Datatable() {
       setDepartmentDataLoading(true);
 
       const response = await axios.get(`${url}/dept?date=${date}`);
+      console.log("dataTable", response)
       setDepartmentData(response.data);
       setDepartmentDataLoading(false);
     } catch (error) {
@@ -225,8 +199,6 @@ function Datatable() {
   };
 
   const handleFetchHistory = () => {
-    console.log('calling fetch logic :::::::::');
-
     if (!masterData || masterData.length === 0) {
       setFetchHistoryError('Please Enter a name first.');
     } else {
@@ -237,23 +209,58 @@ function Datatable() {
     }
   };
 
-  const handleSort = (column) => {
-    const newSortOrder = {
-      column: column,
-      direction: sortOrder.column === column && sortOrder.direction === 'asc' ? 'desc' : 'asc',
-    };
+  // const handleSort = (column) => {
+  //   const newSortOrder = {
+  //     column: column,
+  //     direction: sortOrder.column === column && sortOrder.direction === 'asc' ? 'desc' : 'asc',
+  //   };
 
-    setSortOrder(newSortOrder);
+  //   setSortOrder(newSortOrder);
+
+  //   const sortedData = [...departmentData].sort((a, b) => {
+  //     if (newSortOrder.direction === 'asc') {
+  //       return a[column] - b[column];
+  //     } else {
+  //       return b[column] - a[column];
+  //     }
+  //   });
+
+  //   setDepartmentData(sortedData);
+  // };
+
+  const handleSort = (column) => {
+    const isAsc = sortOrder.column === column && sortOrder.direction === 'asc';
+    setSortOrder({ column, direction: isAsc ? 'desc' : 'asc' });
 
     const sortedData = [...departmentData].sort((a, b) => {
-      if (newSortOrder.direction === 'asc') {
-        return a[column] - b[column];
-      } else {
-        return b[column] - a[column];
+      let valueA, valueB;
+
+      switch (column) {
+        case 'ExpectedCount':
+          valueA = parseInt(a.ExpectedCount);
+          valueB = parseInt(b.ExpectedCount);
+          break;
+        case 'ReportedCount':
+          valueA = parseInt(a.TodaysCount);
+          valueB = parseInt(b.TodaysCount);
+          break;
+        case 'AbsentCount':
+          valueA = parseInt(a.ExpectedCount) - parseInt(a.TodaysCount);
+          valueB = parseInt(b.ExpectedCount) - parseInt(b.TodaysCount);
+          break;
+        case 'Achieved':
+          valueA = calculatePercentage(parseInt(a.ExpectedCount), parseInt(a.TodaysCount));
+          valueB = calculatePercentage(parseInt(b.ExpectedCount), parseInt(b.TodaysCount));
+          break;
+        default:
+          return 0;
       }
+
+      return isAsc ? valueA - valueB : valueB - valueA;
     });
 
-    setDepartmentData(sortedData);
+    // Replace the original array with the sorted one
+    departmentData.splice(0, departmentData.length, ...sortedData);
   };
 
   const calculateExpectedTotalCount = () => {
@@ -272,15 +279,10 @@ function Datatable() {
     return totalTodaysCount;
   };
 
-  // useEffect(() => {
-  // }, [departmentData]);
-
-  // Function to calculate percentage
   const calculatePercentage = (expected, today) => {
     return expected !== 0 ? ((today / expected) * 100).toFixed() : 0;
   };
 
-  // Group watchlist Names by WatchListName
   const groupedWatchlist =
     watchlist.length &&
     watchlist.reduce((acc, curr) => {
@@ -291,50 +293,16 @@ function Datatable() {
       return acc;
     }, {});
 
-  // This API is show and hide the watchlist
-  // useEffect(() => {
-  //   const fetchUserRole = async () => {
-  //     const email = accounts[0]?.username;
-  //     console.log("datatableEMail", email);
-  //     try {
-  //       const response = await axios.get(`${url}/userroles?email=${email}`);
-  //       const roles = response.data;
-  //       if (roles.some((role) => role.RoleID === 1 || role.RoleID === 3)) {
-  //         setShowWatchlist(true);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching user roles: ", error);
-  //     }
-  //   };
-
-  //   if (accounts[0]?.username) {
-  //     fetchUserRole();
-  //   }
-  // }, [accounts]);
-
-  // useEffect(() => {
-  //   if (userRoles && userRoles.length > 0) {
-  //     // if (userRoles.length > 0) {
-  //     const hasAccess = userRoles.some(
-  //       (role) => role.RoleID === 1 || role.RoleID === 3
-  //     );
-  //     setShowWatchlist(hasAccess);
-  //   }
-  // }, [userRoles]);
-
-  // Function to fetch watchlist data from the API
-
   return (
     <Box>
-      {/* <Paper elevation={3} sx={{ p: 1 }}> */}
       <Box
         sx={{
-          // fontWeight: 'bold',
           padding: ' 0.5rem  0.8rem ',
           backgroundColor: '#D6EEEE',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          height: '8vh',
         }}
       >
         <Typography variant="h6">
@@ -349,15 +317,17 @@ function Datatable() {
         </Box>
       </Box>
       <Box style={{ padding: '0.5vh 0.5vw 0 0.5vw' }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={1.5}>
           <Grid item xs={12} sm={6}>
-            <TableContainer component={Paper} sx={{ maxHeight: '74vh', overflow: 'none' }} ś>
+            <TableContainer component={Paper} sx={{ maxHeight: '76.5vh', overflow: 'none' }} ś>
               <Table>
                 <TableHead sx={{ position: 'sticky', top: 0 }}>
                   <TableRow>
                     <TableCell>
                       <Typography variant="body2" fontWeight="bold">
+                      
                         {constraints.DATATABLE.DEPARTMENT_NAME}
+                      
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -375,9 +345,9 @@ function Datatable() {
                     </TableCell>
                     <TableCell>
                       <TableSortLabel
-                        active={sortOrder.column == 'TodaysCount'}
-                        direction={sortOrder.column == 'TodaysCount' ? sortOrder.direction : 'asc'}
-                        onClick={() => handleSort('TodaysCount')}
+                        active={sortOrder.column == 'ReportedCount'}
+                        direction={sortOrder.column == 'ReportedCount' ? sortOrder.direction : 'asc'}
+                        onClick={() => handleSort('ReportedCount')}
                       >
                         <Typography variant="body2" fontWeight="bold">
                           {constraints.DATATABLE.REPORTED_COUNT}
@@ -385,14 +355,26 @@ function Datatable() {
                       </TableSortLabel>
                     </TableCell>
                     <TableCell>
+                    <TableSortLabel
+                        active={sortOrder.column === 'AbsentCount'}
+                        direction={sortOrder.column === 'AbsentCount' ? sortOrder.direction : 'asc'}
+                        onClick={() => handleSort('AbsentCount')}
+                      >
                       <Typography variant="body2" fontWeight="bold">
                         {constraints.DATATABLE.ABSENT_COUNT}
                       </Typography>
+                      </TableSortLabel>
                     </TableCell>
                     <TableCell>
+                    <TableSortLabel
+                        active={sortOrder.column === 'Achieved'}
+                        direction={sortOrder.column === 'Achieved' ? sortOrder.direction : 'asc'}
+                        onClick={() => handleSort('Achieved')}
+                      >
                       <Typography variant="body2" fontWeight="bold">
                         {constraints.DATATABLE.ACHIVEMENT_PERCENTAGE}
                       </Typography>
+                      </TableSortLabel>
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -401,19 +383,13 @@ function Datatable() {
                   {departmentData &&
                     departmentData.map((department) => (
                       <TableRow key={department.EmpID}>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
-                          {department.DeptName}
-                        </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
-                          {department.ExpectedCount}
-                        </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
-                          {department.TodaysCount}
-                        </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
+                        <TableCell>   <Link to= {`/DepartmentDayWiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}`} style={{ textDecoration: 'none' }}>{department.DeptName}</Link></TableCell>
+                        <TableCell>{department.ExpectedCount}</TableCell>
+                        <TableCell>{department.TodaysCount}</TableCell>
+                        <TableCell>
                           {parseInt(department.ExpectedCount) - parseInt(department.TodaysCount)}
                         </TableCell>
-                        <TableCell style={{ height: '1vh', padding: '0.5rem' }}>
+                        <TableCell>
                           {calculatePercentage(
                             parseInt(department.ExpectedCount),
                             parseInt(department.TodaysCount),
@@ -422,7 +398,7 @@ function Datatable() {
                         </TableCell>
                       </TableRow>
                     ))}
-                  {departmentDataLoading && (
+                  {departmentData.length === 0 && departmentDataLoading && (
                     <TableRow>
                       <TableCell colSpan={5}>
                         <Box
@@ -451,7 +427,7 @@ function Datatable() {
                             // background: "red",
                           }}
                         >
-                          <Typography variant="body1">
+                          <Typography variant="body3">
                             {constraints.DATATABLE.NO_DATA_FOUND}
                           </Typography>
                         </Box>
@@ -465,17 +441,13 @@ function Datatable() {
                       backgroundColor: '#f0f0f0',
                     }}
                   >
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>Total</TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
-                      {totalExpectedCount}
-                    </TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
-                      {totalTodaysCount}
-                    </TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
+                    <TableCell>Total</TableCell>
+                    <TableCell>{totalExpectedCount}</TableCell>
+                    <TableCell>{totalTodaysCount}</TableCell>
+                    <TableCell>
                       {parseInt(totalExpectedCount) - parseInt(totalTodaysCount)}
                     </TableCell>
-                    <TableCell sx={{ height: '1vh', padding: '0.5rem' }}>
+                    <TableCell>
                       {calculatePercentage(totalExpectedCount, totalTodaysCount)}%
                     </TableCell>
                   </TableRow>
@@ -484,239 +456,41 @@ function Datatable() {
             </TableContainer>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Box id="searchBox">
-              <Paper sx={{ padding: '0.8rem' }}>
-                <Grid item xs={12} sm={12}>
-                  <Box display={'flex'} gap={2}>
-                    <Box display={'flex'} flexGrow={1}>
-                      <Autocomplete
-                        fullWidth
-                        value={query}
-                        onChange={(event, value) => setQuery(value || '')}
-                        inputValue={query}
-                        onInputChange={(event, newInputValue) => {
-                          setQuery(newInputValue || '');
-                        }}
-                        options={suggestions}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label={constraints.DATATABLE.SEARCH.LABEL}
-                            variant="outlined"
-                            size="small"
-                          />
-                        )}
-                      />
-                    </Box>
-
-                    <Box display={'flex'} gap={'0.8rem'} padding={'2px'}>
-                      <Button variant="contained" onClick={handleSearch}>
-                        {constraints.DATATABLE.BUTTON.FETCH}
-                      </Button>
-                      <Button variant="contained" onClick={handleFetchHistory}>
-                        {constraints.DATATABLE.BUTTON.FETCH_HISTORY}
-                      </Button>
-                      <Button variant="contained" onClick={handleReset}>
-                        {constraints.DATATABLE.BUTTON.CLEAR}
-                      </Button>
-                    </Box>
-                  </Box>
-                </Grid>
-              </Paper>
-            </Box>
-            <Box sx={{ overflow: 'auto', maxHeight: '63vh', paddingRight: '0.5rem' }}>
-              <Box mt={2}>
-                {selectedItem ? (
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      boxShadow: 2,
-                      bgcolor: selectedItem.SwipeDateTime === 'ABSENT' ? '#f43636d4' : '#90EE90',
-                    }}
-                  >
-                    <CardContent sx={{ overflow: 'auto', maxHeight: '35vh' }}>
-                      {/* <Typography variant="h6">Search Result</Typography> */}
-                      <Grid container spacing={2}>
-                        {/* User Info Section */}
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6">User Information</Typography>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            {selectedItem.EmpGender === 'Male' ? (
-                              <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
-                            ) : (
-                              <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
-                            )}
-                            <Typography>
-                              {selectedItem.EmpName} ({selectedItem.EmpID})
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
-                            <Typography>
-                              &nbsp;
-                              <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
-                                {selectedItem.EmpEmail}
-                              </a>
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
-                            <Typography>&nbsp;{selectedItem.DeptName}</Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            <PiMicrosoftTeamsLogoFill
-                              size={20}
-                              sx={{ backgroundColor: '#d6338f' }}
-                            />
-                            <Typography>
-                              &nbsp;
-                              <a
-                                href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
-                                target="_blank"
-                              >
-                                Chat
-                              </a>
-                            </Typography>
-                          </Box>
-                        </Grid>
-
-                        {/* Swipe Info Section */}
-                        <Grid item xs={12} md={6}>
-                          <Typography variant="h6">Swipe Information</Typography>
-                          {selectedItem.SwipeDateTime === 'ABSENT' ? (
-                            <Typography sx={{ color: 'red' }}>ABSENT</Typography>
-                          ) : (
-                            <table>
-                              <tbody>
-                                {selectedItemAllEntries.map((item, index) => (
-                                  <tr key={index}>
-                                    <td>
-                                      {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          )}
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <>
-                    <Typography variant="body1" color="red">
-                      {error}
-                    </Typography>
-                    {fetchHistoryError && (
-                      <Typography variant="contained" color="error">
-                        {fetchHistoryError}
-                      </Typography>
-                    )}
-                  </>
-                )}
-                {employeeDetailsLoading && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      minHeight: '20vh',
-                      alignItems: 'center',
-                      // background: "red",
-                    }}
-                  >
-                    <FadeLoader width={3} height={16} color={colors.primaryColor} />
-                  </Box>
-                )}
+            <Box sx={{ width: '100%' }}>
+              <Box
+                sx={{ borderBottom: 1, borderColor: 'divider', maxHeight: '6.176961602671119vh' }}
+              >
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                  <Tab label="Swipe Information" {...a11yProps(0)} />
+                  <Tab label="WatchList" {...a11yProps(1)} />
+                </Tabs>
               </Box>
-              {showWatchlist && (
-                <Box mt={2}>
-                  <Accordion sx={{ backgroundColor: '' }}>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      sx={{ backgroundColor: '#5DADE2' }}
-                    >
-                      <Typography variant="h5" sx={{ color: '#FFFFFF' }}>
-                        {constraints.DATATABLE.WATCH_LIST.TITLE}
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Box>
-                        {Object.entries(groupedWatchlist).map(
-                          ([watchlistName, employees], index) => (
-                            <Accordion key={index} sx={{ marginBottom: '10px' }} defaultExpanded>
-                              <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls={`${watchlistName}-content`}
-                                id={`${watchlistName}-header`}
-                                sx={{ backgroundColor: '#ECF0F1' }}
-                              >
-                                <Typography>
-                                  <em>{watchlistName}</em>
-                                </Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <TableContainer sx={{ marginTop: '5px' }}>
-                                  <Table>
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>
-                                          <Typography variant="h6">
-                                            {constraints.DATATABLE.WATCH_LIST.EMPLOYEE_NAME}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          <Typography variant="h6">
-                                            {constraints.DATATABLE.WATCH_LIST.IN_TIME}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          <Typography variant="h6">
-                                            {constraints.DATATABLE.WATCH_LIST.OUT_TIME}
-                                          </Typography>
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {employees.map((employee, i) => (
-                                        <TableRow key={i}>
-                                          <TableCell>
-                                            <a
-                                              href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
-                                              target="_blank"
-                                            >
-                                              <PiMicrosoftTeamsLogoFill
-                                                size={20}
-                                                sx={{
-                                                  backgroundColor: '#d6338f',
-                                                }}
-                                              />
-                                            </a>
-                                            &nbsp;
-                                            <a
-                                              href={`mailto:${employee.EmployeeEmail}`}
-                                              style={{ textDecoration: 'none' }}
-                                            >
-                                              {employee.EmployeeName}
-                                            </a>
-                                          </TableCell>
-                                          <TableCell align="right">{employee.InTime}</TableCell>
-                                          <TableCell align="right">{employee.OutTime}</TableCell>
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
-                              </AccordionDetails>
-                            </Accordion>
-                          ),
-                        )}
-                      </Box>
-                    </AccordionDetails>
-                  </Accordion>
+              <CustomTabPanel value={value} index={0}>
+                <Box id="searchBox">
+                  <Paper sx={{ padding: '0.8rem', marginTop: '0.5rem' }}>
+                    <Grid item xs={12} sm={12}>
+                      <AutoCompleteInput
+                        query={query}
+                        setQuery={setQuery}
+                        suggestions={suggestions}
+                        handleSearch={handleSearch}
+                        handleFetchHistory={handleFetchHistory}
+                        handleReset={handleReset}
+                      />
+                    </Grid>
+                  </Paper>
                 </Box>
-              )}
+                <UserInformation
+                  error={error}
+                  fetchHistoryError={fetchHistoryError}
+                  selectedItem={selectedItem}
+                  selectedItemAllEntries={selectedItemAllEntries}
+                  employeeDetailsLoading={employeeDetailsLoading}
+                />
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={1}>
+                <WatchListForAdmin groupedWatchlist={groupedWatchlist} selectedItem={selectedItem}/>
+              </CustomTabPanel>
             </Box>
           </Grid>
         </Grid>
