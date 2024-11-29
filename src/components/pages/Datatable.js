@@ -33,6 +33,7 @@ import constraints from '../../constraints';
 import '../../style/Datatable.scss';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { colors } from '../../colors/Color';
+import {Link } from "react-router-dom"
 
 function Datatable() {
   const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
@@ -134,6 +135,7 @@ function Datatable() {
       setDepartmentDataLoading(true);
 
       const response = await axios.get(`${url}/dept?date=${date}`);
+      console.log("dataTable", response)
       setDepartmentData(response.data);
       setDepartmentDataLoading(false);
     } catch (error) {
@@ -192,23 +194,58 @@ function Datatable() {
     }
   };
 
-  const handleSort = (column) => {
-    const newSortOrder = {
-      column: column,
-      direction: sortOrder.column === column && sortOrder.direction === 'asc' ? 'desc' : 'asc',
-    };
+  // const handleSort = (column) => {
+  //   const newSortOrder = {
+  //     column: column,
+  //     direction: sortOrder.column === column && sortOrder.direction === 'asc' ? 'desc' : 'asc',
+  //   };
 
-    setSortOrder(newSortOrder);
+  //   setSortOrder(newSortOrder);
+
+  //   const sortedData = [...departmentData].sort((a, b) => {
+  //     if (newSortOrder.direction === 'asc') {
+  //       return a[column] - b[column];
+  //     } else {
+  //       return b[column] - a[column];
+  //     }
+  //   });
+
+  //   setDepartmentData(sortedData);
+  // };
+
+  const handleSort = (column) => {
+    const isAsc = sortOrder.column === column && sortOrder.direction === 'asc';
+    setSortOrder({ column, direction: isAsc ? 'desc' : 'asc' });
 
     const sortedData = [...departmentData].sort((a, b) => {
-      if (newSortOrder.direction === 'asc') {
-        return a[column] - b[column];
-      } else {
-        return b[column] - a[column];
+      let valueA, valueB;
+
+      switch (column) {
+        case 'ExpectedCount':
+          valueA = parseInt(a.ExpectedCount);
+          valueB = parseInt(b.ExpectedCount);
+          break;
+        case 'ReportedCount':
+          valueA = parseInt(a.TodaysCount);
+          valueB = parseInt(b.TodaysCount);
+          break;
+        case 'AbsentCount':
+          valueA = parseInt(a.ExpectedCount) - parseInt(a.TodaysCount);
+          valueB = parseInt(b.ExpectedCount) - parseInt(b.TodaysCount);
+          break;
+        case 'Achieved':
+          valueA = calculatePercentage(parseInt(a.ExpectedCount), parseInt(a.TodaysCount));
+          valueB = calculatePercentage(parseInt(b.ExpectedCount), parseInt(b.TodaysCount));
+          break;
+        default:
+          return 0;
       }
+
+      return isAsc ? valueA - valueB : valueB - valueA;
     });
 
-    setDepartmentData(sortedData);
+    // Replace the original array with the sorted one
+    departmentData.splice(0, departmentData.length, ...sortedData);
   };
 
   const calculateExpectedTotalCount = () => {
@@ -273,7 +310,9 @@ function Datatable() {
                   <TableRow>
                     <TableCell>
                       <Typography variant="body2" fontWeight="bold">
+                      
                         {constraints.DATATABLE.DEPARTMENT_NAME}
+                      
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -291,9 +330,9 @@ function Datatable() {
                     </TableCell>
                     <TableCell>
                       <TableSortLabel
-                        active={sortOrder.column == 'TodaysCount'}
-                        direction={sortOrder.column == 'TodaysCount' ? sortOrder.direction : 'asc'}
-                        onClick={() => handleSort('TodaysCount')}
+                        active={sortOrder.column == 'ReportedCount'}
+                        direction={sortOrder.column == 'ReportedCount' ? sortOrder.direction : 'asc'}
+                        onClick={() => handleSort('ReportedCount')}
                       >
                         <Typography variant="body2" fontWeight="bold">
                           {constraints.DATATABLE.REPORTED_COUNT}
@@ -301,14 +340,26 @@ function Datatable() {
                       </TableSortLabel>
                     </TableCell>
                     <TableCell>
+                    <TableSortLabel
+                        active={sortOrder.column === 'AbsentCount'}
+                        direction={sortOrder.column === 'AbsentCount' ? sortOrder.direction : 'asc'}
+                        onClick={() => handleSort('AbsentCount')}
+                      >
                       <Typography variant="body2" fontWeight="bold">
                         {constraints.DATATABLE.ABSENT_COUNT}
                       </Typography>
+                      </TableSortLabel>
                     </TableCell>
                     <TableCell>
+                    <TableSortLabel
+                        active={sortOrder.column === 'Achieved'}
+                        direction={sortOrder.column === 'Achieved' ? sortOrder.direction : 'asc'}
+                        onClick={() => handleSort('Achieved')}
+                      >
                       <Typography variant="body2" fontWeight="bold">
                         {constraints.DATATABLE.ACHIVEMENT_PERCENTAGE}
                       </Typography>
+                      </TableSortLabel>
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -317,7 +368,7 @@ function Datatable() {
                   {departmentData &&
                     departmentData.map((department) => (
                       <TableRow key={department.EmpID}>
-                        <TableCell>{department.DeptName}</TableCell>
+                        <TableCell>   <Link to= {`/DepartmentDaywiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}`} style={{ textDecoration: 'none' }}>{department.DeptName}</Link></TableCell>
                         <TableCell>{department.ExpectedCount}</TableCell>
                         <TableCell>{department.TodaysCount}</TableCell>
                         <TableCell>
@@ -482,6 +533,9 @@ function Datatable() {
                               >
                                 Chat
                               </a>
+                            </Typography>
+                            <Typography>
+                              {selectedItem.Location}
                             </Typography>
                           </Box>
                         </Grid>
