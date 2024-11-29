@@ -383,7 +383,7 @@ function Datatable() {
                   {departmentData &&
                     departmentData.map((department) => (
                       <TableRow key={department.EmpID}>
-                        <TableCell>   <Link to= {`/DepartmentDaywiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}`} style={{ textDecoration: 'none' }}>{department.DeptName}</Link></TableCell>
+                        <TableCell>   <Link to= {`/DepartmentDayWiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}`} style={{ textDecoration: 'none' }}>{department.DeptName}</Link></TableCell>
                         <TableCell>{department.ExpectedCount}</TableCell>
                         <TableCell>{department.TodaysCount}</TableCell>
                         <TableCell>

@@ -1,4 +1,4 @@
-import React, { useState ,useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -13,19 +13,17 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FcOk } from 'react-icons/fc';
 import { FcHighPriority } from 'react-icons/fc';
 import UserContext from '../../context/UserContext';
-import { useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
- const DepartmentDaywiseReport = ({operationId , departmentId}) => {
+const DepartmentDayWiseReport = () => {
+  const [departmentDayWiseData, setDepartmentDayWiseData] = useState([]);
+  const location = useLocation();
 
-    const [departmentdata , setDepartmentdata] = useState([])
-    const location = useLocation();
-
-
-    const {selectedFormatedWatchListDate} = useContext(UserContext)
-    const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
-   const navigate = useNavigate()
-       const dummyData = [
-        {
+  const { selectedFormatedWatchListDate } = useContext(UserContext);
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
+  const navigate = useNavigate();
+  const dummyData = [
+    {
       date: '2024-11-24',
       day: 'Monday',
       type: 'Office',
@@ -60,38 +58,40 @@ import { useLocation } from "react-router-dom";
     },
   ];
 
+  useEffect(() => {
+    const fetchDepartmentdata = async () => {
+      try {
+        const queryParams = new URLSearchParams(location.search);
+        const operationId = queryParams.get('operationId');
+        const departmentId = queryParams.get('departmentId');
+        const date = queryParams.get('date');
 
-  useEffect(() =>{
+        const response = await fetch(
+          `${url}/DepartmentDaywiseReport/${operationId}/${date}/${departmentId}`,
+        );
+        if (response.data) {
+          setDepartmentDayWiseData(response.data);
+        }
+      } catch (error) {
+        console.log('Error fetching departmrntdata', error);
+        setDepartmentDayWiseData([]);
+      }
+    };
+    fetchDepartmentdata();
+  }, []);
 
-   const fetchDepartmentdata = async() =>{
-    
-    try {
-    const queryParams = new URLSearchParams(location.search);
-    const operationId = queryParams.get("operationId");
-    const departmentId = queryParams.get("departmentId");
-    const date = queryParams.get("date");
-
-    const response = await fetch(`${url}/DepartmentDaywiseReport/${operationId}/${date}/${departmentId}`);
-    setDepartmentdata(response.data)
-    } catch (error) {
-        console.log("Error fetching departmrntdata" , error)
-    }
-   }
-  },[])
-
-    const handleBack = async () => {
-        // await setActiveApiCall(false);
-        await navigate('/');
-      };
+  const handleBack = async () => {
+    // await setActiveApiCall(false);
+    await navigate('/');
+  };
   return (
-   
-     <>
+    <>
       <div>
         <Box
           bgcolor="#d9d8d8"
           borderBottom="1px solid #ccc"
           padding="0.5rem"
-        //   px="10px"
+          //   px="10px"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
@@ -100,14 +100,12 @@ import { useLocation } from "react-router-dom";
           zIndex="100"
         >
           <Box display="flex" justifyContent="space-between" alignItems="center" gap="1rem">
-           
             <Button variant="contained" color="primary" onClick={handleBack}>
               Back to home page
             </Button>
-         
 
             <Typography variant="h6" fontWeight="bold">
-              Attendance History of Employee ID: 
+              Attendance History of Employee ID:
             </Typography>
           </Box>
 
@@ -139,7 +137,7 @@ import { useLocation } from "react-router-dom";
                   InputLabelProps={{
                     shrink: true,
                   }} */}
-                  {/* size="small"
+                {/* size="small"
                   style={{
                     minWidth: '150px',
                     backgroundColor: 'white',
@@ -160,13 +158,11 @@ import { useLocation } from "react-router-dom";
                     width: '300px',
                   }}
                 /> */}
-              
               </Box>
-           
+
               {/* <Button variant="contained" >
                 Search
               </Button> */}
-            
             </Box>
           </Box>
         </Box>
@@ -210,33 +206,25 @@ import { useLocation } from "react-router-dom";
               </TableRow>
             </TableHead>
             <TableBody sx={{}}>
-            {dummyData.map((row, index) => (
-              <TableRow key={index}>
+              {departmentDayWiseData.map((row, index) => (
+                <TableRow key={index}>
                   <TableCell>{row.date}</TableCell>
                   <TableCell>{row.day}</TableCell>
-                  <TableCell>
-                  {row.type}
-                  </TableCell>
+                  <TableCell>{row.type}</TableCell>
                   <TableCell>{row.empName}</TableCell>
                   <TableCell>{row.department}</TableCell>
                   <TableCell>{row.firstIn}</TableCell>
                   <TableCell>{row.lastOut}</TableCell>
                   <TableCell>{row.duration}</TableCell>
-                  <TableCell>
-                   
-                  {row.remarks}
-                  
-                  </TableCell>
+                  <TableCell>{row.remarks}</TableCell>
                 </TableRow>
-            ))}
-            
+              ))}
             </TableBody>
           </Table>
         </Box>
       </div>
     </>
- 
-  )
-}
+  );
+};
 
-export default DepartmentDaywiseReport
+export default DepartmentDayWiseReport;
