@@ -290,50 +290,50 @@ const theme = createTheme({
     //     },
     //   },
     // },
-    MuiAccordion: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#fff',
-          boxShadow: 'none',
-          '&:before': {
-            display: 'none', // Hide default border line
-          },
-        },
-      },
-    },
-    MuiAccordionSummary: {
-      styleOverrides: {
-        root: {
-          // backgroundColor: '#6200ea',
-          minHeight:'37px',
-          color: '#fff',
-          // padding: '10px 20px',
-          borderRadius: '4px',
-          '&.Mui-expanded': {
-            // minHeight:'37px',
-            // color: '#fff',
-            // // padding: '10px 20px',
-            // borderRadius: '4px',
-            // margin:0,
-            // backgroundColor: '#3700b3', // Darker purple when expanded
-          },
-        },
-        content: {
-          margin: '0',
-          '&.Mui-expanded':{
-            margin:0, 
-          }
-        },
-      },
-    },
-    MuiAccordionDetails: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#f5f5f5', // Light gray background for the content area
-          padding: '10px 20px',
-        },
-      },
-    },
+    // MuiAccordion: {
+    //   styleOverrides: {
+    //     root: {
+    //       backgroundColor: '#fff',
+    //       boxShadow: 'none',
+    //       '&:before': {
+    //         display: 'none', // Hide default border line
+    //       },
+    //     },
+    //   },
+    // },
+    // MuiAccordionSummary: {
+    //   styleOverrides: {
+    //     root: {
+    //       // backgroundColor: '#6200ea',
+    //       minHeight:'37px',
+    //       color: '#fff',
+    //       // padding: '10px 20px',
+    //       borderRadius: '4px',
+    //       '&.Mui-expanded': {
+    //         // minHeight:'37px',
+    //         // color: '#fff',
+    //         // // padding: '10px 20px',
+    //         // borderRadius: '4px',
+    //         // margin:0,
+    //         // backgroundColor: '#3700b3', // Darker purple when expanded
+    //       },
+    //     },
+    //     content: {
+    //       margin: '0',
+    //       '&.Mui-expanded':{
+    //         margin:0, 
+    //       }
+    //     },
+    //   },
+    // },
+    // MuiAccordionDetails: {
+    //   styleOverrides: {
+    //     root: {
+    //       backgroundColor: '#f5f5f5', // Light gray background for the content area
+    //       padding: '10px 20px',
+    //     },
+    //   },
+    // },
   
   },
 });
