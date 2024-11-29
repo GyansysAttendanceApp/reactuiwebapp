@@ -33,7 +33,18 @@ import constraints from '../../constraints';
 import '../../style/Datatable.scss';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { colors } from '../../colors/Color';
+import AutoCompleteInput from '../common/AutoCompleteInput';
+import UserInformation from './UserInformation';
+import { Tab, Tabs } from '@mui/material';
+import CustomTabPanel from '../common/Tabs';
+import WatchListForAdmin from './WatchListForAdmin';
 
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 function Datatable() {
   const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
   const [error, setError] = useState('');
@@ -67,7 +78,11 @@ function Datatable() {
     setDepartmentDataLoading,
   } = useContext(UserContext);
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
+  const [value, setValue] = React.useState(0);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   useEffect(() => {
     const clearErrors = setTimeout(() => {
       setError('');
@@ -390,239 +405,41 @@ function Datatable() {
             </TableContainer>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Box id="searchBox">
-              <Paper sx={{ padding: '0.8rem'}}>
-                <Grid item xs={12} sm={12}>
-                  <Box display={'flex'} gap={2} alignItems={'center'}>
-                    <Box display={'flex'} flexGrow={1}>
-                      <Autocomplete
-                        fullWidth
-                        value={query}
-                        onChange={(event, value) => setQuery(value || '')}
-                        inputValue={query}
-                        onInputChange={(event, newInputValue) => {
-                          setQuery(newInputValue || '');
-                        }}
-                        options={suggestions}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label={constraints.DATATABLE.SEARCH.LABEL}
-                            variant="outlined"
-                            size="small"
-                          />
-                        )}
-                      />
-                    </Box>
-
-                    <Box display={'flex'} gap={'0.8rem'} alignItems={'center'}>
-                      <Button variant="contained" onClick={handleSearch}>
-                        {constraints.DATATABLE.BUTTON.FETCH}
-                      </Button>
-                      <Button variant="contained" onClick={handleFetchHistory}>
-                        {constraints.DATATABLE.BUTTON.FETCH_HISTORY}
-                      </Button>
-                      <Button variant="contained" onClick={handleReset}>
-                        {constraints.DATATABLE.BUTTON.CLEAR}
-                      </Button>
-                    </Box>
-                  </Box>
-                </Grid>
-              </Paper>
-            </Box>
-            <Box mt={1.5} sx={{ overflow: 'auto', maxHeight: '64.5vh' }}>
-              <Box >
-                {selectedItem ? (
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      boxShadow: 2,
-                      bgcolor: selectedItem.SwipeDateTime === 'ABSENT' ? '#f43636d4' : '#90EE90',
-                    }}
-                  >
-                    <CardContent sx={{  }}>
-                      {/* <Typography variant="h6">Search Result</Typography> */}
-                      <Grid container spacing={2}>
-                        {/* User Info Section */}
-                        <Grid item xs={12} md={5}>
-                          <Typography variant="body2" fontWeight={'bold'} mb={1}>User Information</Typography>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            {selectedItem.EmpGender === 'Male' ? (
-                              <BiMale size={28} sx={{ backgroundColor: '#3658f4d4' }} />
-                            ) : (
-                              <BiFemale size={26} sx={{ backgroundColor: '#d6338f' }} />
-                            )}
-                            <Typography variant='body3'>
-                              {selectedItem.EmpName} ({selectedItem.EmpID})
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            <GoMail size={20} sx={{ backgroundColor: '#d6338f' }} />
-                            <Typography variant='body3'>
-                              &nbsp;
-                              <a href={`mailto:${selectedItem.EmpEmail}`} target="_blank">
-                                {selectedItem.EmpEmail}
-                              </a>
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            <VscOrganization size={20} sx={{ backgroundColor: '#d6338f' }} />
-                            <Typography variant='body3'>&nbsp;{selectedItem.DeptName}</Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" marginBottom={1}>
-                            <PiMicrosoftTeamsLogoFill
-                              size={20}
-                              sx={{ backgroundColor: '#d6338f' }}
-                            />
-                            <Typography variant='body3'>
-                              &nbsp;
-                              <a
-                                href={`https://teams.microsoft.com/l/chat/0/0?users=${selectedItem.EmpEmail}`}
-                                target="_blank"
-                              >
-                                Chat
-                              </a>
-                            </Typography>
-                          </Box>
-                        </Grid>
-
-                        {/* Swipe Info Section */}
-                        <Grid item xs={12} md={7}>
-                          <Typography variant="body2" fontWeight={'bold'} mb={1}>Swipe Information</Typography>
-                          {selectedItem.SwipeDateTime === 'ABSENT' ? (
-                            <Typography variant='body3' sx={{ color: 'red' }}>ABSENT</Typography>
-                          ) : (
-                            <Table>
-                              <TableBody>
-                                {selectedItemAllEntries.map((item, index) => (
-                                  <TableRow key={index} >
-                                    <TableCell sx={{border:'none'}}>
-                                      {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          )}
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <>
-                    <Typography variant='body3' color="red">
-                      {error}
-                    </Typography>
-                    {fetchHistoryError && (
-                      <Typography variant='body3' color="error">
-                        {fetchHistoryError}
-                      </Typography>
-                    )}
-                  </>
-                )}
-                {selectedItem?.length === 0 && employeeDetailsLoading && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      minHeight: '20vh',
-                      alignItems: 'center',
-                      // background: "red",
-                    }}
-                  >
-                    <FadeLoader width={3} height={16} color={colors.primaryColor} />
-                  </Box>
-                )}
+            <Box sx={{ width: '100%' }}>
+              <Box
+                sx={{ borderBottom: 1, borderColor: 'divider', maxHeight: '6.176961602671119vh' }}
+              >
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                  <Tab label="Swipe Information" {...a11yProps(0)} />
+                  <Tab label="WatchList" {...a11yProps(1)} />
+                </Tabs>
               </Box>
-              {showWatchlist && (
-                <Box mt={2}>
-                  <Accordion sx={{ backgroundColor: '' }}>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      sx={{ backgroundColor: '#5DADE2' }}
-                    >
-                      <Typography variant="h5" sx={{ color: '#FFFFFF' }}>
-                        {constraints.DATATABLE.WATCH_LIST.TITLE}
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Box>
-                        {Object.entries(groupedWatchlist).map(
-                          ([watchlistName, employees], index) => (
-                            <Accordion key={index} sx={{ marginBottom: '10px' }} defaultExpanded>
-                              <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls={`${watchlistName}-content`}
-                                id={`${watchlistName}-header`}
-                                sx={{ backgroundColor: '#ECF0F1' }}
-                              >
-                                <Typography>
-                                  <em>{watchlistName}</em>
-                                </Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <TableContainer sx={{ marginTop: '5px' }}>
-                                  <Table>
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>
-                                          <Typography variant="h6">
-                                            {constraints.DATATABLE.WATCH_LIST.EMPLOYEE_NAME}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          <Typography variant="h6">
-                                            {constraints.DATATABLE.WATCH_LIST.IN_TIME}
-                                          </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          <Typography variant="h6">
-                                            {constraints.DATATABLE.WATCH_LIST.OUT_TIME}
-                                          </Typography>
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {employees.map((employee, i) => (
-                                        <TableRow key={i}>
-                                          <TableCell>
-                                            <a
-                                              href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
-                                              target="_blank"
-                                            >
-                                              <PiMicrosoftTeamsLogoFill
-                                                size={20}
-                                                sx={{
-                                                  backgroundColor: '#d6338f',
-                                                }}
-                                              />
-                                            </a>
-                                            &nbsp;
-                                            <a
-                                              href={`mailto:${employee.EmployeeEmail}`}
-                                              style={{ textDecoration: 'none' }}
-                                            >
-                                              {employee.EmployeeName}
-                                            </a>
-                                          </TableCell>
-                                          <TableCell align="right">{employee.InTime}</TableCell>
-                                          <TableCell align="right">{employee.OutTime}</TableCell>
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
-                              </AccordionDetails>
-                            </Accordion>
-                          ),
-                        )}
-                      </Box>
-                    </AccordionDetails>
-                  </Accordion>
+              <CustomTabPanel value={value} index={0}>
+                <Box id="searchBox">
+                  <Paper sx={{ padding: '0.8rem', marginTop: '0.5rem' }}>
+                    <Grid item xs={12} sm={12}>
+                      <AutoCompleteInput
+                        query={query}
+                        setQuery={setQuery}
+                        suggestions={suggestions}
+                        handleSearch={handleSearch}
+                        handleFetchHistory={handleFetchHistory}
+                        handleReset={handleReset}
+                      />
+                    </Grid>
+                  </Paper>
                 </Box>
-              )}
+                <UserInformation
+                  error={error}
+                  fetchHistoryError={fetchHistoryError}
+                  selectedItem={selectedItem}
+                  selectedItemAllEntries={selectedItemAllEntries}
+                  employeeDetailsLoading={employeeDetailsLoading}
+                />
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={1}>
+                <WatchListForAdmin groupedWatchlist={groupedWatchlist} />
+              </CustomTabPanel>
             </Box>
           </Grid>
         </Grid>

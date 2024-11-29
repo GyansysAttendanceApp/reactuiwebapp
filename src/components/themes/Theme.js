@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles'
-import { colors } from '../../colors/Color'
+import { createTheme } from '@mui/material/styles';
+import { colors } from '../../colors/Color';
 
 const theme = createTheme({
   palette: {
@@ -90,7 +90,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          padding: "4px 16px",
+          padding: '4px 16px',
           // borderRadius: 4,
           // fontWeight: 600,
         },
@@ -121,7 +121,7 @@ const theme = createTheme({
           // },
         },
         noOptions: {
-          fontSize:'0.8rem'
+          fontSize: '0.8rem',
           // color: '#888', // Gray color for the "No options" text
           // fontStyle: 'italic', // Italicized font
           // textAlign: 'center', // Center the "No options" text
@@ -143,72 +143,67 @@ const theme = createTheme({
       },
       styleOverrides: {
         root: {
-               fontSize:'0.8rem',
-              //  color:'red',
-              padding: '8px 12px',
+          fontSize: '0.8rem',
+          //  color:'red',
+          padding: '8px 12px',
           // Default padding for 'small' size (you can adjust as needed)
           // padding: '18px',  // Customize the padding here for small size
         },
-      
-      }
+      },
     },
-    MuiIconButton:{
-      styleOverrides:{
-        root:{
-          padding:'0 8px'
-        }
-      }
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          padding: '0 8px',
+        },
+      },
     },
-    MuiOutlinedInput:{
+    MuiOutlinedInput: {
       styleOverrides: {
         root: {
           // borderRadius: 4,
           padding: '3px 12px',
-          fontSize:'0.8rem',
-          background:'#ffffff'
-
+          fontSize: '0.8rem',
+          background: '#ffffff',
         },
-        input:{
-          padding:'6px 0'
-        }
+        input: {
+          padding: '6px 0',
+        },
       },
     },
-    MuiInputLabel:{
+    MuiInputLabel: {
       styleOverrides: {
         root: {
           // borderRadius: 4,
           // padding: '3px 12px',
-          fontSize:'0.8rem',
+          fontSize: '0.8rem',
           // background:'red'
-
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          boxSizing:"border-box",
-          height:'100%'
+          boxSizing: 'border-box',
+          height: '100%',
         },
       },
     },
-
-   
 
     MuiTableCell: {
       styleOverrides: {
         root: {
           padding: '0.6rem',
-          fontSize: '0.8rem'
+          fontSize: '0.8rem',
         },
         head: {
           background: '#f0f0f0',
           padding: '0.4rem',
-          fontSize: '0.875rem'
+          fontSize: '0.875rem',
         },
         body: {
           padding: '0.35rem',
-          fontSize: '0.8rem'
+          fontSize: '0.8rem',
         },
       },
     },
@@ -237,12 +232,66 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '&.Mui-active': {
-            color: '#1670b9', // Custom primary color when active
+            color: '#1670b9',
           },
         },
       },
     },
-  },
-})
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          padding: '0',
+          minHeight: '37px',
+          // backgroundColor: '#f0f0f0',
+          borderRadius: '4px 4px 0 0',
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          padding: '6px 16px', 
+          fontSize: '0.875rem', 
+          fontWeight:400,
+          minHeight: '36px', 
+          //  backgroundColor: '#f0f0f0',
+          textTransform: 'none', 
+          '&.Mui-selected': {
+            // color: '#1976d2', 
+            // backgroundColor:'#1e88e5',
+            backgroundColor:'#f0f0f0',
+            borderRadius: '4px 4px 0 0',
 
-export default theme
+          },
+          // '&:hover': {
+          //   color: '#ff4081', // Set hover color for tabs
+          // },
+        },
+      },
+    },
+    // MuiTabs: {
+    //   styleOverrides: {
+    //     root: {
+    //       padding:0,
+    //       backgroundColor: '#f0f0f0',
+    //       borderRadius: '4px 4px 0 0',
+    //       height:'4vh'
+    //     },
+    //   },
+    // },
+    // MuiTab: {
+    //   styleOverrides: {
+    //     root: {
+    //       paddingTop: '0',
+    //       paddingBottom:0,
+    //       fontSize: '0.875rem',
+    //       fontWeight: 'bold',
+    //       color:'#000'
+    //     },
+    //   },
+    // },
+  
+  },
+});
+
+export default theme;
