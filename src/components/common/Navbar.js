@@ -51,6 +51,14 @@ function Navbar() {
             <AdminPanelSettingsIcon />
             <Typography variant='body2'>Admin</Typography>
           </IconButton>
+
+          {/* <IconButton color="inherit" sx={{ marginLeft: '0px' ,display:'flex',alignItems:'flex-end'}}>
+            <HomeIcon />
+            <Typography variant='body2'>Tracking</Typography>
+            {/* <Option>WatchList</Option>
+            <Option>Montely Employee Attendance</Option> */}
+          {/* </IconButton> */}
+      
           <Menu
             anchorEl={anchorEl}
             open={isMenuOpen}

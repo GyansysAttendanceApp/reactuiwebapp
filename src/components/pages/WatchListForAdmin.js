@@ -16,10 +16,10 @@ import constraints from '../../constraints';
 import { PiMicrosoftTeamsLogoFill } from 'react-icons/pi';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-const WatchListForAdmin = ({ groupedWatchlist }) => {
+const WatchListForAdmin = ({ groupedWatchlist ,selectedItem}) => {
   return (
     <Box sx={{ overflow: 'auto', maxHeight: '68.5vh', marginTop: '0.5rem' }}>
-      {true && ( //selectedItem
+      {selectedItem && ( //selectedItem
         <Box>
           <Accordion sx={{ backgroundColor: '' }}>
             <AccordionSummary
