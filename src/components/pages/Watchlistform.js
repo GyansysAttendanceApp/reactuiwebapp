@@ -11,6 +11,7 @@ import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
 import Chip from '@mui/material/Chip'
 import { useMsal } from '@azure/msal-react'
+import "../../style/watchlistform.scss"
 
 function Watchlistform({ username }) {
   const { instance, accounts } = useMsal()
@@ -158,17 +159,8 @@ function Watchlistform({ username }) {
         </MuiAlert>
       </Snackbar>
       <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        bgcolor="#d6d5d0"
-        py={1}
-        px={2}
-        position="sticky"
-        top="64px"
-        margin="0 auto"
-      >
-        <Link to="/watchlist" style={{ textDecoration: 'none' }}>
+        className="header-box" >
+        <Link to="/watchlist">
           <Button variant="contained" color="primary">
             Back
           </Button>
@@ -176,12 +168,12 @@ function Watchlistform({ username }) {
         <Typography variant="h6">Watch List Maintenance</Typography>
       </Box>
 
-      <Box px={2} pt={2}>
+      <Box className ="form-container">    {/*  px={2} pt={2} */}
         <Typography variant="h5" gutterBottom>
           New Watchlist Creation
         </Typography>
-        <Box display="flex" flexDirection="column" width="100%" margin="0 auto" mt={2}>
-          <Box mb={2} display="flex" alignItems="center">
+        <Box  className = "form-content " >   {/*display="flex" flexDirection="column" width="100%" margin="0 auto" mt={2}*/}
+          <Box className="form-field " >    {/*mb={2} display="flex" alignItems="center" */}
             <Typography variant="subtitle1" style={{ marginRight: '10px', width: '250px' }}>
               Watchlist Name:
             </Typography>
@@ -295,3 +287,7 @@ function Watchlistform({ username }) {
 }
 
 export default Watchlistform
+
+ 
+
+

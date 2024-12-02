@@ -272,7 +272,7 @@ function EmployeeHistory() {
                 <TableRow
                   key={employee.Date}
                   style={{
-                    backgroundColor: employee.IsHoliday ? '#8abec2' : '',
+                    backgroundColor: employee.IsHoliday ? '#8abec2' :['Saturday', 'Sunday'].includes(employee.AttDay)  ? '#fff0e6' :   !employee.FirstIn  ? '#e6f9ff'  : '',
                   }}
                 >
                   <TableCell>{formatDateWithoutTime(employee.AttDate)}</TableCell>
