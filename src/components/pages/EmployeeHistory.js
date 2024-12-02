@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import Footer from '../common/Footer';
@@ -21,9 +21,15 @@ import DateComponent from '../common/DateComponent';
 import dayjs from 'dayjs';
 import Autocomplete from '@mui/material/Autocomplete';
 import constraints from '../../constraints';
+import {
+  formatDateWithoutTime,
+  formatDateWithTime,
+  trimString,
+  weekdaysTypeAccordingToDate,
+} from '../../utils/Helper';
 
 function EmployeeHistory() {
-  const { empId, year, month } = useParams();
+  const { empId, year, month, empName } = useParams();
   const [employeeData, setEmployeeData] = useState([]);
   const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`);
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,7 +55,7 @@ function EmployeeHistory() {
     const selectedMonth = event.target.value;
     setSelectedYearMonth(selectedMonth);
     const [selectedYear, selectedMonthValue] = selectedMonth.split('-');
-    navigate(`/EmpHistory/${empId}/${selectedYear}/${selectedMonthValue}`);
+    navigate(`/EmpHistory/${empId}/${selectedYear}/${selectedMonthValue}/${empName}`);
   };
 
   const handleSearchInputChange = async (event, value) => {
@@ -132,7 +138,9 @@ function EmployeeHistory() {
             {/* </Link> */}
 
             <Typography variant="h6" fontWeight="bold">
-              Attendance History of Employee ID: {empId}
+              Attendance History of Employee ID: {trimString(empId)}
+              {'_'}
+              {empName}
             </Typography>
           </Box>
 
@@ -244,35 +252,19 @@ function EmployeeHistory() {
           }}
         >
           <Table>
-            <TableHead sx={{ position: 'sticky', top: 0, background: 'white' }}>
+            <TableHead 
+            // sx={{ position: 'sticky', top: 0, background: 'white' }}
+            >
               <TableRow>
-                <TableCell>
-                  <b>Date</b>
-                </TableCell>
-                <TableCell>
-                  <b>Day</b>
-                </TableCell>
-                <TableCell>
-                  <b>Type</b>
-                </TableCell>
-                <TableCell>
-                  <b>Emp Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Department</b>
-                </TableCell>
-                <TableCell>
-                  <b>First In</b>
-                </TableCell>
-                <TableCell>
-                  <b>Last Out</b>
-                </TableCell>
-                <TableCell>
-                  <b>Duration</b>
-                </TableCell>
-                <TableCell>
-                  <b>Remarks</b>
-                </TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Day</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Emp Name</TableCell>
+                <TableCell>Department</TableCell>
+                <TableCell>First In</TableCell>
+                <TableCell>Last Out</TableCell>
+                <TableCell>Duration</TableCell>
+                <TableCell>Remarks</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{}}>
@@ -283,15 +275,15 @@ function EmployeeHistory() {
                     backgroundColor: employee.IsHoliday ? '#8abec2' : '',
                   }}
                 >
-                  <TableCell>{employee.AttDateText}</TableCell>
+                  <TableCell>{formatDateWithoutTime(employee.AttDate)}</TableCell>
                   <TableCell>{employee.AttDay}</TableCell>
                   <TableCell>
-                    {employee.IsWeekDay ? (employee.IsHoliday ? 'Holiday' : 'Workday') : 'Weekend'}
+                    {weekdaysTypeAccordingToDate(employee.IsWeekDay, employee.IsHoliday)}
                   </TableCell>
                   <TableCell>{employee.EmpName}</TableCell>
                   <TableCell>{employee.DeptName}</TableCell>
-                  <TableCell>{employee.FirstIn}</TableCell>
-                  <TableCell>{employee.LastOut}</TableCell>
+                  <TableCell>{formatDateWithTime(employee.FirstIn)}</TableCell>
+                  <TableCell>{formatDateWithTime(employee.LastOut)}</TableCell>
                   <TableCell>{employee.Duration}</TableCell>
                   <TableCell>
                     {employee.IsHoliday ? (

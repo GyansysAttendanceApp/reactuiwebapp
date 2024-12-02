@@ -42,7 +42,7 @@ const UserInformation = ({
           >
             <CardContent sx={{}}>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={5}>
+                <Grid item xs={12} md={6}>
                   <Typography variant="body2" fontWeight={'bold'} mb={1}>
                     User Information
                   </Typography>
@@ -82,8 +82,7 @@ const UserInformation = ({
                     </Typography>
                   </Box>
                 </Grid>
-
-                <Grid item xs={12} md={7}>
+                <Grid item xs={12} md={6}>
                   <Typography variant="body2" fontWeight={'bold'} mb={1}>
                     Swipe Information
                   </Typography>

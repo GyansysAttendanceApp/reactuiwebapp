@@ -28,9 +28,9 @@ const constraints = {
     },
     WATCH_LIST: {
       TITLE: 'Watch Lists',
-      EMPLOYEE_NAME: '',
-      IN_TIME: '',
-      OUT_TIME: '',
+      EMPLOYEE_NAME: 'Employee Name',
+      IN_TIME: 'In Time',
+      OUT_TIME: 'Out Time',
     },
   },
 }

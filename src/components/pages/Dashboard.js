@@ -38,7 +38,9 @@ import UserInformation from './UserInformation';
 import { Tab, Tabs } from '@mui/material';
 import CustomTabPanel from '../common/Tabs';
 import WatchListForAdmin from './WatchListForAdmin';
-import {Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
+import AttendancePieChart from '../d3_js_Chart/AttendancePieChart';
+import BarChart from '../d3_js_Chart/BarChart';
 
 function a11yProps(index) {
   return {
@@ -46,7 +48,7 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-function Datatable() {
+function Dashboard() {
   const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
   const [error, setError] = useState('');
   const [totalExpectedCount, setTotalExpectedCount] = useState(0);
@@ -150,7 +152,7 @@ function Datatable() {
       setDepartmentDataLoading(true);
 
       const response = await axios.get(`${url}/dept?date=${date}`);
-      console.log("dataTable", response)
+      console.log('dataTable', response);
       setDepartmentData(response.data);
       setDepartmentDataLoading(false);
     } catch (error) {
@@ -199,19 +201,16 @@ function Datatable() {
   };
   const handleFetchHistory = () => {
     if (!masterData || masterData.length === 0) {
-     
-      
       setFetchHistoryError('Please Enter a name first.');
     } else {
-      const date = new Date(selectedFormatedWatchListDate);
+      const date = new Date();
       const year = date.getFullYear();
-      // const year = dayjs(date).year();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      // const month =dayjs(date).month()+1;
-      const empName=masterData[0].EmpName
-      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}/${empName}`,{state:{
-       
-      }});
+      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`, {
+        state: {
+          EmpName: masterData[0].EmpName,
+        },
+      });
     }
   };
 
@@ -323,8 +322,28 @@ function Datatable() {
         </Box>
       </Box>
       <Box style={{ padding: '0.5vh 0.5vw 0 0.5vw' }}>
+        {/* <Box>
+        <AttendancePieChart
+        todaysCount={totalTodaysCount}
+        expectedCount={totalExpectedCount}
+      />
+       <BarChart data={departmentData} />
+        </Box> */}
         <Grid container spacing={1.5}>
-          <Grid item xs={12} sm={6}>
+          <Grid container item xs={12} sm={3}>
+            <Grid item xs={12} sm={12}>
+              <AttendancePieChart
+                todaysCount={totalTodaysCount}
+                expectedCount={totalExpectedCount}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <BarChart data={departmentData} 
+              style={{ marginLeft:'-100px'}}
+              />
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={4.5}>
             <TableContainer component={Paper} sx={{ maxHeight: '76.5vh', overflow: 'none' }} ś>
               <Table>
                 <TableHead 
@@ -333,9 +352,7 @@ function Datatable() {
                   <TableRow>
                     <TableCell>
                       <Typography variant="body2" fontWeight="bold">
-                      
                         {constraints.DATATABLE.DEPARTMENT_NAME}
-                      
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -354,7 +371,9 @@ function Datatable() {
                     <TableCell>
                       <TableSortLabel
                         active={sortOrder.column == 'ReportedCount'}
-                        direction={sortOrder.column == 'ReportedCount' ? sortOrder.direction : 'asc'}
+                        direction={
+                          sortOrder.column == 'ReportedCount' ? sortOrder.direction : 'asc'
+                        }
                         onClick={() => handleSort('ReportedCount')}
                       >
                         <Typography variant="body2" fontWeight="bold">
@@ -363,25 +382,25 @@ function Datatable() {
                       </TableSortLabel>
                     </TableCell>
                     <TableCell>
-                    <TableSortLabel
+                      <TableSortLabel
                         active={sortOrder.column === 'AbsentCount'}
                         direction={sortOrder.column === 'AbsentCount' ? sortOrder.direction : 'asc'}
                         onClick={() => handleSort('AbsentCount')}
                       >
-                      <Typography variant="body2" fontWeight="bold">
-                        {constraints.DATATABLE.ABSENT_COUNT}
-                      </Typography>
+                        <Typography variant="body2" fontWeight="bold">
+                          {constraints.DATATABLE.ABSENT_COUNT}
+                        </Typography>
                       </TableSortLabel>
                     </TableCell>
                     <TableCell>
-                    <TableSortLabel
+                      <TableSortLabel
                         active={sortOrder.column === 'Achieved'}
                         direction={sortOrder.column === 'Achieved' ? sortOrder.direction : 'asc'}
                         onClick={() => handleSort('Achieved')}
                       >
-                      <Typography variant="body2" fontWeight="bold">
-                        {constraints.DATATABLE.ACHIVEMENT_PERCENTAGE}
-                      </Typography>
+                        <Typography variant="body2" fontWeight="bold">
+                          {constraints.DATATABLE.ACHIVEMENT_PERCENTAGE}
+                        </Typography>
                       </TableSortLabel>
                     </TableCell>
                   </TableRow>
@@ -391,7 +410,15 @@ function Datatable() {
                   {departmentData &&
                     departmentData.map((department) => (
                       <TableRow key={department.EmpID}>
-                        <TableCell>   <Link to= {`/DepartmentDayWiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}&deptName=${department.DeptName}`} style={{ textDecoration: 'none' }}>{department.DeptName}</Link></TableCell>
+                        <TableCell>
+                          {' '}
+                          <Link
+                            to={`/DepartmentDayWiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}&deptName=${department.DeptName}`}
+                            style={{ textDecoration: 'none' }}
+                          >
+                            {department.DeptName}
+                          </Link>
+                        </TableCell>
                         <TableCell>{department.ExpectedCount}</TableCell>
                         <TableCell>{department.TodaysCount}</TableCell>
                         <TableCell>
@@ -463,7 +490,7 @@ function Datatable() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4.5}>
             <Box sx={{ width: '100%' }}>
               <Box
                 sx={{ borderBottom: 1, borderColor: 'divider', maxHeight: '6.176961602671119vh' }}
@@ -497,7 +524,10 @@ function Datatable() {
                 />
               </CustomTabPanel>
               <CustomTabPanel value={value} index={1}>
-                <WatchListForAdmin groupedWatchlist={groupedWatchlist} selectedItem={selectedItem}/>
+                <WatchListForAdmin
+                  groupedWatchlist={groupedWatchlist}
+                  selectedItem={selectedItem}
+                />
               </CustomTabPanel>
             </Box>
           </Grid>
@@ -508,4 +538,4 @@ function Datatable() {
   );
 }
 
-export default Datatable;
+export default Dashboard;
