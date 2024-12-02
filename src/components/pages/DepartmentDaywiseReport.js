@@ -148,15 +148,16 @@ const DepartmentDayWiseReport = () => {
           }}
         >
           <Table>
-            <TableHead 
+            <TableHead
             // sx={{ position: 'sticky', top: 0, background: 'white' }}
             >
               <TableRow>
+                <TableCell>No.</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Day</TableCell>
                 <TableCell>Type</TableCell>
-                <TableCell>Emp Name</TableCell>
                 <TableCell>Department</TableCell>
+                <TableCell>Emp Name</TableCell>
                 <TableCell>First In</TableCell>
                 <TableCell>Last Out</TableCell>
                 <TableCell>Duration</TableCell>
@@ -166,11 +167,12 @@ const DepartmentDayWiseReport = () => {
             <TableBody sx={{}}>
               {departmentDayWiseData.map((row, index) => (
                 <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{formatDateWithoutTime(row.AttDate)}</TableCell>
                   <TableCell>{row.AttDay}</TableCell>
                   <TableCell>{weekdaysTypeAccordingToDate(row.IsWeekDay, row.IsHoliday)}</TableCell>
-                  <TableCell>{row.EmpName}</TableCell>
                   <TableCell>{row.DeptName}</TableCell>
+                  <TableCell>{row.EmpName}</TableCell>
                   <TableCell>{formatDateWithTime(row.FirstIn)}</TableCell>
                   <TableCell>{formatDateWithTime(row.LastOut)}</TableCell>
                   <TableCell>{row.Duration}</TableCell>

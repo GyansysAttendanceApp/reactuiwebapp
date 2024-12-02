@@ -256,11 +256,12 @@ function EmployeeHistory() {
             // sx={{ position: 'sticky', top: 0, background: 'white' }}
             >
               <TableRow>
+              <TableCell>No.</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Day</TableCell>
                 <TableCell>Type</TableCell>
-                <TableCell>Emp Name</TableCell>
                 <TableCell>Department</TableCell>
+                <TableCell>Emp Name</TableCell>
                 <TableCell>First In</TableCell>
                 <TableCell>Last Out</TableCell>
                 <TableCell>Duration</TableCell>
@@ -268,20 +269,21 @@ function EmployeeHistory() {
               </TableRow>
             </TableHead>
             <TableBody sx={{}}>
-              {employeeData.map((employee) => (
+              {employeeData.map((employee,index) => (
                 <TableRow
                   key={employee.Date}
                   style={{
                     backgroundColor: employee.IsHoliday ? '#8abec2' :['Saturday', 'Sunday'].includes(employee.AttDay)  ? '#fff0e6' :   !employee.FirstIn  ? '#e6f9ff'  : '',
                   }}
                 >
+                  <TableCell>{index+1}</TableCell>
                   <TableCell>{formatDateWithoutTime(employee.AttDate)}</TableCell>
                   <TableCell>{employee.AttDay}</TableCell>
                   <TableCell>
                     {weekdaysTypeAccordingToDate(employee.IsWeekDay, employee.IsHoliday)}
                   </TableCell>
-                  <TableCell>{employee.EmpName}</TableCell>
                   <TableCell>{employee.DeptName}</TableCell>
+                  <TableCell>{employee.EmpName}</TableCell>
                   <TableCell>{formatDateWithTime(employee.FirstIn)}</TableCell>
                   <TableCell>{formatDateWithTime(employee.LastOut)}</TableCell>
                   <TableCell>{employee.Duration}</TableCell>
