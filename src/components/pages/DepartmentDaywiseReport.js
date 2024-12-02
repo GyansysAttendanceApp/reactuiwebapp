@@ -14,6 +14,12 @@ import { FcOk } from 'react-icons/fc';
 import { FcHighPriority } from 'react-icons/fc';
 import UserContext from '../../context/UserContext';
 import { useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
+import {
+  formatDateWithoutTime,
+  formatDateWithTime,
+  weekdaysTypeAccordingToDate,
+} from '../../utils/Helper';
 
 const DepartmentDayWiseReport = () => {
   const [departmentDayWiseData, setDepartmentDayWiseData] = useState([]);
@@ -22,50 +28,15 @@ const DepartmentDayWiseReport = () => {
   const { selectedFormatedWatchListDate } = useContext(UserContext);
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
   const navigate = useNavigate();
-  const dummyData = [
-    {
-      date: '2024-11-24',
-      day: 'Monday',
-      type: 'Office',
-      empName: 'John Doe',
-      department: 'IT',
-      firstIn: '09:00 AM',
-      lastOut: '05:00 PM',
-      duration: '8h',
-      remarks: 'Present',
-    },
-    {
-      date: '2024-11-25',
-      day: 'Tuesday',
-      type: 'Remote',
-      empName: 'Jane Smith',
-      department: 'HR',
-      firstIn: '08:30 AM',
-      lastOut: '04:30 PM',
-      duration: '8h',
-      remarks: 'Work from home',
-    },
-    {
-      date: '2024-11-26',
-      day: 'Wednesday',
-      type: 'Leave',
-      empName: 'Alice Johnson',
-      department: 'Finance',
-      firstIn: 'N/A',
-      lastOut: 'N/A',
-      duration: '0h',
-      remarks: 'Sick leave',
-    },
-  ];
+  const queryParams = new URLSearchParams(location.search);
+  const operationId = queryParams.get('operationId');
+  const departmentId = queryParams.get('departmentId');
+  const date = queryParams.get('date');
+  const DeptName = queryParams.get('deptName');
 
   useEffect(() => {
     const fetchDepartmentdata = async () => {
       try {
-        const queryParams = new URLSearchParams(location.search);
-        const operationId = queryParams.get('operationId');
-        const departmentId = queryParams.get('departmentId');
-        const date = queryParams.get('date');
-
         const response = await fetch(
           `${url}/get-employee-attendance/${operationId}/${date}/${departmentId}`,
         ).then((res) => res.json());
@@ -106,7 +77,9 @@ const DepartmentDayWiseReport = () => {
             </Button>
 
             <Typography variant="h6" fontWeight="bold">
-              Attendance History of Employee ID:
+              Attendance History of Department:{departmentId}
+              {'_'}
+              {DeptName}
             </Typography>
           </Box>
 
@@ -175,50 +148,33 @@ const DepartmentDayWiseReport = () => {
           }}
         >
           <Table>
-            <TableHead sx={{ position: 'sticky', top: 0, background: 'white' }}>
+            <TableHead
+            // sx={{ position: 'sticky', top: 0, background: 'white' }}
+            >
               <TableRow>
-                <TableCell>
-                  <b>Date</b>
-                </TableCell>
-                <TableCell>
-                  <b>Day</b>
-                </TableCell>
-                <TableCell>
-                  <b>Type</b>
-                </TableCell>
-                <TableCell>
-                  <b>Emp Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Department</b>
-                </TableCell>
-                <TableCell>
-                  <b>First In</b>
-                </TableCell>
-                <TableCell>
-                  <b>Last Out</b>
-                </TableCell>
-                <TableCell>
-                  <b>Duration</b>
-                </TableCell>
-                <TableCell>
-                  <b>Remarks</b>
-                </TableCell>
+                <TableCell>No.</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Day</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Department</TableCell>
+                <TableCell>Emp Name</TableCell>
+                <TableCell>First In</TableCell>
+                <TableCell>Last Out</TableCell>
+                <TableCell>Duration</TableCell>
+                <TableCell>Remarks</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{}}>
               {departmentDayWiseData.map((row, index) => (
                 <TableRow key={index}>
-                  <TableCell>{row.AttDateText}</TableCell>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{formatDateWithoutTime(row.AttDate)}</TableCell>
                   <TableCell>{row.AttDay}</TableCell>
-                  <TableCell>
-                    {' '}
-                    {row.IsWeekDay ? (row.IsHoliday ? 'Holiday' : 'Workday') : 'Weekend'}
-                  </TableCell>
-                  <TableCell>{row.EmpName}</TableCell>
+                  <TableCell>{weekdaysTypeAccordingToDate(row.IsWeekDay, row.IsHoliday)}</TableCell>
                   <TableCell>{row.DeptName}</TableCell>
-                  <TableCell>{row.FirstIn}</TableCell>
-                  <TableCell>{row.LastOut}</TableCell>
+                  <TableCell>{row.EmpName}</TableCell>
+                  <TableCell>{formatDateWithTime(row.FirstIn)}</TableCell>
+                  <TableCell>{formatDateWithTime(row.LastOut)}</TableCell>
                   <TableCell>{row.Duration}</TableCell>
                   <TableCell>{row.HolidayText}</TableCell>
                 </TableRow>

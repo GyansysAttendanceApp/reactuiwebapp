@@ -78,7 +78,7 @@ const theme = createTheme({
       fontWeight: 300,
     },
     subtitle2: {
-      fontSize: '0.875rem',
+      fontSize: '0.75rem',
       fontWeight: 300,
     },
     button: {
@@ -200,6 +200,7 @@ const theme = createTheme({
           background: '#f0f0f0',
           padding: '0.4rem',
           fontSize: '0.875rem',
+          fontWeight:'bold'
         },
         body: {
           padding: '0.35rem',
@@ -212,6 +213,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#1670b9',
+          position:'sticky',
+          top:0,
           // padding:'1rem !important',
           textTransform: 'capitalize',
         },
@@ -247,21 +250,29 @@ const theme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          boxShadow: '0px 0px 5px -1px rgba(0, 0, 0, 0.2)',
+        },
+      },
+    },
     MuiTab: {
       styleOverrides: {
         root: {
-          padding: '6px 16px', 
-          fontSize: '0.875rem', 
-          fontWeight:400,
-          minHeight: '36px', 
-          //  backgroundColor: '#f0f0f0',
-          textTransform: 'none', 
+          padding: '6px 16px',
+          fontSize: '0.875rem',
+          fontWeight: 400,
+          minHeight: '36px',
+          borderRadius: '4px 4px 0 0',
+          backgroundColor: '#f0f0f0',
+          //  backgroundColor: '#fafafa',
+          textTransform: 'none',
           '&.Mui-selected': {
-            // color: '#1976d2', 
+            // color: '#1976d2',
             // backgroundColor:'#1e88e5',
-            backgroundColor:'#f0f0f0',
             borderRadius: '4px 4px 0 0',
-
+            backgroundColor: '#e0e0e0',
           },
           // '&:hover': {
           //   color: '#ff4081', // Set hover color for tabs
@@ -290,51 +301,57 @@ const theme = createTheme({
     //     },
     //   },
     // },
-    // MuiAccordion: {
-    //   styleOverrides: {
-    //     root: {
-    //       backgroundColor: '#fff',
-    //       boxShadow: 'none',
-    //       '&:before': {
-    //         display: 'none', // Hide default border line
-    //       },
-    //     },
-    //   },
-    // },
-    // MuiAccordionSummary: {
-    //   styleOverrides: {
-    //     root: {
-    //       // backgroundColor: '#6200ea',
-    //       minHeight:'37px',
-    //       color: '#fff',
-    //       // padding: '10px 20px',
-    //       borderRadius: '4px',
-    //       '&.Mui-expanded': {
-    //         // minHeight:'37px',
-    //         // color: '#fff',
-    //         // // padding: '10px 20px',
-    //         // borderRadius: '4px',
-    //         // margin:0,
-    //         // backgroundColor: '#3700b3', // Darker purple when expanded
-    //       },
-    //     },
-    //     content: {
-    //       margin: '0',
-    //       '&.Mui-expanded':{
-    //         margin:0, 
-    //       }
-    //     },
-    //   },
-    // },
-    // MuiAccordionDetails: {
-    //   styleOverrides: {
-    //     root: {
-    //       backgroundColor: '#f5f5f5', // Light gray background for the content area
-    //       padding: '10px 20px',
-    //     },
-    //   },
-    // },
-  
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#5DADE2',
+          boxShadow: 'none',
+          font:'0.8rem',
+        
+          '&:before': {
+            display: 'none', // Hide default border line
+          },
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          // backgroundColor: '#6200ea',
+          minHeight: '37px',
+          color: '#fff',
+          // padding: '10px 20px',
+          // borderRadius: '4px',
+          '&.Mui-expanded': {
+            minHeight: '37px',
+
+            // body:{
+            //   background: '#759bb3c9',
+
+            // }
+            // color: '#fff',
+            // // padding: '10px 20px',
+            // borderRadius: '4px',
+            // margin:0,
+            // backgroundColor: '#3700b3', // Darker purple when expanded
+          },
+        },
+        content: {
+          margin: '0',
+          '&.Mui-expanded': {
+            margin: 0,
+          },
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#ffffff', // Light gray background for the content area
+          padding: '10px 20px',
+        },
+      },
+    },
   },
 });
 

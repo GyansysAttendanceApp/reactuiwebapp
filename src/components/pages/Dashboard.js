@@ -39,6 +39,8 @@ import { Tab, Tabs } from '@mui/material';
 import CustomTabPanel from '../common/Tabs';
 import WatchListForAdmin from './WatchListForAdmin';
 import { Link } from 'react-router-dom';
+import AttendancePieChart from '../d3_js_Chart/AttendancePieChart';
+import BarChart from '../d3_js_Chart/BarChart';
 
 function a11yProps(index) {
   return {
@@ -46,7 +48,7 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-function Datatable() {
+function Dashboard() {
   const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
   const [error, setError] = useState('');
   const [totalExpectedCount, setTotalExpectedCount] = useState(0);
@@ -201,13 +203,14 @@ function Datatable() {
     if (!masterData || masterData.length === 0) {
       setFetchHistoryError('Please Enter a name first.');
     } else {
-      const date = new Date(selectedFormatedWatchListDate);
+      const date = new Date();
       const year = date.getFullYear();
-      // const year = dayjs(date).year();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      // const month =dayjs(date).month()+1;
-      const empName = masterData[0].EmpName;
-      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}/${empName}`, { state: {} });
+      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`, {
+        state: {
+          EmpName: masterData[0].EmpName,
+        },
+      });
     }
   };
 
@@ -319,19 +322,34 @@ function Datatable() {
         </Box>
       </Box>
       <Box style={{ padding: '0.5vh 0.5vw 0 0.5vw' }}>
+        {/* <Box>
+        <AttendancePieChart
+        todaysCount={totalTodaysCount}
+        expectedCount={totalExpectedCount}
+      />
+       <BarChart data={departmentData} />
+        </Box> */}
         <Grid container spacing={1.5}>
-          <Grid item xs={12} sm={6}>
+          <Grid container item xs={12} sm={3}>
+            <Grid item xs={12} sm={12}>
+              <AttendancePieChart
+                todaysCount={totalTodaysCount}
+                expectedCount={totalExpectedCount}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <BarChart data={departmentData} 
+              style={{ marginLeft:'-100px'}}
+              />
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={4.5}>
             <TableContainer component={Paper} sx={{ maxHeight: '76.5vh', overflow: 'none' }} ś>
               <Table>
-                <TableHead
+                <TableHead 
                 // sx={{ position: 'sticky', top: 0 }}
                 >
                   <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" fontWeight="bold">
-                        {constraints.DATATABLE.NO}
-                      </Typography>
-                    </TableCell>
                     <TableCell>
                       <Typography variant="body2" fontWeight="bold">
                         {constraints.DATATABLE.DEPARTMENT_NAME}
@@ -390,11 +408,8 @@ function Datatable() {
 
                 <TableBody>
                   {departmentData &&
-                    departmentData.map((department,index) => (
+                    departmentData.map((department) => (
                       <TableRow key={department.EmpID}>
-                        <TableCell>
-                          {index+1}
-                        </TableCell>
                         <TableCell>
                           {' '}
                           <Link
@@ -461,7 +476,7 @@ function Datatable() {
                       backgroundColor: '#f0f0f0',
                     }}
                   >
-                    <TableCell colSpan={2}>Total</TableCell>
+                    <TableCell>Total</TableCell>
                     <TableCell>{totalExpectedCount}</TableCell>
                     <TableCell>{totalTodaysCount}</TableCell>
                     <TableCell>
@@ -475,7 +490,7 @@ function Datatable() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4.5}>
             <Box sx={{ width: '100%' }}>
               <Box
                 sx={{ borderBottom: 1, borderColor: 'divider', maxHeight: '6.176961602671119vh' }}
@@ -523,4 +538,4 @@ function Datatable() {
   );
 }
 
-export default Datatable;
+export default Dashboard;

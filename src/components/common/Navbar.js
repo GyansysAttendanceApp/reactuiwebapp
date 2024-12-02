@@ -43,10 +43,12 @@ function Navbar() {
           </Link>
         </Box>
         <Box className="navbar-middle-header">
+        <Link to="/" className="navbar-link">
           <IconButton color="inherit" sx={{ marginLeft: '0px' ,display:'flex',alignItems:'flex-end'}}>
             <HomeIcon />
             <Typography variant='body2'>Home</Typography>
           </IconButton>
+          </Link>
           <IconButton color="inherit" onClick={handleMenuClick} sx={{ marginLeft: '0px' ,display:'flex',alignItems:'flex-end'}}>
             <AdminPanelSettingsIcon />
             <Typography variant='body2'>Admin</Typography>

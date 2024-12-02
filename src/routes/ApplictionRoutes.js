@@ -10,6 +10,8 @@ import Datatable from '../components/pages/Datatable';
 import UserContext from '../context/UserContext';
 import Updatepage from '../components/pages/Updatepage';
 import DepartmentDayWiseReport from '../components/pages/DepartmentDaywiseReport';
+import Dashboard from '../components/pages/Dashboard';
+import Loginpage from "../components/pages/Loginpage"
 
 const ApplictionRoutes = () => {
   const { user: username, userRoles } = useContext(UserContext);
@@ -17,8 +19,13 @@ const ApplictionRoutes = () => {
     <>
       <ErrorBoundary>
         <Routes>
+        <Route
+            // path="/"
+            path="/dashboard"
+            element={<Dashboard username={username} />}
+          />
           <Route path="/" element={<Datatable />} />
-          <Route path="/EmpHistory/:empId/:year/:month" element={<EmployeeHistory />} />
+          <Route path="/EmpHistory/:empId/:year/:month/:empName" element={<EmployeeHistory />} />
           <Route
             // path="/"
             path="/watchlist"
@@ -36,6 +43,10 @@ const ApplictionRoutes = () => {
           <Route
             path="/DepartmentDayWiseReport"
             element={<DepartmentDayWiseReport/>}
+          />
+          <Route
+            path="/Login"
+            element={<Loginpage  username={username}/>}
           />
           <Route path="/watchlistform/:id" element={<EditWatchlistForm username={username} />} />
           <Route path="*" element={<PageNotFound />} />

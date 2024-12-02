@@ -17,6 +17,7 @@ const constraints = {
     REPORTED_COUNT: 'Reported',
     ACHIVEMENT_PERCENTAGE: 'Achived %',
     TOTAL: 'Total',
+    NO:'No.',
     NO_DATA_FOUND: ' No data found!',
     SEARCH: {
       LABEL: 'Search by employee name',
@@ -28,9 +29,9 @@ const constraints = {
     },
     WATCH_LIST: {
       TITLE: 'Watch Lists',
-      EMPLOYEE_NAME: '',
-      IN_TIME: '',
-      OUT_TIME: '',
+      EMPLOYEE_NAME: 'Employee Name',
+      IN_TIME: 'In Time',
+      OUT_TIME: 'Out Time',
     },
   },
 }

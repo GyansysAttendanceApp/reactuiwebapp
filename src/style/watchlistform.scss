@@ -1,0 +1,45 @@
+/* General Styles */
+.header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d6d5d0;
+ 
+    padding: 10px 16px;
+    position: sticky;
+    top: 64px;
+    margin: 0 auto;
+
+  }
+  
+  .back-button {
+    text-decoration: none;
+  }
+  
+  .form-container {
+    padding: 16px;
+    padding-top: 24px;
+ 
+  }
+  
+  .form-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 16px;
+   
+  }
+  
+  .form-field {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .label {
+    margin-right: 10px;
+    width: 250px;
+  }
+  
+  
