@@ -10,6 +10,8 @@ import Datatable from '../components/pages/Datatable';
 import UserContext from '../context/UserContext';
 import Updatepage from '../components/pages/Updatepage';
 import DepartmentDayWiseReport from '../components/pages/DepartmentDaywiseReport';
+import { Login } from '@mui/icons-material';
+import Loginpage from "../components/pages/Loginpage"
 
 const ApplictionRoutes = () => {
   const { user: username, userRoles } = useContext(UserContext);
@@ -36,6 +38,10 @@ const ApplictionRoutes = () => {
           <Route
             path="/DepartmentDayWiseReport"
             element={<DepartmentDayWiseReport/>}
+          />
+          <Route
+            path="/Loginpage"
+            element={<Loginpage  username={username}/>}
           />
           <Route path="/watchlistform/:id" element={<EditWatchlistForm username={username} />} />
           <Route path="*" element={<PageNotFound />} />
