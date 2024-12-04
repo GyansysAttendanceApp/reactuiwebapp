@@ -10,8 +10,11 @@ import Datatable from '../components/pages/Datatable';
 import UserContext from '../context/UserContext';
 import Updatepage from '../components/pages/Updatepage';
 import DepartmentDayWiseReport from '../components/pages/DepartmentDaywiseReport';
+import DepartmentMonthWiseReport from '../components/pages/DepartmentMonthWiseReport';
 import Dashboard from '../components/pages/Dashboard';
-import Loginpage from "../components/pages/Loginpage"
+import Loginpage from '../components/pages/Loginpage';
+import { ThemeProvider } from '@emotion/react';
+import theme from '../components/themes/DepartmentMonthWiseReportTheme';
 
 const ApplictionRoutes = () => {
   const { user: username, userRoles } = useContext(UserContext);
@@ -19,13 +22,13 @@ const ApplictionRoutes = () => {
     <>
       <ErrorBoundary>
         <Routes>
-        <Route
+          <Route
             // path="/"
             path="/dashboard"
             element={<Dashboard username={username} />}
           />
           <Route path="/" element={<Datatable />} />
-          <Route path="/EmpHistory/:empId/:year/:month/:empName" element={<EmployeeHistory />} />
+          <Route path="/EmpHistory/:empId/:year/:month" element={<EmployeeHistory />} />
           <Route
             // path="/"
             path="/watchlist"
@@ -40,14 +43,16 @@ const ApplictionRoutes = () => {
             path="/Updatepage"
             element={<Updatepage username={username} userRoles={userRoles} />}
           />
+          <Route path="/DepartmentDayWiseReport" element={<DepartmentDayWiseReport />} />
           <Route
-            path="/DepartmentDayWiseReport"
-            element={<DepartmentDayWiseReport/>}
+            path="/DepartmentMonthWiseReport/:operationId/:deptId/:year/:month"
+            element={
+              <ThemeProvider theme={theme}>
+                <DepartmentMonthWiseReport />
+              </ThemeProvider>
+            }
           />
-          <Route
-            path="/Login"
-            element={<Loginpage  username={username}/>}
-          />
+          <Route path="/Login" element={<Loginpage username={username} />} />
           <Route path="/watchlistform/:id" element={<EditWatchlistForm username={username} />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

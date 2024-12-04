@@ -17,7 +17,7 @@ const constraints = {
     REPORTED_COUNT: 'Reported',
     ACHIVEMENT_PERCENTAGE: 'Achived %',
     TOTAL: 'Total',
-    NO:'No.',
+    NO: 'No.',
     NO_DATA_FOUND: ' No data found!',
     SEARCH: {
       LABEL: 'Search by employee name',
@@ -26,6 +26,7 @@ const constraints = {
       FETCH: 'Fetch',
       FETCH_HISTORY: 'Fetch History',
       CLEAR: 'Clear',
+      SEARCH: 'Search',
     },
     WATCH_LIST: {
       TITLE: 'Watch Lists',
@@ -34,5 +35,5 @@ const constraints = {
       OUT_TIME: 'Out Time',
     },
   },
-}
-export default constraints
+};
+export default constraints;

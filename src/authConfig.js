@@ -10,10 +10,10 @@ const config = {
     cacheLocation: 'localStorage',
     storeAuthStateInCookie: false,
   },
-}
+};
 
 const loginRequest = {
   scopes: ['openid', 'profile', 'User.Read'],
-}
+};
 
-export { config, loginRequest }
+export { config, loginRequest };

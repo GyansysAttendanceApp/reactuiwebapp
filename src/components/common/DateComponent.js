@@ -14,7 +14,7 @@ export default function DatePickerValue({ value, onchange, views }) {
         <Stack sx={{ width: '100%' }}>
           {views && views.length ? (
             <DatePicker
-              views={views} 
+              views={views}
               value={value}
               onChange={(newValue) => onchange(newValue)}
               renderInput={(params) => (

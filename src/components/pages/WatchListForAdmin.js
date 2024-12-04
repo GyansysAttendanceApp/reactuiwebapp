@@ -23,10 +23,7 @@ const WatchListForAdmin = ({ groupedWatchlist, selectedItem }) => {
       <Box sx={{ overflow: 'auto', maxHeight: '68.5vh', marginTop: '0.5rem' }}>
         {true && ( //selectedItem
           <Box>
-            <Accordion
-            // defaultExpanded
-            // sx={{ backgroundColor: '' }}
-            >
+            <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
@@ -47,9 +44,7 @@ const WatchListForAdmin = ({ groupedWatchlist, selectedItem }) => {
                         id={`${watchlistName}-header`}
                         // sx={{ backgroundColor: '#ECF0F1' }}
                       >
-                        <Typography variant="body3">
-                          {watchlistName}
-                        </Typography>
+                        <Typography variant="body3">{watchlistName}</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
                         <TableContainer sx={{ marginTop: '5px' }}>
@@ -78,26 +73,26 @@ const WatchListForAdmin = ({ groupedWatchlist, selectedItem }) => {
                                 <TableRow key={i}>
                                   <TableCell>
                                     <Box display={'flex'}>
-                                    <a
-                                      href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
-                                      target="_blank"
-                                    >
-                                      <PiMicrosoftTeamsLogoFill
-                                        size={20}
-                                        sx={{
-                                          backgroundColor: '#d6338f',
-                                        }}
-                                      />
-                                    </a>
-                                    &nbsp;
-                                    <a
-                                      href={`mailto:${employee.EmployeeEmail}`}
-                                      style={{ textDecoration: 'none' }}
-                                    >
-                                      <Typography variant="subtitle2">
-                                        {employee.EmployeeName}
-                                      </Typography>
-                                    </a>
+                                      <a
+                                        href={`https://teams.microsoft.com/l/chat/0/0?users=${employee.EmployeeEmail}`}
+                                        target="_blank"
+                                      >
+                                        <PiMicrosoftTeamsLogoFill
+                                          size={20}
+                                          sx={{
+                                            backgroundColor: '#d6338f',
+                                          }}
+                                        />
+                                      </a>
+                                      &nbsp;
+                                      <a
+                                        href={`mailto:${employee.EmployeeEmail}`}
+                                        style={{ textDecoration: 'none' }}
+                                      >
+                                        <Typography variant="subtitle2">
+                                          {employee.EmployeeName}
+                                        </Typography>
+                                      </a>
                                     </Box>
                                   </TableCell>
                                   <TableCell align="right">

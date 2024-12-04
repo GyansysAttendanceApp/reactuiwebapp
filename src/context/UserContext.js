@@ -22,6 +22,7 @@ export const UserProvider = ({ children }) => {
   const [departmentData, setDepartmentData] = useState([]);
   const [departmentDataLoading, setDepartmentDataLoading] = useState(true);
   const [employeeDetailsLoading, setEmployeeDetailsLoading] = useState(true);
+  const [departmentSuggestion, setDepartmentSuggestion] = useState([]);
 
   const updateUser = (user) => setUser((prevState) => user);
   const updateUserRoles = (userRoles) => setUserRoles((prevState) => userRoles);
@@ -49,6 +50,8 @@ export const UserProvider = ({ children }) => {
     departmentData,
     employeeDetailsLoading,
     departmentDataLoading,
+    departmentSuggestion,
+    setDepartmentSuggestion,
     setEmployeeDetailsLoading,
     setDepartmentDataLoading,
     setDepartmentData,
@@ -63,7 +66,6 @@ export const UserProvider = ({ children }) => {
     setShowWatchlist,
     updateUser,
     updateUserRoles,
-    
   };
 
   return <UserContext.Provider value={userInfo}>{children}</UserContext.Provider>;

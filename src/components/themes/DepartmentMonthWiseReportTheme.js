@@ -194,17 +194,17 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           padding: '0.6rem',
-          fontSize: '0.75rem',
+          fontSize: '0.8rem',
         },
         head: {
           background: '#f0f0f0',
           padding: '0.4rem',
-          fontSize: '0.75rem',
+          fontSize: '0.7rem',
           fontWeight: 'bold',
         },
         body: {
           padding: '0.35rem',
-          fontSize: '0.75rem',
+          fontSize: '0.7rem',
         },
       },
     },

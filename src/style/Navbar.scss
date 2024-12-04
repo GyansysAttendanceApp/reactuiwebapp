@@ -23,14 +23,14 @@
   .navbar-middle-header {
     display: flex;
     gap: 1rem;
-    align-items:flex-end;
+    align-items: flex-end;
     justify-content: flex-start;
     flex-grow: 1;
     padding-left: 2rem;
     // border: 1px solid red;
     height: 9vh;
-    .MuiIconButton-root{
-      padding:0;
+    .MuiIconButton-root {
+      padding: 0;
     }
   }
   .navbar-actions {
@@ -51,8 +51,6 @@
   cursor: pointer;
   font-weight: 600;
 }
-
-
 
 .navbar-username {
   font-weight: bold;

@@ -55,7 +55,7 @@ function EmployeeHistory() {
     const selectedMonth = event.target.value;
     setSelectedYearMonth(selectedMonth);
     const [selectedYear, selectedMonthValue] = selectedMonth.split('-');
-    navigate(`/EmpHistory/${empId}/${selectedYear}/${selectedMonthValue}/${empName}`);
+    navigate(`/EmpHistory/${empId}/${selectedYear}/${selectedMonthValue}`);
   };
 
   const handleSearchInputChange = async (event, value) => {
@@ -252,11 +252,11 @@ function EmployeeHistory() {
           }}
         >
           <Table>
-            <TableHead 
+            <TableHead
             // sx={{ position: 'sticky', top: 0, background: 'white' }}
             >
               <TableRow>
-              <TableCell>No.</TableCell>
+                <TableCell>No.</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Day</TableCell>
                 <TableCell>Type</TableCell>
@@ -269,14 +269,20 @@ function EmployeeHistory() {
               </TableRow>
             </TableHead>
             <TableBody sx={{}}>
-              {employeeData.map((employee,index) => (
+              {employeeData.map((employee, index) => (
                 <TableRow
                   key={employee.Date}
                   style={{
-                    backgroundColor: employee.IsHoliday ? '#8abec2' :['Saturday', 'Sunday'].includes(employee.AttDay)  ? '#fff0e6' :   !employee.FirstIn  ? '#e6f9ff'  : '',
+                    backgroundColor: employee.IsHoliday
+                      ? '#8abec2'
+                      : ['Saturday', 'Sunday'].includes(employee.AttDay)
+                        ? '#fff0e6'
+                        : !employee.FirstIn
+                          ? '#e6f9ff'
+                          : '',
                   }}
                 >
-                  <TableCell>{index+1}</TableCell>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{formatDateWithoutTime(employee.AttDate)}</TableCell>
                   <TableCell>{employee.AttDay}</TableCell>
                   <TableCell>

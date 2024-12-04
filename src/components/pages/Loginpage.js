@@ -1,30 +1,25 @@
-import React , { useState }  from 'react'
-import "../../style/Loginpage.scss"
+import React, { useState } from 'react';
+import '../../style/Loginpage.scss';
 import { useNavigate } from 'react-router-dom';
 
 const Loginpage = () => {
-
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
-
   const handleLogin = () => {
     if (email === 'test@example.com' && name === 'John Doe' && password === '12345') {
       alert('Login successful!');
-      navigate('/'); 
+      navigate('/');
     } else {
       alert('Invalid credentials. Please try again.');
     }
   };
 
-  
   return (
-    <div className="login-container"> 
-    
+    <div className="login-container">
       <div className="login-card">
-
         <h2 className="login-title">Welcome to Gyansys</h2>
         <div className="input-group">
           <label htmlFor="name">Name:</label>
@@ -46,7 +41,7 @@ const Loginpage = () => {
             placeholder="Enter your email"
           />
         </div>
-       
+
         <div className="input-group">
           <label htmlFor="password">Password:</label>
           <input
@@ -62,7 +57,7 @@ const Loginpage = () => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Loginpage
+export default Loginpage;

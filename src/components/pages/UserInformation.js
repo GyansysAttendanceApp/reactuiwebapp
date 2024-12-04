@@ -24,13 +24,14 @@ const UserInformation = ({
   selectedItemAllEntries,
   employeeDetailsLoading,
 }) => {
-
   return (
-    <Box sx={{
-       overflow: 'auto',
+    <Box
+      sx={{
+        overflow: 'auto',
         maxHeight: '56.5vh',
-        marginTop:'0.8rem'
-         }}>
+        marginTop: '0.8rem',
+      }}
+    >
       <Box>
         {selectedItem ? (
           <Card
@@ -95,7 +96,7 @@ const UserInformation = ({
                       <TableBody>
                         {selectedItemAllEntries.map((item, index) => (
                           <TableRow key={index}>
-                            <TableCell sx={{ border: 'none' ,padding:'0.1rem'}}>
+                            <TableCell sx={{ border: 'none', padding: '0.1rem' }}>
                               {item.SwipeDateTime} - {item.InOut} - {item.FloorDoorName}
                             </TableCell>
                           </TableRow>

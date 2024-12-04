@@ -1,15 +1,15 @@
-import { CenterFocusStrong } from '@mui/icons-material'
-import React, { useEffect } from 'react'
-import { loginRequest } from '../../authConfig'
-import { useMsal } from '@azure/msal-react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { CenterFocusStrong } from '@mui/icons-material';
+import React, { useEffect } from 'react';
+import { loginRequest } from '../../authConfig';
+import { useMsal } from '@azure/msal-react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const MFALogin = ({ username }) => {
-  const { instance } = useMsal()
+  const { instance } = useMsal();
 
   const handleLoginRedirect = async () => {
-    await instance.loginRedirect()
-  }
+    await instance.loginRedirect();
+  };
 
   return (
     <div
@@ -30,6 +30,6 @@ const MFALogin = ({ username }) => {
         )}
       </div>
     </div>
-  )
-}
-export default MFALogin
+  );
+};
+export default MFALogin;
