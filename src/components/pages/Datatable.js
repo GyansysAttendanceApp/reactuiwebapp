@@ -84,8 +84,8 @@ function Datatable() {
   } = useContext(UserContext);
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
   const [value, setValue] = React.useState(0);
-  const year=new Date(selectedFormatedWatchListDate).getFullYear();
-  const month=(new Date(selectedFormatedWatchListDate).getMonth()+1).toString().padStart(2,0);
+  const year = new Date(selectedFormatedWatchListDate).getFullYear();
+  const month = (new Date(selectedFormatedWatchListDate).getMonth() + 1).toString().padStart(2, 0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -428,7 +428,9 @@ function Datatable() {
                         </TableCell>
                         <Tooltip title="Monthly Department Report" arrow>
                           <TableCell>
-                            <Link to={`/DepartmentMonthWiseReport/${2}/${department.DeptID}/${year}/${month}`}>
+                            <Link
+                              to={`/DepartmentMonthWiseReport/${2}/${department.DeptID}/${year}/${month}`}
+                            >
                               <FcCalendar size={24} />
                             </Link>
                           </TableCell>
@@ -502,7 +504,7 @@ function Datatable() {
               >
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                   <Tab label="Swipe Information" {...a11yProps(0)} />
-                <Tab label="WatchList" {...a11yProps(1)} />
+                  <Tab label="WatchList" {...a11yProps(1)} />
                 </Tabs>
               </Box>
               <CustomTabPanel value={value} index={0}>

@@ -128,7 +128,7 @@ const DepartmentMonthWiseReport = () => {
 
       const deptDetails = departmentSuggestion.filter((item) => item.DeptName === query);
 
-      setDepatName(deptDetails[0].DeptName)
+      setDepatName(deptDetails[0].DeptName);
       console.log({ deptDetails });
       const [selectedYear, selectedMonthValue] = selectedYearMonth.split('-');
       setDepartmentMonthWiseData([]);

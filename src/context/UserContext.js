@@ -6,10 +6,10 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const { accounts } = useMsal();
-  const [ isAutheriseUser, setIsAutheriseUser ] = useState(localStorage.getItem('active'));
-  const [userDetails, setUserDetails ] = useState({
+  const [isAutheriseUser, setIsAutheriseUser] = useState(localStorage.getItem('active'));
+  const [userDetails, setUserDetails] = useState({
     email: 'test@gyansys.com',
-    name:'test user',
+    name: 'test user',
     password: 'PSN@12345',
   });
   const [user, setUser] = useState(() => accounts[0] && accounts[0].name);

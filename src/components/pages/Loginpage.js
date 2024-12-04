@@ -81,13 +81,14 @@ const Loginpage = () => {
   const { isAutheriseUser, setIsAutheriseUser, userDetails } = useContext(UserContext);
 
   const handleLogin = () => {
-    console.log(userMail,name,password,userDetails)
-    if ((userMail === userDetails.email) &&
-     ( name === userDetails.name )&&
-     ( password === userDetails.password)
+    console.log(userMail, name, password, userDetails);
+    if (
+      userMail === userDetails.email &&
+      name === userDetails.name &&
+      password === userDetails.password
     ) {
       alert('Login successful!');
-      localStorage.setItem('active',1);
+      localStorage.setItem('active', 1);
       setIsAutheriseUser(1);
       navigate('/');
     } else {
