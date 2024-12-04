@@ -252,7 +252,7 @@ function EmployeeHistory() {
           }}
         >
           <Table>
-            <TableHead 
+            <TableHead
             // sx={{ position: 'sticky', top: 0, background: 'white' }}
             >
               <TableRow>
@@ -272,7 +272,13 @@ function EmployeeHistory() {
                 <TableRow
                   key={employee.Date}
                   style={{
-                    backgroundColor: employee.IsHoliday ? '#8abec2' :['Saturday', 'Sunday'].includes(employee.AttDay)  ? '#fff0e6' :   !employee.FirstIn  ? '#e6f9ff'  : '',
+                    backgroundColor: employee.IsHoliday
+                      ? '#8abec2'
+                      : ['Saturday', 'Sunday'].includes(employee.AttDay)
+                        ? '#fff0e6'
+                        : !employee.FirstIn
+                          ? '#e6f9ff'
+                          : '',
                   }}
                 >
                   <TableCell>{formatDateWithoutTime(employee.AttDate)}</TableCell>

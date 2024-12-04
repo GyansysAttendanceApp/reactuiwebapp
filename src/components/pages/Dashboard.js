@@ -338,15 +338,13 @@ function Dashboard() {
               />
             </Grid>
             <Grid item xs={12} sm={3}>
-              <BarChart data={departmentData} 
-              style={{ marginLeft:'-100px'}}
-              />
+              <BarChart data={departmentData} style={{ marginLeft: '-100px' }} />
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4.5}>
             <TableContainer component={Paper} sx={{ maxHeight: '76.5vh', overflow: 'none' }} ś>
               <Table>
-                <TableHead 
+                <TableHead
                 // sx={{ position: 'sticky', top: 0 }}
                 >
                   <TableRow>

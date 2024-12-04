@@ -10,4 +10,4 @@ export const colors = {
   borderColor: '#dcdcdc',
   errorColor: '#e53935',
   successColor: '#43a047',
-}
+};

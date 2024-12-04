@@ -200,7 +200,7 @@ const theme = createTheme({
           background: '#f0f0f0',
           padding: '0.4rem',
           fontSize: '0.875rem',
-          fontWeight:'bold'
+          fontWeight: 'bold',
         },
         body: {
           padding: '0.35rem',
@@ -213,8 +213,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#1670b9',
-          position:'sticky',
-          top:0,
+          position: 'sticky',
+          top: 0,
           // padding:'1rem !important',
           textTransform: 'capitalize',
         },
@@ -306,8 +306,8 @@ const theme = createTheme({
         root: {
           backgroundColor: '#5DADE2',
           boxShadow: 'none',
-          font:'0.8rem',
-        
+          font: '0.8rem',
+
           '&:before': {
             display: 'none', // Hide default border line
           },

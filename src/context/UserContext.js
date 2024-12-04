@@ -63,7 +63,6 @@ export const UserProvider = ({ children }) => {
     setShowWatchlist,
     updateUser,
     updateUserRoles,
-    
   };
 
   return <UserContext.Provider value={userInfo}>{children}</UserContext.Provider>;

@@ -1,7 +1,7 @@
-import React from 'react'
-import Navbar from './Navbar'
-import Footer from './Footer'
-import { Box } from '@mui/material'
+import React from 'react';
+import Navbar from './Navbar';
+import Footer from './Footer';
+import { Box } from '@mui/material';
 
 const Layout = ({ children }) => {
   return (
@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
         <Footer />
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
