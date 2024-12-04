@@ -16,6 +16,7 @@ const constraints = {
     ABSENT_COUNT: 'Absent',
     REPORTED_COUNT: 'Reported',
     ACHIVEMENT_PERCENTAGE: 'Achived %',
+    Reports: 'reports',
     TOTAL: 'Total',
     NO: 'No.',
     NO_DATA_FOUND: ' No data found!',

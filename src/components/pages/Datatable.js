@@ -39,6 +39,9 @@ import { Tab, Tabs } from '@mui/material';
 import CustomTabPanel from '../common/Tabs';
 import WatchListForAdmin from './WatchListForAdmin';
 import { Link } from 'react-router-dom';
+import { FcCalendar } from 'react-icons/fc';
+import { Tooltip } from '@mui/material';
+import { SlCalender } from 'react-icons/sl';
 
 function a11yProps(index) {
   return {
@@ -387,6 +390,11 @@ function Datatable() {
                         </Typography>
                       </TableSortLabel>
                     </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" fontWeight="bold">
+                        {/* {constraints.DATATABLE.Reports} */}
+                      </Typography>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -416,6 +424,13 @@ function Datatable() {
                           )}
                           %
                         </TableCell>
+                        <Tooltip title="Monthly Department Report" arrow>
+                          <TableCell>
+                            <Link>
+                              <FcCalendar size={24} />
+                            </Link>
+                          </TableCell>
+                        </Tooltip>
                       </TableRow>
                     ))}
                   {departmentData.length === 0 && departmentDataLoading && (
@@ -470,6 +485,9 @@ function Datatable() {
                     <TableCell>
                       {calculatePercentage(totalExpectedCount, totalTodaysCount)}%
                     </TableCell>
+                    <TableCell>
+                      <FcCalendar />
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -511,14 +529,12 @@ function Datatable() {
                   employeeDetailsLoading={employeeDetailsLoading}
                 />
               </CustomTabPanel>
-              {selectedItem && (
-                <CustomTabPanel value={value} index={1}>
-                  <WatchListForAdmin
-                    groupedWatchlist={groupedWatchlist}
-                    selectedItem={selectedItem}
-                  />
-                </CustomTabPanel>
-              )}
+              <CustomTabPanel value={value} index={1}>
+                <WatchListForAdmin
+                  groupedWatchlist={groupedWatchlist}
+                  selectedItem={selectedItem}
+                />
+              </CustomTabPanel>
             </Box>
           </Grid>
         </Grid>
