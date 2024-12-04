@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import EmployeeHistory from '../components/pages/EmployeeHistory';
 import Watchlistform from '../components/pages/Watchlistform';
 import EditWatchlistForm from '../components/pages/EditWatchlistForm';
@@ -15,9 +15,12 @@ import Dashboard from '../components/pages/Dashboard';
 import Loginpage from '../components/pages/Loginpage';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../components/themes/DepartmentMonthWiseReportTheme';
+import watchlistTheme from '../components/themes/watchListTheme';
 
 const ApplictionRoutes = () => {
-  const { user: username, userRoles } = useContext(UserContext);
+  const { user: username, userRoles, isAutheriseUser } = useContext(UserContext);
+  const navigate = useNavigate();
+
   return (
     <>
       <ErrorBoundary>
@@ -36,7 +39,11 @@ const ApplictionRoutes = () => {
           />
           <Route
             path="/watchlistform"
-            element={<Watchlistform username={username} userRoles={userRoles} />}
+            element={
+              <ThemeProvider theme={watchlistTheme}>
+                <Watchlistform username={username} userRoles={userRoles} />
+              </ThemeProvider>
+            }
           />
 
           <Route

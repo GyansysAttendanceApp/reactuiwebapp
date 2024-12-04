@@ -11,13 +11,18 @@ import axios from 'axios';
 import { Typography } from '@mui/material';
 import { setCssVariables } from './colors/colorsVariables';
 import Layout from './components/common/Layout';
+import { useNavigate } from 'react-router-dom';
+import Loginpage from './components/pages/Loginpage';
 
 function App() {
   const { accounts } = useMsal();
   const { setUserRoles, setShowWatchlist } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { isAutheriseUser } = useContext(UserContext);
+  
 
   const url = process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL;
-
+ 
   useEffect(() => {
     if (accounts.length > 0) {
       const fetchUserRole = async () => {
@@ -43,7 +48,9 @@ function App() {
   return (
     <>
       <Layout>
-        <ApplictionRoutes />
+        {isAutheriseUser?<ApplictionRoutes />:<Loginpage/>}
+
+        
 
         {/* <AuthenticatedTemplate>
             <ApplictionRoutes />

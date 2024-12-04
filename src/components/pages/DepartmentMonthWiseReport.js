@@ -20,6 +20,7 @@ const DepartmentMonthWiseReport = () => {
   const [departmentSuggestion, setDepartmentSuggestion] = useState([]);
   const [queryFlag, setQueryFlag] = useState(false);
   const [query, setQuery] = useState('');
+  const [DeptName, setDepatName] = useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const DepartmentMonthWiseReport = () => {
   // const queryParams = new URLSearchParams(location.search);
   // const deptId = queryParams.get('deptId');
   // || '010';
-  const DeptName = 'hr';
+  // const DeptName = 'hr';
   // || 'HR';
   // const month = queryParams.get('month');
   // || new Date().getMonth() - 1;
@@ -37,6 +38,8 @@ const DepartmentMonthWiseReport = () => {
   const { deptId, year, month, empName } = useParams();
   const convertJson = {};
   const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`);
+
+  console.log(selectedYearMonth);
   useEffect(() => {
     const fetchDepartmentdata = async () => {
       try {
@@ -94,6 +97,10 @@ const DepartmentMonthWiseReport = () => {
       const response = await axios.get(`${url}/dept?date=${date}`);
       console.log('dataTable', response);
       setDepartmentSuggestion(response.data);
+      const deptDetails = response.data.filter((item) => item.DeptID === deptId);
+      if (deptDetails) {
+        setDepatName(deptDetails[0].DeptName);
+      }
     } catch (error) {
       console.error('Error fetching department data:', error);
     }
@@ -120,6 +127,8 @@ const DepartmentMonthWiseReport = () => {
       console.log({ query });
 
       const deptDetails = departmentSuggestion.filter((item) => item.DeptName === query);
+
+      setDepatName(deptDetails[0].DeptName)
       console.log({ deptDetails });
       const [selectedYear, selectedMonthValue] = selectedYearMonth.split('-');
       setDepartmentMonthWiseData([]);

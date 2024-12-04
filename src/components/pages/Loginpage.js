@@ -67,22 +67,32 @@
 
 //MUI with out  inLine
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, TextField, Typography, Card, CardContent } from '@mui/material';
 import '../../style/Loginpage.scss';
+import UserContext from '../../context/UserContext';
 
 const Loginpage = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [userMail, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const { isAutheriseUser, setIsAutheriseUser, userDetails } = useContext(UserContext);
 
   const handleLogin = () => {
-    if (email === 'test@gyansys.com' && name === 'test user' && password === 'PSN@12345') {
+    console.log(userMail,name,password,userDetails)
+    if ((userMail === userDetails.email) &&
+     ( name === userDetails.name )&&
+     ( password === userDetails.password)
+    ) {
       alert('Login successful!');
+      localStorage.setItem('active',1);
+      setIsAutheriseUser(1);
       navigate('/');
     } else {
+      setIsAutheriseUser(false);
+      // navigate('/Login');
       alert('Invalid credentials. Please try again.');
     }
   };
@@ -109,7 +119,7 @@ const Loginpage = () => {
               variant="outlined"
               fullWidth
               type="email"
-              value={email}
+              value={userMail}
               onChange={(e) => setEmail(e.target.value)}
               className="login-input"
               placeholder="Enter your email"
