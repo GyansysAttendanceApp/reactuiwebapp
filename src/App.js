@@ -42,21 +42,19 @@ function App() {
     } else {
       setShowWatchlist(false);
     }
-  }, [JSON.stringify(accounts)]);
+  }, [accounts, setUserRoles, setShowWatchlist, url]);
 
   return (
-    <>
       <Layout>
-        {isAutheriseUser ? <ApplictionRoutes /> : <Loginpage />}
+        {/* {isAutheriseUser ? <ApplictionRoutes /> : <Loginpage />} */}
 
-        {/* <AuthenticatedTemplate>
+        <AuthenticatedTemplate>
             <ApplictionRoutes />
           </AuthenticatedTemplate>
           <UnauthenticatedTemplate>
             <MFALogin />
-          </UnauthenticatedTemplate>      */}
+          </UnauthenticatedTemplate>     
       </Layout>
-    </>
   );
 }
 

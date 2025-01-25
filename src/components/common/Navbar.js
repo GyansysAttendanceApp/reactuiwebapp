@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import { Link } from 'react-router-dom';
-import { useMsal } from '@azure/msal-react';
+import { AuthenticatedTemplate ,useMsal } from '@azure/msal-react';
 import UserContext from '../../context/UserContext';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import MenuItem from '@mui/material/MenuItem';
@@ -42,6 +42,7 @@ function Navbar() {
             </Typography>
           </Link>
         </Box>
+        <AuthenticatedTemplate>
         <Box className="navbar-middle-header">
           <Link to="/" className="navbar-link">
             <IconButton
@@ -114,13 +115,12 @@ function Navbar() {
             </Link>
           )}
           {userName && (
-            <>
               <Typography variant="h6" className="navbar-username">
                 {userName}
               </Typography>
-            </>
           )}
         </Box>
+        </AuthenticatedTemplate>
       </Box>
     </Box>
   );
