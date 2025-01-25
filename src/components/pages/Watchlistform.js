@@ -1,71 +1,71 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import Autocomplete from '@mui/material/Autocomplete'
-import Snackbar from '@mui/material/Snackbar'
-import MuiAlert from '@mui/material/Alert'
-import Chip from '@mui/material/Chip'
-import { useMsal } from '@azure/msal-react'
-import "../../style/watchlistform.scss"
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Autocomplete from '@mui/material/Autocomplete';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Chip from '@mui/material/Chip';
+import { useMsal } from '@azure/msal-react';
+import '../../style/watchlistform.scss';
 
 function Watchlistform({ username }) {
-  const { instance, accounts } = useMsal()
-  const [watchlistName, setWatchlistName] = useState('')
-  const [watchlistDescription, setWatchlistDescription] = useState('')
-  const [WatchListPrimaryOwner, setWatchListPrimaryOwner] = useState({ name: '', email: '' })
-  const [employeesInWatchlist, setEmployeesInWatchlist] = useState([])
-  const [ownerSuggestions, setOwnerSuggestions] = useState([])
-  const [employeeSuggestions, setEmployeeSuggestions] = useState([])
-  const [formErrors, setFormErrors] = useState({})
+  const { instance, accounts } = useMsal();
+  const [watchlistName, setWatchlistName] = useState('');
+  const [watchlistDescription, setWatchlistDescription] = useState('');
+  const [WatchListPrimaryOwner, setWatchListPrimaryOwner] = useState({ name: '', email: '' });
+  const [employeesInWatchlist, setEmployeesInWatchlist] = useState([]);
+  const [ownerSuggestions, setOwnerSuggestions] = useState([]);
+  const [employeeSuggestions, setEmployeeSuggestions] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
 
-  const [openSnackbar, setOpenSnackbar] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState('')
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success')
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
-  const navigate = useNavigate()
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
+  const navigate = useNavigate();
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
   useEffect(() => {
     const fetchOwnerSuggestions = async () => {
       try {
-        const response = await axios.get(`${url}/employees?name=${WatchListPrimaryOwner.name}`)
+        const response = await axios.get(`${url}/employees?name=${WatchListPrimaryOwner.name}`);
         setOwnerSuggestions(
           response.data.map((item) => ({ name: item.EmpName, email: item.EmpEmail })),
-        )
+        );
       } catch (error) {
-        console.error('Error fetching owner suggestions:', error)
+        console.error('Error fetching owner suggestions:', error);
       }
-    }
+    };
 
     if (WatchListPrimaryOwner.name.trim() !== '') {
-      fetchOwnerSuggestions()
+      fetchOwnerSuggestions();
     } else {
-      setOwnerSuggestions([])
+      setOwnerSuggestions([]);
     }
-  }, [WatchListPrimaryOwner.name])
+  }, [WatchListPrimaryOwner.name]);
 
   const fetchEmployeeSuggestions = async (inputValue) => {
     try {
-      const response = await axios.get(`${url}/employees?name=${inputValue}`)
+      const response = await axios.get(`${url}/employees?name=${inputValue}`);
       setEmployeeSuggestions(
         response.data.map((item) => ({
           EmployeeID: item.EmpID,
           EmployeeName: item.EmpName,
           EmployeeEmail: item.EmpEmail,
         })),
-      )
+      );
     } catch (error) {
-      console.error('Error fetching employee suggestions:', error)
+      console.error('Error fetching employee suggestions:', error);
     }
-  }
+  };
 
   const handleSave = async () => {
-    const isValid = validateForm()
+    const isValid = validateForm();
     if (isValid) {
       try {
         await axios.post(`${url}/watchlist/create`, {
@@ -75,77 +75,77 @@ function Watchlistform({ username }) {
           param_WatchListPrimaryOwnerName: WatchListPrimaryOwner.name,
           param_WatchListPrimaryOwnerEmail: WatchListPrimaryOwner.email,
           param_tvp_WatchListEmployees: employeesInWatchlist,
-        })
-        console.log('Watchlist created successfully')
-        setSnackbarMessage('Watchlist created successfully!')
-        setSnackbarSeverity('success')
-        setOpenSnackbar(true)
+        });
+        console.log('Watchlist created successfully');
+        setSnackbarMessage('Watchlist created successfully!');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
         // setWatchlistName("");
         // setWatchlistDescription("");
         // setWatchListPrimaryOwner({ name: "", email: "" });
         // setEmployeesInWatchlist([]);
       } catch (error) {
-        console.error(' watchlistformError creating watchlist:', error)
-        setSnackbarMessage('Error creating watchlist already exist')
-        setSnackbarSeverity('error')
-        setOpenSnackbar(true)
+        console.error(' watchlistformError creating watchlist:', error);
+        setSnackbarMessage('Error creating watchlist already exist');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
       }
     }
-  }
+  };
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
-      return
+      return;
     }
     // debugger
-    setOpenSnackbar(false)
+    setOpenSnackbar(false);
     if (snackbarSeverity === 'error') {
-      return
+      return;
     }
-    navigate('/watchlist')
-  }
+    navigate('/watchlist');
+  };
 
   const handleCancel = () => {
-    setWatchlistName('')
-    setWatchlistDescription('')
-    setWatchListPrimaryOwner({ name: '', email: '' })
-    setEmployeesInWatchlist([])
-    clearFormErrors()
-  }
+    setWatchlistName('');
+    setWatchlistDescription('');
+    setWatchListPrimaryOwner({ name: '', email: '' });
+    setEmployeesInWatchlist([]);
+    clearFormErrors();
+  };
 
   const clearFormErrors = () => {
-    setFormErrors({})
-  }
+    setFormErrors({});
+  };
   // Valodation
   const validateForm = () => {
-    const errors = {}
+    const errors = {};
     if (!watchlistName.trim()) {
-      errors.watchlistName = 'Watchlist name is required'
+      errors.watchlistName = 'Watchlist name is required';
     }
     if (!watchlistDescription.trim()) {
-      errors.watchlistDescription = 'Watchlist description is required'
+      errors.watchlistDescription = 'Watchlist description is required';
     }
     if (!WatchListPrimaryOwner.name) {
-      errors.WatchListPrimaryOwnerName = 'Please select the owner'
+      errors.WatchListPrimaryOwnerName = 'Please select the owner';
     }
     if (
       WatchListPrimaryOwner.name &&
       !ownerSuggestions.some((owner) => owner.name === WatchListPrimaryOwner.name)
     ) {
-      errors.WatchListPrimaryOwnerName = 'Invalid owner name'
+      errors.WatchListPrimaryOwnerName = 'Invalid owner name';
     }
     if (employeesInWatchlist.length === 0) {
-      errors.employeesInWatchlist = 'Employees list is required'
+      errors.employeesInWatchlist = 'Employees list is required';
     }
-    setFormErrors(errors)
-    return Object.keys(errors).length === 0
-  }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   return (
     <>
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={1000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
@@ -158,8 +158,7 @@ function Watchlistform({ username }) {
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>
-      <Box
-        className="header-box" >
+      <Box className="header-box">
         <Link to="/watchlist">
           <Button variant="contained" color="primary">
             Back
@@ -168,12 +167,18 @@ function Watchlistform({ username }) {
         <Typography variant="h6">Watch List Maintenance</Typography>
       </Box>
 
-      <Box className ="form-container">    {/*  px={2} pt={2} */}
+      <Box className="form-container">
+        {' '}
+        {/*  px={2} pt={2} */}
         <Typography variant="h5" gutterBottom>
           New Watchlist Creation
         </Typography>
-        <Box  className = "form-content " >   {/*display="flex" flexDirection="column" width="100%" margin="0 auto" mt={2}*/}
-          <Box className="form-field " >    {/*mb={2} display="flex" alignItems="center" */}
+        <Box className="form-content ">
+          {' '}
+          {/*display="flex" flexDirection="column" width="100%" margin="0 auto" mt={2}*/}
+          <Box className="form-field ">
+            {' '}
+            {/*mb={2} display="flex" alignItems="center" */}
             <Typography variant="subtitle1" style={{ marginRight: '10px', width: '250px' }}>
               Watchlist Name:
             </Typography>
@@ -216,7 +221,7 @@ function Watchlistform({ username }) {
               }
               inputValue={WatchListPrimaryOwner.name}
               onInputChange={(event, newInputValue) => {
-                setWatchListPrimaryOwner({ name: newInputValue || '', email: '' })
+                setWatchListPrimaryOwner({ name: newInputValue || '', email: '' });
               }}
               options={ownerSuggestions}
               getOptionLabel={(option) => option.name}
@@ -241,10 +246,10 @@ function Watchlistform({ username }) {
               options={employeeSuggestions}
               value={employeesInWatchlist}
               onChange={(event, newValue) => {
-                setEmployeesInWatchlist(newValue)
+                setEmployeesInWatchlist(newValue);
               }}
               onInputChange={(event, newInputValue) => {
-                fetchEmployeeSuggestions(newInputValue)
+                fetchEmployeeSuggestions(newInputValue);
               }}
               getOptionLabel={(option) => option.EmployeeName}
               renderTags={(value, getTagProps) =>
@@ -283,11 +288,7 @@ function Watchlistform({ username }) {
         </Box>
       </Box>
     </>
-  )
+  );
 }
 
-export default Watchlistform
-
- 
-
-
+export default Watchlistform;

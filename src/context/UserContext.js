@@ -6,6 +6,12 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const { accounts } = useMsal();
+  const [isAutheriseUser, setIsAutheriseUser] = useState(localStorage.getItem('active'));
+  const [userDetails, setUserDetails] = useState({
+    email: 'test@gyansys.com',
+    name: 'test user',
+    password: 'PSN@12345',
+  });
   const [user, setUser] = useState(() => accounts[0] && accounts[0].name);
   const [userRoles, setUserRoles] = useState(null);
   const [showWatchlist, setShowWatchlist] = useState(false);
@@ -22,6 +28,7 @@ export const UserProvider = ({ children }) => {
   const [departmentData, setDepartmentData] = useState([]);
   const [departmentDataLoading, setDepartmentDataLoading] = useState(true);
   const [employeeDetailsLoading, setEmployeeDetailsLoading] = useState(true);
+  const [departmentSuggestion, setDepartmentSuggestion] = useState([]);
 
   const updateUser = (user) => setUser((prevState) => user);
   const updateUserRoles = (userRoles) => setUserRoles((prevState) => userRoles);
@@ -49,6 +56,12 @@ export const UserProvider = ({ children }) => {
     departmentData,
     employeeDetailsLoading,
     departmentDataLoading,
+    departmentSuggestion,
+    isAutheriseUser,
+    setIsAutheriseUser,
+    userDetails,
+    setUserDetails,
+    setDepartmentSuggestion,
     setEmployeeDetailsLoading,
     setDepartmentDataLoading,
     setDepartmentData,
@@ -63,7 +76,6 @@ export const UserProvider = ({ children }) => {
     setShowWatchlist,
     updateUser,
     updateUserRoles,
-    
   };
 
   return <UserContext.Provider value={userInfo}>{children}</UserContext.Provider>;

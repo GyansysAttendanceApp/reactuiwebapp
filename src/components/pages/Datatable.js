@@ -39,6 +39,9 @@ import { Tab, Tabs } from '@mui/material';
 import CustomTabPanel from '../common/Tabs';
 import WatchListForAdmin from './WatchListForAdmin';
 import { Link } from 'react-router-dom';
+import { FcCalendar } from 'react-icons/fc';
+import { Tooltip } from '@mui/material';
+import { SlCalender } from 'react-icons/sl';
 
 function a11yProps(index) {
   return {
@@ -77,9 +80,12 @@ function Datatable() {
     departmentDataLoading,
     setEmployeeDetailsLoading,
     setDepartmentDataLoading,
+    setDepartmentSuggestion,
   } = useContext(UserContext);
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
   const [value, setValue] = React.useState(0);
+  const year = new Date(selectedFormatedWatchListDate).getFullYear();
+  const month = (new Date(selectedFormatedWatchListDate).getMonth() + 1).toString().padStart(2, 0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -153,6 +159,7 @@ function Datatable() {
       console.log('dataTable', response);
       setDepartmentData(response.data);
       setDepartmentDataLoading(false);
+      setDepartmentSuggestion(response.data);
     } catch (error) {
       setDepartmentDataLoading(false);
 
@@ -207,7 +214,7 @@ function Datatable() {
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       // const month =dayjs(date).month()+1;
       const empName = masterData[0].EmpName;
-      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}/${empName}`, { state: {} });
+      navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`);
     }
   };
 
@@ -385,16 +392,19 @@ function Datatable() {
                         </Typography>
                       </TableSortLabel>
                     </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" fontWeight="bold">
+                        {/* {constraints.DATATABLE.Reports} */}
+                      </Typography>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
                   {departmentData &&
-                    departmentData.map((department,index) => (
+                    departmentData.map((department, index) => (
                       <TableRow key={department.EmpID}>
-                        <TableCell>
-                          {index+1}
-                        </TableCell>
+                        <TableCell>{index + 1}</TableCell>
                         <TableCell>
                           {' '}
                           <Link
@@ -416,6 +426,15 @@ function Datatable() {
                           )}
                           %
                         </TableCell>
+                        <Tooltip title="Monthly Department Report" arrow>
+                          <TableCell>
+                            <Link
+                              to={`/DepartmentMonthWiseReport/${2}/${department.DeptID}/${year}/${month}`}
+                            >
+                              <FcCalendar size={24} />
+                            </Link>
+                          </TableCell>
+                        </Tooltip>
                       </TableRow>
                     ))}
                   {departmentData.length === 0 && departmentDataLoading && (
@@ -470,6 +489,9 @@ function Datatable() {
                     <TableCell>
                       {calculatePercentage(totalExpectedCount, totalTodaysCount)}%
                     </TableCell>
+                    <TableCell>
+                      <FcCalendar />
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -496,6 +518,9 @@ function Datatable() {
                         handleSearch={handleSearch}
                         handleFetchHistory={handleFetchHistory}
                         handleReset={handleReset}
+                        isFetch
+                        isFetchHistory
+                        isClear
                       />
                     </Grid>
                   </Paper>

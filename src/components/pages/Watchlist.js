@@ -1,70 +1,70 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Table from '@mui/material/Table'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-import { FaUserEdit } from 'react-icons/fa'
-import { MdDeleteForever } from 'react-icons/md'
-import { useMsal } from '@azure/msal-react'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import { FaUserEdit } from 'react-icons/fa';
+import { MdDeleteForever } from 'react-icons/md';
+import { useMsal } from '@azure/msal-react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function Watchlist() {
-  const { instance, accounts } = useMsal()
-  const [watchlist, setWatchlist] = useState([])
-  const email = accounts[0].username
-  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`
-  const [openDialog, setOpenDialog] = useState(false)
-  const [selectedWatchlistId, setSelectedWatchlistId] = useState(null)
+  const { instance, accounts } = useMsal();
+  const [watchlist, setWatchlist] = useState([]);
+  const email = accounts[0].username;
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedWatchlistId, setSelectedWatchlistId] = useState(null);
 
   useEffect(() => {
     const fetchWatchlist = async () => {
       try {
-        const response = await axios.get(`${url}/watchlist/${email}`)
-        console.log('watchlist', response.data)
-        setWatchlist(response.data)
+        const response = await axios.get(`${url}/watchlist/${email}`);
+        console.log('watchlist', response.data);
+        setWatchlist(response.data);
       } catch (error) {
-        console.error('Error fetching watchlist data: ', error)
+        console.error('Error fetching watchlist data: ', error);
       }
-    }
+    };
 
-    fetchWatchlist()
-  }, [email])
+    fetchWatchlist();
+  }, [email]);
 
   const handleDeleteWatchlist = async () => {
     if (selectedWatchlistId !== null) {
       try {
-        const response = await axios.delete(`${url}/watchlist/${email}/${selectedWatchlistId}`)
-        console.log(response.data)
-        console.log('deletewatchlist', response)
-        setWatchlist(watchlist.filter((item) => item.ID !== selectedWatchlistId))
-        setSelectedWatchlistId(null)
-        setOpenDialog(false)
+        const response = await axios.delete(`${url}/watchlist/${email}/${selectedWatchlistId}`);
+        console.log(response.data);
+        console.log('deletewatchlist', response);
+        setWatchlist(watchlist.filter((item) => item.ID !== selectedWatchlistId));
+        setSelectedWatchlistId(null);
+        setOpenDialog(false);
       } catch (error) {
-        console.error('Error deleting watchlist: ', error)
+        console.error('Error deleting watchlist: ', error);
       }
     }
-  }
+  };
 
   const openDeleteDialog = (watchlistId) => {
-    setSelectedWatchlistId(watchlistId)
-    setOpenDialog(true)
-  }
+    setSelectedWatchlistId(watchlistId);
+    setOpenDialog(true);
+  };
 
   const closeDialog = () => {
-    setOpenDialog(false)
-    setSelectedWatchlistId(null)
-  }
+    setOpenDialog(false);
+    setSelectedWatchlistId(null);
+  };
   // debugger;
   return (
     <>
@@ -186,7 +186,7 @@ function Watchlist() {
         </Box>
       </div>
     </>
-  )
+  );
 }
 
-export default Watchlist
+export default Watchlist;

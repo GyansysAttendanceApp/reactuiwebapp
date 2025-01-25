@@ -77,9 +77,7 @@ const DepartmentDayWiseReport = () => {
             </Button>
 
             <Typography variant="h6" fontWeight="bold">
-              Attendance History of Department:{departmentId}
-              {'_'}
-              {DeptName}
+              Attendance History of Department: {DeptName}
             </Typography>
           </Box>
 

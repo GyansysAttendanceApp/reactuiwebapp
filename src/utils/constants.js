@@ -12,3 +12,9 @@ export const tabData = [
     content: <p>Another Tab</p>,
   },
 ];
+
+export const EmployeeHistoryHeaderDefinition = [
+  { id: 'EmpName', label: 'EmpName' },
+  { id: 'DeptName', label: 'DeptName' },
+  { id: 'job', label: 'Job' },
+];

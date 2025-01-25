@@ -1,7 +1,7 @@
-import React from 'react'
-import { Container, Typography, Button, Box } from '@mui/material'
-import { Error as ErrorIcon } from '@mui/icons-material'
-import { Link } from 'react-router-dom' // If using React Router for navigation
+import React from 'react';
+import { Container, Typography, Button, Box } from '@mui/material';
+import { Error as ErrorIcon } from '@mui/icons-material';
+import { Link } from 'react-router-dom'; // If using React Router for navigation
 
 const SomethingWentWrong = () => {
   return (
@@ -100,7 +100,7 @@ const SomethingWentWrong = () => {
         />
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default SomethingWentWrong
+export default SomethingWentWrong;
