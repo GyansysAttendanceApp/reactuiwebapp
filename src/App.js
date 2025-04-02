@@ -43,7 +43,7 @@ function App() {
       setShowWatchlist(false);
     }
   }, [accounts, setUserRoles, setShowWatchlist, url]);
-
+  console.log(accounts);
   return (
       <Layout>
         {/* {isAutheriseUser ? <ApplictionRoutes /> : <Loginpage />} */}

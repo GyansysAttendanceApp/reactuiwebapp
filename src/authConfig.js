@@ -7,7 +7,7 @@ const config = {
     navigateToLoginRequestUrl: true,
   },
   cache: {
-    cacheLocation: 'localStorage',
+    cacheLocation: 'sessionStorage',
     storeAuthStateInCookie: false,
   },
 };
