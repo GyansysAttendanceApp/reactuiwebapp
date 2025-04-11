@@ -37,13 +37,29 @@ const DepartmentDayWiseReport = () => {
   useEffect(() => {
     const fetchDepartmentdata = async () => {
       try {
+
         const response = await fetch(
           `${url}/get-employee-attendance/${operationId}/${date}/${departmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('apiToken')}`, // Add Authorization header
+              'Content-Type': 'application/json', // Optional: Specify content type
+            },
+          }
         ).then((res) => res.json());
+        
         console.log({ response }, 'response from departmentwise data');
         if (response) {
           setDepartmentDayWiseData(response);
         }
+
+        // const response = await fetch(
+        //   `${url}/get-employee-attendance/${operationId}/${date}/${departmentId}`,
+        // ).then((res) => res.json());
+        // console.log({ response }, 'response from departmentwise data');
+        // if (response) {
+        //   setDepartmentDayWiseData(response);
+        // }
       } catch (error) {
         console.log('Error fetching departmrntdata', error);
         setDepartmentDayWiseData([]);
