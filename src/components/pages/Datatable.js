@@ -133,7 +133,13 @@ function Datatable() {
     const fetchWatchlistData = async () => {
       try {
         const email = accounts[0].username;
-        const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
+        // const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`, {header: });
+        const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('apiToken')}`, // Add Authorization header
+            'Content-Type': 'application/json', // Optional: Specify content type
+          },
+        });
         const data = await response.json();
         setWatchlist(data);
       } catch (error) {
@@ -152,17 +158,24 @@ function Datatable() {
   };
 
   const fetchDepartmentData = async (date) => {
+    const token = localStorage.getItem('apiToken'); // Corrected the typo in 'const'
+  
     try {
       setDepartmentDataLoading(true);
-
-      const response = await axios.get(`${url}/dept?date=${date}`);
+  
+      const response = await axios.get(`${url}/dept`, {
+        params: { date }, // Use params for query parameters
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
       console.log('dataTable', response);
       setDepartmentData(response.data);
       setDepartmentDataLoading(false);
       setDepartmentSuggestion(response.data);
     } catch (error) {
       setDepartmentDataLoading(false);
-
       console.error('Error fetching department data:', error);
     }
   };

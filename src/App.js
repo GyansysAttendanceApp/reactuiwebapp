@@ -31,7 +31,11 @@ function App() {
         if (accounts.length > 0 && !secureToken) {
           try {
             const token = await getToken(); // call Node backend with API ID + key
-            setSecureToken(token);
+            setSecureToken(
+              token
+            
+            );
+            
           } catch (err) {
             console.error('Error getting secure token:', err);
           }
@@ -39,6 +43,8 @@ function App() {
       };
       initAuthFlow();
     }, [accounts, secureToken]);
+
+    
 
   useEffect(() => {
     if (accounts.length > 0 && secureToken) {
@@ -66,14 +72,7 @@ function App() {
   }, [accounts, setUserRoles, setShowWatchlist, url,secureToken]);
   console.log(accounts);
 
-  useEffect(() => {
-    if (secureToken) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${secureToken}`
-    } else {
-      delete axios.defaults.headers.common["Authorization"]
-    }
-  
-  }, [secureToken]);
+
 
   return (
       <Layout>

@@ -17,6 +17,11 @@ export const getToken = async () => {
 
     if (token) {
       localStorage.setItem('apiToken', token);
+       if (token) {
+              axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+            } else {
+              delete axios.defaults.headers.common["Authorization"]
+            }
     }
 
     return token;
