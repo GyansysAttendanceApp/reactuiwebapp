@@ -129,8 +129,8 @@ function Dashboard() {
     const fetchWatchlistData = async () => {
       try {
         const email = accounts[0].username;
-        const response = await fetch(`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
-        const data = await response.json();
+        const response = await axios.get (`${url}/watchlist/${email}/${selectedFormatedWatchListDate}`);
+        const data = await response.data;
         setWatchlist(data);
       } catch (error) {
         console.error('Error fetching watchlist data:', error);

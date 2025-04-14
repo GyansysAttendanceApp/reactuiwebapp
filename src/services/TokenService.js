@@ -1,49 +1,30 @@
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
-export const getToken = async () => {
-  const apiId = process.env.REACT_APP_API_ID;
-  const apiKey = process.env.REACT_APP_API_KEY;
-
-  console.log('apiId:', apiId);  // ✅ should show correct values
-  console.log('apiKey:', apiKey);
-
-  try {
-    const res = await axios.post(`${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}/get-token`, {
-      apiId: apiId,
-      apiKey: apiKey
-    });
-
-    const token = res.data.token;
-
-    if (token) {
-      localStorage.setItem('apiToken', token);
-       if (token) {
-              axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
-            } else {
-              delete axios.defaults.headers.common["Authorization"]
-            }
-    }
-
-    return token;
-  } catch (error) {
-    console.error('Error fetching token:', error);
-    throw error;
-  }
+const getHmacSignature = (timestamp, secret) => {
+  return CryptoJS.HmacSHA256(timestamp, secret).toString(CryptoJS.enc.Hex);
 };
 
-export const fetchSecureData = async () => {
-  const token = localStorage.getItem('apiToken');
+export const getToken = async () => {
+  const timestamp = Date.now().toString();
+  const secret = process.env.REACT_APP_API_ID;
+  const signature = getHmacSignature(timestamp, secret);
 
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/secure-data`, {
+    const response = await axios.post(`${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}/get-token`, {
+      timestamp,
+    }, {
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        'X-Signature': signature,
+      }
     });
 
-    return res.data;
+    const token = response.data.token;
+    localStorage.setItem('apiToken', token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    return token;
   } catch (error) {
-    console.error('Error fetching secure data:', error);
+    console.error("Token fetch failed", error);
     throw error;
   }
 };
