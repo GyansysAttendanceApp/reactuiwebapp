@@ -84,7 +84,7 @@ function Navbar() {
           >
             <MenuItem onClick={handleMenuClose}>
               <Link to="/Updatepage" style={{ textDecoration: 'none', color: 'black' }}>
-                Configuration Master
+                Department owner Master
               </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
