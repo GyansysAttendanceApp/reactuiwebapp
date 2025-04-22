@@ -88,18 +88,8 @@ function Navbar() {
               </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-              <Link to="/admin-master" style={{ textDecoration: 'none', color: 'black' }}>
-                Admin Master
-              </Link>
-            </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
               <Link to="/employeestatus" style={{ textDecoration: 'none', color: 'black' }}>
                 Employee Reporting Status
-              </Link>
-            </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
-              <Link to="/department-master" style={{ textDecoration: 'none', color: 'black' }}>
-                Department Master
               </Link>
             </MenuItem>
           </Menu>

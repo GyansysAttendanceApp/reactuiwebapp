@@ -47,7 +47,7 @@ export default function Updatepage() {
   const [manager, setManager] = useState({ name: '', email: '' });
   const [mappings, setMappings] = useState([]);
   const [sortDir, setSortDir] = useState('asc');
-
+//updated
   // fetch data
   useEffect(() => {
     axios.get(`${url}/deptsubdept`).then(res => setDepts(res.data)).catch(console.error);
