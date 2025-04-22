@@ -16,6 +16,7 @@ import Loginpage from '../components/pages/Loginpage';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../components/themes/DepartmentMonthWiseReportTheme';
 import watchlistTheme from '../components/themes/watchListTheme';
+import EmployeeStatus from '../components/pages/Employeereporting';
 
 const ApplictionRoutes = () => {
   const { user: username, userRoles, isAutheriseUser } = useContext(UserContext);
@@ -45,7 +46,10 @@ const ApplictionRoutes = () => {
               </ThemeProvider>
             }
           />
-
+          <Route 
+          path='/EmployeeStatus'
+          element={<EmployeeStatus/>}
+          />
           <Route
             path="/Updatepage"
             element={<Updatepage username={username} userRoles={userRoles} />}
