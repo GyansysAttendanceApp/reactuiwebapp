@@ -73,7 +73,6 @@ function App() {
   console.log(accounts);
 
 
-
   return (
       <Layout>
         {/* {isAutheriseUser ? <ApplictionRoutes /> : <Loginpage />} */}
