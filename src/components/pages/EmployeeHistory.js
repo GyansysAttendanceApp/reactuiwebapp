@@ -21,6 +21,8 @@ import DateComponent from '../common/DateComponent';
 import dayjs from 'dayjs';
 import Autocomplete from '@mui/material/Autocomplete';
 import constraints from '../../constraints';
+ 
+
 import {
   formatDateWithoutTime,
   formatDateWithTime,
@@ -37,7 +39,7 @@ function EmployeeHistory() {
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
   const navigate = useNavigate();
   const { setActiveApiCall } = useContext(UserContext);
-
+  const { accounts } = useMsal();
   useEffect(() => {
     const fetchEmployeeHistory = async () => {
       try {
@@ -66,7 +68,10 @@ function EmployeeHistory() {
         setSuggestions([]);
         return;
       }
-      const response = await axios.get(`${url}/employees?name=${query}`);
+      const email = accounts[0]?.username; // Assuming email is available in accounts
+      const response = await axios.get(`${url}/employees`, {
+        params: { name: query, email },
+      });      
       setSuggestions(response.data);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
