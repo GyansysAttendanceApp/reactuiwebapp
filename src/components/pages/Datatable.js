@@ -111,8 +111,11 @@ function Datatable() {
           setSuggestions([]);
           return;
         }
-
-        const response = await axios.get(`${url}/employees?name=${query}`);
+  
+        const email = accounts[0]?.username; // Assuming email is available in accounts
+        const response = await axios.get(`${url}/employees`, {
+          params: { name: query, email },
+        });
         const data = response.data;
         setMasterData(data);
         const suggestions = data.map((item) => item.EmpName);
@@ -122,7 +125,7 @@ function Datatable() {
       }
     };
     fetchSuggestions();
-  }, [query]);
+  }, [query, accounts]);
 
   useEffect(() => {
     setDepartmentData([]);

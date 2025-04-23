@@ -72,8 +72,8 @@ export default function Updatepage() {
       .filter((d) => d.DeptId === deptId)
       .map((d) => ({ id: d.SubDeptId, name: d.SubDeptName }));
     setSubDepts(subs);
-    if (!editMode) setSubDeptId(''); // Only reset in add mode
-  }, [deptId, depts]);
+    if (!editMode) setSubDeptId('');
+  }, [deptId, depts, editMode]);
 
   // Debounce employee search
   useEffect(() => {
@@ -98,20 +98,20 @@ export default function Updatepage() {
     setSubDeptId(mapping.SubDeptId);
     const tempEmployee = {
       EmpId: mapping.ManagerId,
-      empname: mapping.ManagerName, // Assumes ManagerName is returned by /deptmanager
+      empname: mapping.ManagerName,
       email: mapping.ManagerEmail,
     };
     setSelectedEmployee(tempEmployee);
     setManager({ name: tempEmployee.empname, email: tempEmployee.email });
     setSearchTerm(tempEmployee.empname);
-    setEmployees([tempEmployee]); // Pre-populate options with current manager
+    setEmployees([tempEmployee]);
   };
 
   // Handle delete button click
-  const handleDelete = (deptId, subDeptId) => {
+  const handleDelete = (deptId, subDeptId, managerId) => {
     if (window.confirm('Are you sure you want to delete this mapping?')) {
       axios
-        .delete(`${url}/deptmanager/${deptId}/${subDeptId}`)
+        .delete(`${url}/deptmanager/${deptId}/${subDeptId}/${managerId}`)
         .then(() => axios.get(`${url}/deptmanager`))
         .then((res) => {
           const sorted = [...res.data].sort((a, b) =>
@@ -139,51 +139,25 @@ export default function Updatepage() {
       depts.find((d) => d.DeptId === deptId && d.SubDeptId === subDeptId) || {};
 
     if (editMode) {
-      // If deptId or subDeptId changed, delete old mapping and create new one
-      if (editingMapping.DeptId !== deptId || editingMapping.SubDeptId !== subDeptId) {
-        axios
-          .delete(`${url}/deptmanager/${editingMapping.DeptId}/${editingMapping.SubDeptId}`)
-          .then(() =>
-            axios.post(`${url}/deptmanager`, {
-              DeptId: deptId,
-              DeptName,
-              SubDeptId: subDeptId,
-              SubDeptName,
-              ManagerId,
-              ManagerEmail,
-            }),
-          )
-          .then(() => axios.get(`${url}/deptmanager`))
-          .then((res) => {
-            const sorted = [...res.data].sort((a, b) =>
-              (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
-            );
-            setMappings(sorted);
-            alert('Mapping updated');
-            resetForm();
-          })
-          .catch((err) => {
-            console.error('Error updating mapping:', err);
-            alert('Failed to update mapping');
-          });
-      } else {
-        // Simple update if deptId and subDeptId are unchanged
-        axios
-          .put(`${url}/deptmanager/${deptId}/${subDeptId}`, { ManagerId, ManagerEmail })
-          .then(() => axios.get(`${url}/deptmanager`))
-          .then((res) => {
-            const sorted = [...res.data].sort((a, b) =>
-              (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
-            );
-            setMappings(sorted);
-            alert('Mapping updated');
-            resetForm();
-          })
-          .catch((err) => {
-            console.error('Error updating mapping:', err);
-            alert('Failed to update mapping');
-          });
-      }
+      // Simple update: use oldManagerId in URL
+      axios
+        .put(
+          `${url}/deptmanager/${editingMapping.DeptId}/${editingMapping.SubDeptId}/${editingMapping.ManagerId}`,
+          { ManagerId, ManagerEmail },
+        )
+        .then(() => axios.get(`${url}/deptmanager`))
+        .then((res) => {
+          const sorted = [...res.data].sort((a, b) =>
+            (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
+          );
+          setMappings(sorted);
+          alert('Mapping updated');
+          resetForm();
+        })
+        .catch((err) => {
+          console.error('Error updating mapping:', err);
+          alert('Failed to update mapping');
+        });
     } else {
       // Add new mapping
       axios
@@ -211,7 +185,7 @@ export default function Updatepage() {
     }
   };
 
-  // Reset form to initial state
+  // Reset form
   const resetForm = () => {
     setEditMode(false);
     setEditingMapping(null);
@@ -223,7 +197,7 @@ export default function Updatepage() {
     setEmployees([]);
   };
 
-  // Toggle sort direction
+  // Toggle sort
   const handleSort = () => {
     const dir = sortDir === 'asc' ? 'desc' : 'asc';
     const sorted = [...mappings].sort((a, b) =>
@@ -278,7 +252,7 @@ export default function Updatepage() {
                             size="small"
                             variant="outlined"
                             color="error"
-                            onClick={() => handleDelete(m.DeptId, m.SubDeptId)}
+                            onClick={() => handleDelete(m.DeptId, m.SubDeptId, m.ManagerId)}
                           >
                             Delete
                           </Button>
@@ -312,7 +286,6 @@ export default function Updatepage() {
                     label="Dept"
                     value={deptId}
                     onChange={(e) => setDeptId(e.target.value)}
-                    // Removed disabled={editMode} to allow editing
                   >
                     {Array.from(new Set(depts.map((d) => d.DeptId))).map((id) => (
                       <MenuItem key={id} value={id}>
@@ -329,7 +302,7 @@ export default function Updatepage() {
                     label="Sub‑Dept"
                     value={subDeptId}
                     onChange={(e) => setSubDeptId(e.target.value)}
-                    disabled={!deptId} // Only disabled if no dept selected
+                    disabled={!deptId}
                   >
                     {subDepts.map((sd) => (
                       <MenuItem key={sd.id} value={sd.id}>
@@ -364,16 +337,16 @@ export default function Updatepage() {
 
               {selectedEmployee && (
                 <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={editMode ? 4 : 8}>
+                  <Grid item xs={8}>
                     <TextField
                       fullWidth
                       size="small"
                       label="Email"
                       value={manager.email}
-                      InputProps={{ readOnly: true }} // Email is still read-only, derived from manager
+                      InputProps={{ readOnly: true }}
                     />
                   </Grid>
-                  <Grid item xs={editMode ? 4 : 4}>
+                  <Grid item xs={4}>
                     <Button fullWidth variant="contained" onClick={handleSubmit}>
                       {editMode ? 'Update Mapping' : 'Add Mapping'}
                     </Button>
