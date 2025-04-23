@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Box, Paper, Typography, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import FadeLoader from 'react-spinners/FadeLoader';
 
-const reportOptions = ['Pending', 'In Progress', 'Completed', 'On Hold', 'Cancelled'];
+const reportOptions = [ 'Need to Report', 'WFH Approved', 'Remote Employee', 'Partial Reporting', 'Bench'];
 
 export default function EmployeeStatus() {
   const [mapping, setMapping] = useState([]);
@@ -158,7 +158,7 @@ export default function EmployeeStatus() {
       {employees.length > 0 ? (
         <TableContainer component={Paper} sx={{ maxHeight: '76.5vh', overflow: 'auto' }}>
           <Table>
-            <TableHead>
+            <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 1 }}>
               <TableRow>
                 <TableCell>
                   <Typography variant="body2" fontWeight="bold">
@@ -187,7 +187,7 @@ export default function EmployeeStatus() {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" fontWeight="bold">
-                    Reporting Status
+                    Report Status
                   </Typography>
                 </TableCell>
               </TableRow>
