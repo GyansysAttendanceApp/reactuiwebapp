@@ -1,9 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Paper, Typography, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import {
+  Box,
+  Paper,
+  Typography,
+  Grid,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
 import FadeLoader from 'react-spinners/FadeLoader';
 
-const reportOptions = [ 'Need to Report', 'WFH Approved', 'Remote Employee', 'Partial Reporting', 'Bench'];
+const reportOptions = [
+  'Need to Report',
+  'WFH Approved',
+  'Remote Employee',
+  'Partial Reporting',
+  'Bench',
+];
 
 export default function EmployeeStatus() {
   const [mapping, setMapping] = useState([]);
@@ -15,22 +37,24 @@ export default function EmployeeStatus() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
+
   // Fetch dept-subdept mapping on mount
   useEffect(() => {
     async function fetchMapping() {
       try {
-        const res = await axios.get('http://localhost:8085/api/deptsubdeptmapping');
-        const data = res.data.map(m => ({
+        const res = await axios.get(`${url}/deptsubdeptmapping`);
+        const data = res.data.map((m) => ({
           DeptId: String(m.DeptId),
           DeptName: m.DeptName,
           SubDeptId: String(m.SubDeptId),
-          SubDeptName: m.SubDeptName
+          SubDeptName: m.SubDeptName,
         }));
         setMapping(data);
         const deptMap = new Map();
-        data.forEach(m => deptMap.set(m.DeptId, m.DeptName));
+        data.forEach((m) => deptMap.set(m.DeptId, m.DeptName));
         setDeptList(
-          Array.from(deptMap.entries()).map(([id, name]) => ({ DeptId: id, DeptName: name }))
+          Array.from(deptMap.entries()).map(([id, name]) => ({ DeptId: id, DeptName: name })),
         );
       } catch (err) {
         console.error('Error loading mapping:', err);
@@ -49,10 +73,10 @@ export default function EmployeeStatus() {
     }
     const subMap = new Map();
     mapping
-      .filter(m => m.DeptId === deptId)
-      .forEach(m => subMap.set(m.SubDeptId, m.SubDeptName));
+      .filter((m) => m.DeptId === deptId)
+      .forEach((m) => subMap.set(m.SubDeptId, m.SubDeptName));
     setSubDeptList(
-      Array.from(subMap.entries()).map(([id, name]) => ({ SubDeptId: id, SubDeptName: name }))
+      Array.from(subMap.entries()).map(([id, name]) => ({ SubDeptId: id, SubDeptName: name })),
     );
     setSubDeptId('');
   }, [mapping, deptId]);
@@ -63,7 +87,7 @@ export default function EmployeeStatus() {
     setError(null);
     try {
       const params = { deptid: deptId, subdeptid: subDeptId };
-      const res = await axios.get('http://localhost:8085/api/employeereport', { params });
+      const res = await axios.get(`${url}/employeereport`, { params });
       setEmployees(res.data);
     } catch (err) {
       console.error('Error fetching employees:', err);
@@ -76,12 +100,9 @@ export default function EmployeeStatus() {
   // Handle updating report
   const handleReportChange = async (empid, newReport) => {
     try {
-      const res = await axios.post(
-        `http://localhost:8085/api/employeereport/${empid}/report`,
-        { report: newReport }
-      );
-      setEmployees(prev =>
-        prev.map(e => (e.Empid === empid ? { ...e, Report: res.data.Report } : e))
+      const res = await axios.post(`${url}/employeereport/${empid}/report`, { report: newReport });
+      setEmployees((prev) =>
+        prev.map((e) => (e.Empid === empid ? { ...e, Report: res.data.Report } : e)),
       );
     } catch (err) {
       console.error('Error updating report:', err);
@@ -106,10 +127,10 @@ export default function EmployeeStatus() {
                 labelId="dept-label"
                 value={deptId}
                 label="Department"
-                onChange={e => setDeptId(e.target.value)}
+                onChange={(e) => setDeptId(e.target.value)}
               >
                 <MenuItem value="">Select Department</MenuItem>
-                {deptList.map(d => (
+                {deptList.map((d) => (
                   <MenuItem key={d.DeptId} value={d.DeptId}>
                     {d.DeptName}
                   </MenuItem>
@@ -124,10 +145,10 @@ export default function EmployeeStatus() {
                 labelId="subdept-label"
                 value={subDeptId}
                 label="Sub-Department"
-                onChange={e => setSubDeptId(e.target.value)}
+                onChange={(e) => setSubDeptId(e.target.value)}
               >
                 <MenuItem value="">Select Sub-dept</MenuItem>
-                {subDeptList.map(sd => (
+                {subDeptList.map((sd) => (
                   <MenuItem key={sd.SubDeptId} value={sd.SubDeptId}>
                     {sd.SubDeptName}
                   </MenuItem>
@@ -193,7 +214,7 @@ export default function EmployeeStatus() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {employees.map(emp => (
+              {employees.map((emp) => (
                 <TableRow key={emp.Empid}>
                   <TableCell>{emp.Empid}</TableCell>
                   <TableCell>{emp.Name}</TableCell>
@@ -203,12 +224,12 @@ export default function EmployeeStatus() {
                   <TableCell>
                     <Select
                       value={emp.Report || ''}
-                      onChange={e => handleReportChange(emp.Empid, e.target.value)}
+                      onChange={(e) => handleReportChange(emp.Empid, e.target.value)}
                       displayEmpty
                       fullWidth
                     >
                       <MenuItem value="">-- Select Report --</MenuItem>
-                      {reportOptions.map(opt => (
+                      {reportOptions.map((opt) => (
                         <MenuItem key={opt} value={opt}>
                           {opt}
                         </MenuItem>

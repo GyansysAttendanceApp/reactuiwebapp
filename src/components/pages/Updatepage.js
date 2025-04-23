@@ -32,7 +32,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 export default function Updatepage() {
@@ -51,13 +51,19 @@ export default function Updatepage() {
 
   // Fetch initial data
   useEffect(() => {
-    axios.get(`${url}/deptsubdept`).then((res) => setDepts(res.data)).catch(console.error);
-    axios.get(`${url}/deptmanager`).then((res) => {
-      const sorted = [...res.data].sort((a, b) =>
-        (a.DeptName || '').localeCompare(b.DeptName || '', undefined, { sensitivity: 'base' })
-      );
-      setMappings(sorted);
-    }).catch(console.error);
+    axios
+      .get(`${url}/deptsubdept`)
+      .then((res) => setDepts(res.data))
+      .catch(console.error);
+    axios
+      .get(`${url}/deptmanager`)
+      .then((res) => {
+        const sorted = [...res.data].sort((a, b) =>
+          (a.DeptName || '').localeCompare(b.DeptName || '', undefined, { sensitivity: 'base' }),
+        );
+        setMappings(sorted);
+      })
+      .catch(console.error);
   }, []);
 
   // Filter sub-departments based on selected department
@@ -109,7 +115,7 @@ export default function Updatepage() {
         .then(() => axios.get(`${url}/deptmanager`))
         .then((res) => {
           const sorted = [...res.data].sort((a, b) =>
-            (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' })
+            (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
           );
           setMappings(sorted);
           alert('Mapping deleted');
@@ -129,7 +135,8 @@ export default function Updatepage() {
     }
 
     const { EmpId: ManagerId, email: ManagerEmail } = selectedEmployee;
-    const { DeptName, SubDeptName } = depts.find((d) => d.DeptId === deptId && d.SubDeptId === subDeptId) || {};
+    const { DeptName, SubDeptName } =
+      depts.find((d) => d.DeptId === deptId && d.SubDeptId === subDeptId) || {};
 
     if (editMode) {
       // If deptId or subDeptId changed, delete old mapping and create new one
@@ -144,12 +151,12 @@ export default function Updatepage() {
               SubDeptName,
               ManagerId,
               ManagerEmail,
-            })
+            }),
           )
           .then(() => axios.get(`${url}/deptmanager`))
           .then((res) => {
             const sorted = [...res.data].sort((a, b) =>
-              (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' })
+              (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
             );
             setMappings(sorted);
             alert('Mapping updated');
@@ -166,7 +173,7 @@ export default function Updatepage() {
           .then(() => axios.get(`${url}/deptmanager`))
           .then((res) => {
             const sorted = [...res.data].sort((a, b) =>
-              (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' })
+              (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
             );
             setMappings(sorted);
             alert('Mapping updated');
@@ -191,7 +198,7 @@ export default function Updatepage() {
         .then(() => axios.get(`${url}/deptmanager`))
         .then((res) => {
           const sorted = [...res.data].sort((a, b) =>
-            (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' })
+            (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
           );
           setMappings(sorted);
           alert('Mapping added');
@@ -220,7 +227,7 @@ export default function Updatepage() {
   const handleSort = () => {
     const dir = sortDir === 'asc' ? 'desc' : 'asc';
     const sorted = [...mappings].sort((a, b) =>
-      (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' })
+      (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
     );
     if (dir === 'desc') sorted.reverse();
     setMappings(sorted);
@@ -231,11 +238,11 @@ export default function Updatepage() {
     <Box sx={{ p: 2, background: '#f9f9f9', minHeight: '100vh' }}>
       <Grid container spacing={3}>
         {/* Dashboard */}
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined">
+        <Grid item xs={12} md={8}>
+          <Card variant="outlined" sx={{ height: '83vh' }}>
             <CardHeader title={<Typography variant="h6">Existing Mappings</Typography>} />
             <CardContent sx={{ p: 0 }}>
-              <TableContainer sx={{ maxHeight: 450, overflowY: 'auto' }} component={Paper}>
+              <TableContainer sx={{ height: '83vh', overflowY: 'auto' }} component={Paper}>
                 <Table stickyHeader size="small">
                   <TableHead sx={{ background: '#eee', position: 'sticky', top: 0, zIndex: 1 }}>
                     <TableRow>
@@ -286,10 +293,14 @@ export default function Updatepage() {
         </Grid>
 
         {/* Form */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Card variant="outlined">
             <CardHeader
-              title={<Typography variant="h6">{editMode ? 'Update Mapping' : 'Add New Mapping'}</Typography>}
+              title={
+                <Typography variant="h6">
+                  {editMode ? 'Update Mapping' : 'Add New Mapping'}
+                </Typography>
+              }
             />
             <CardContent>
               <Grid container spacing={2} mb={2}>
@@ -304,7 +315,9 @@ export default function Updatepage() {
                     // Removed disabled={editMode} to allow editing
                   >
                     {Array.from(new Set(depts.map((d) => d.DeptId))).map((id) => (
-                      <MenuItem key={id} value={id}>{depts.find((d) => d.DeptId === id).DeptName}</MenuItem>
+                      <MenuItem key={id} value={id}>
+                        {depts.find((d) => d.DeptId === id).DeptName}
+                      </MenuItem>
                     ))}
                   </TextField>
                 </Grid>
@@ -319,7 +332,9 @@ export default function Updatepage() {
                     disabled={!deptId} // Only disabled if no dept selected
                   >
                     {subDepts.map((sd) => (
-                      <MenuItem key={sd.id} value={sd.id}>{sd.name}</MenuItem>
+                      <MenuItem key={sd.id} value={sd.id}>
+                        {sd.name}
+                      </MenuItem>
                     ))}
                   </TextField>
                 </Grid>
@@ -340,7 +355,9 @@ export default function Updatepage() {
                     setManager({ name: '', email: '' });
                   }
                 }}
-                renderInput={(params) => <TextField {...params} label="Search Manager" size="small" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Search Manager" size="small" />
+                )}
                 noOptionsText="No matches"
                 sx={{ mb: 2 }}
               />
