@@ -163,10 +163,12 @@ function Datatable() {
 
   const fetchDepartmentData = async (date) => {
     const token = localStorage.getItem('apiToken');
+    const email = accounts[0]?.username;
+    console.log('Selected Date:', email);
     try {
       setDepartmentDataLoading(true);
       const response = await axios.get(`${url}/dept`, {
-        params: { date, transitionDate },
+        params: { email,date,transitionDate },
         headers: {
           Authorization: `Bearer ${token}`,
         },
