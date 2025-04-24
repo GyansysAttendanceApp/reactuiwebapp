@@ -144,7 +144,7 @@ function EmployeeHistory() {
 
             <Typography variant="h6" fontWeight="bold">
               Attendance History of Employee ID: {trimString(empId)}
-              {'_'}
+              {/* {'_'} */}
               {empName}
             </Typography>
           </Box>

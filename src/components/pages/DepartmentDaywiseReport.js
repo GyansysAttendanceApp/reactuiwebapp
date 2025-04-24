@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import FadeLoader from 'react-spinners/FadeLoader';
 import { useNavigate, useLocation } from 'react-router-dom';
 import UserContext from '../../context/UserContext';
 import dayjs from 'dayjs';
@@ -18,6 +19,7 @@ import {
 
 const DepartmentDayWiseReport = () => {
   const [departmentDayWiseData, setDepartmentDayWiseData] = useState([]);
+  const [loading, setLoading] = useState(false); // Added loading state
   const location = useLocation();
   const { selectedFormatedWatchListDate } = useContext(UserContext);
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
@@ -32,6 +34,7 @@ const DepartmentDayWiseReport = () => {
 
   useEffect(() => {
     const fetchDepartmentdata = async () => {
+      setLoading(true); // Start loading
       try {
         // Construct the URL with subDeptId if provided, otherwise omit it
         const apiUrl = subDeptId
@@ -54,6 +57,8 @@ const DepartmentDayWiseReport = () => {
       } catch (error) {
         console.log('Error fetching department data', error);
         setDepartmentDayWiseData([]);
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
     fetchDepartmentdata();
@@ -87,51 +92,57 @@ const DepartmentDayWiseReport = () => {
           </Box>
         </Box>
 
-        <Box sx={{ overflowX: 'auto', height: '75vh' }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>No.</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Day</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Dept</TableCell>
-                <TableCell>SubDept</TableCell>
-                <TableCell>Emp ID</TableCell>
-                <TableCell>Emp Name</TableCell>
-                <TableCell>First In</TableCell>
-                <TableCell>Last Out</TableCell>
-                <TableCell>Duration</TableCell>
-                <TableCell>Remarks</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {departmentDayWiseData.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{formatDateWithoutTime(row.AttDate)}</TableCell>
-                  <TableCell>{row.AttDay}</TableCell>
-                  <TableCell>{weekdaysTypeAccordingToDate(row.IsWeekDay, row.IsHoliday)}</TableCell>
-                  <TableCell>{row.DeptName}</TableCell>
-                  <TableCell>{row.SubDeptName || '-'}</TableCell>
-                  <TableCell>{row.EmpID}</TableCell>
-                  <TableCell>{row.EmpName}</TableCell>
-                  <TableCell>{formatDateWithTime(row.FirstIn)}</TableCell>
-                  <TableCell>{formatDateWithTime(row.LastOut)}</TableCell>
-                  <TableCell>{row.Duration}</TableCell>
-                  <TableCell>{row.HolidayText}</TableCell>
-                </TableRow>
-              ))}
-              {departmentDayWiseData.length === 0 && (
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+            <FadeLoader color="#1976d2" />
+          </Box>
+        ) : (
+          <Box sx={{ overflowX: 'auto', height: '75vh' }}>
+            <Table>
+              <TableHead>
                 <TableRow>
-                  <TableCell colSpan={12} align="center">
-                    <Typography>No data available</Typography>
-                  </TableCell>
+                  <TableCell>No.</TableCell>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Day</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Dept</TableCell>
+                  <TableCell>SubDept</TableCell>
+                  <TableCell>Emp ID</TableCell>
+                  <TableCell>Emp Name</TableCell>
+                  <TableCell>First In</TableCell>
+                  <TableCell>Last Out</TableCell>
+                  <TableCell>Duration</TableCell>
+                  <TableCell>Remarks</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Box>
+              </TableHead>
+              <TableBody>
+                {departmentDayWiseData.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{formatDateWithoutTime(row.AttDate)}</TableCell>
+                    <TableCell>{row.AttDay}</TableCell>
+                    <TableCell>{weekdaysTypeAccordingToDate(row.IsWeekDay, row.IsHoliday)}</TableCell>
+                    <TableCell>{row.DeptName}</TableCell>
+                    <TableCell>{row.SubDeptName || '-'}</TableCell>
+                    <TableCell>{row.EmpID}</TableCell>
+                    <TableCell>{row.EmpName}</TableCell>
+                    <TableCell>{formatDateWithTime(row.FirstIn)}</TableCell>
+                    <TableCell>{formatDateWithTime(row.LastOut)}</TableCell>
+                    <TableCell>{row.Duration}</TableCell>
+                    <TableCell>{row.HolidayText}</TableCell>
+                  </TableRow>
+                ))}
+                {departmentDayWiseData.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={12} align="center">
+                      <Typography>No data available</Typography>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Box>
+        )}
       </div>
     </>
   );

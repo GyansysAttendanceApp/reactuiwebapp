@@ -42,14 +42,14 @@ import { Link } from 'react-router-dom';
 import { FcCalendar } from 'react-icons/fc';
 import { Tooltip } from '@mui/material';
 import { SlCalender } from 'react-icons/sl';
-
+ 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-
+ 
 function Datatable() {
   const [sortOrder, setSortOrder] = useState({ column: '', direction: '' });
   const [error, setError] = useState('');
@@ -59,7 +59,7 @@ function Datatable() {
   const [suggestions, setSuggestions] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
   const transitionDate = '2025-04-16'; // Hardcoded to match stored procedure
-
+ 
   const navigate = useNavigate();
   const { accounts } = useMsal();
   const {
@@ -90,20 +90,20 @@ function Datatable() {
   const month = (new Date(selectedFormatedWatchListDate).getMonth() + 1)
     .toString()
     .padStart(2, '0');
-
+ 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+ 
   useEffect(() => {
     const clearErrors = setTimeout(() => {
       setError('');
       setFetchHistoryError('');
     }, 2000);
-
+ 
     return () => clearTimeout(clearErrors);
   }, [error, fetchHistoryError]);
-
+ 
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
@@ -111,7 +111,7 @@ function Datatable() {
           setSuggestions([]);
           return;
         }
-
+ 
         const email = accounts[0]?.username; // Assuming email is available in accounts
         const response = await axios.get(`${url}/employees`, {
           params: { name: query, email },
@@ -126,17 +126,17 @@ function Datatable() {
     };
     fetchSuggestions();
   }, [query, accounts]);
-
+ 
   useEffect(() => {
     setDepartmentData([]);
     fetchDepartmentData(selectedFormatedWatchListDate);
   }, [selectedFormatedWatchListDate]);
-
+ 
   useEffect(() => {
     setTotalExpectedCount(calculateExpectedTotalCount());
     setTotalTodaysCount(calculateTodaysTotalCount());
   }, [departmentData]);
-
+ 
   useEffect(() => {
     const fetchWatchlistData = async () => {
       try {
@@ -158,12 +158,12 @@ function Datatable() {
     fetchWatchlistData();
     handleSearch();
   }, [accounts, selectedFormatedWatchListDate]);
-
+ 
   const handleSelectedWatchListDate = (event) => {
     setSelectedFormatedWatchListDate(dayjs(event).format('YYYY-MM-DD'));
     setSelectedWatchListDate(event);
   };
-
+ 
   const fetchDepartmentData = async (date) => {
     const token = localStorage.getItem('apiToken');
     const email = accounts[0]?.username;
@@ -178,7 +178,7 @@ function Datatable() {
       });
       const rawData = response.data;
       let processedData;
-
+ 
       // Check if the data includes SubDeptID (new structure)
       if (rawData.length > 0 && rawData[0].hasOwnProperty('SubDeptID')) {
         // New structure: Use raw data with sub-departments
@@ -201,7 +201,7 @@ function Datatable() {
           TodaysCount: item.TodaysCount,
         }));
       }
-
+ 
       setDepartmentData(processedData);
       setDepartmentDataLoading(false);
       setDepartmentSuggestion(processedData);
@@ -210,7 +210,7 @@ function Datatable() {
       console.error('Error fetching department data:', error);
     }
   };
-
+ 
   const handleSearch = async () => {
     try {
       if (!query) {
@@ -218,7 +218,7 @@ function Datatable() {
         setEmployeeDetailsLoading(false);
         return;
       }
-
+ 
       if (masterData.length > 0) {
         setEmployeeDetailsLoading(true);
         const response = await axios.get(
@@ -242,13 +242,13 @@ function Datatable() {
       setEmployeeDetailsLoading(false);
     }
   };
-
+ 
   const handleReset = () => {
     setQuery('');
     setSelectedItem(null);
     setSelectedItemAllEntries(null);
   };
-
+ 
   const handleFetchHistory = () => {
     if (!masterData || masterData.length === 0) {
       setFetchHistoryError('Please Enter a name first.');
@@ -260,14 +260,14 @@ function Datatable() {
       navigate(`/EmpHistory/${masterData[0].EmpID}/${year}/${month}`);
     }
   };
-
+ 
   const handleSort = (column) => {
     const isAsc = sortOrder.column === column && sortOrder.direction === 'asc';
     setSortOrder({ column, direction: isAsc ? 'desc' : 'asc' });
-
+ 
     const sortedData = [...departmentData].sort((a, b) => {
       let valueA, valueB;
-
+ 
       switch (column) {
         case 'DeptName':
           valueA = a.DeptName.toLowerCase();
@@ -296,13 +296,13 @@ function Datatable() {
         default:
           return 0;
       }
-
+ 
       return isAsc ? valueA - valueB : valueB - valueA;
     });
-
+ 
     setDepartmentData(sortedData);
   };
-
+ 
   const calculateExpectedTotalCount = () => {
     let totalExpectedCount = 0;
     departmentData.forEach((department) => {
@@ -310,7 +310,7 @@ function Datatable() {
     });
     return totalExpectedCount;
   };
-
+ 
   const calculateTodaysTotalCount = () => {
     let totalTodaysCount = 0;
     departmentData.forEach((department) => {
@@ -318,11 +318,11 @@ function Datatable() {
     });
     return totalTodaysCount;
   };
-
+ 
   const calculatePercentage = (expected, today) => {
     return expected !== 0 ? ((today / expected) * 100).toFixed() : 0;
   };
-
+ 
   const groupedWatchlist =
     watchlist.length &&
     watchlist.reduce((acc, curr) => {
@@ -332,7 +332,7 @@ function Datatable() {
       acc[curr.WatchListName].push(curr);
       return acc;
     }, {});
-
+ 
   return (
     <Box>
       <Box
@@ -461,7 +461,7 @@ function Datatable() {
                             to={`/DepartmentDayWiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}&deptName=${department.DeptName}${department.SubDeptID ? `&subDeptId=${department.SubDeptID}&subDeptName=${department.SubDeptName}` : ''}`}
                             style={{ textDecoration: 'none' }}
                           >
-                            
+                           
                           </Link> */}
                         </TableCell>
                         <TableCell>{department.SubDeptName || '-'}</TableCell>
@@ -606,5 +606,7 @@ function Datatable() {
     </Box>
   );
 }
-
+ 
 export default Datatable;
+ 
+ 
