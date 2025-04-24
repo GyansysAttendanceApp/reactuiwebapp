@@ -85,10 +85,15 @@ function EmployeeHistory() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`${url}/employees?name=${searchQuery}`);
+      // const response = await axios.get(`${url}/employees?name=${searchQuery}`);
+      const email = accounts[0]?.username; // Assuming email is available in accounts
+              const response = await axios.get(`${url}/employees`, {
+                params: { name: searchQuery, email },
+              });
       const data = response.data;
       if (data.length > 0) {
         const empId = data[0].EmpID;
+        console.log('executed')
         navigate(`/EmpHistory/${empId}/${year}/${month}`);
       } else {
         console.log('Employee not found');
@@ -266,6 +271,8 @@ function EmployeeHistory() {
                 <TableCell>Day</TableCell>
                 <TableCell>Type</TableCell>
                 <TableCell>Department</TableCell>
+                <TableCell>SubDeptName</TableCell>
+                {/* <TableCell>EmpID</TableCell> */}
                 <TableCell>Emp Name</TableCell>
                 <TableCell>First In</TableCell>
                 <TableCell>Last Out</TableCell>
@@ -294,6 +301,8 @@ function EmployeeHistory() {
                     {weekdaysTypeAccordingToDate(employee.IsWeekDay, employee.IsHoliday)}
                   </TableCell>
                   <TableCell>{employee.DeptName}</TableCell>
+                  <TableCell>{employee.SubdeptName}</TableCell>
+                  {/* <TableCell>{employee.EmpID}</TableCell> */}
                   <TableCell>{employee.EmpName}</TableCell>
                   <TableCell>{formatDateWithTime(employee.FirstIn)}</TableCell>
                   <TableCell>{formatDateWithTime(employee.LastOut)}</TableCell>
