@@ -111,7 +111,7 @@ function Datatable() {
           setSuggestions([]);
           return;
         }
-  
+
         const email = accounts[0]?.username; // Assuming email is available in accounts
         const response = await axios.get(`${url}/employees`, {
           params: { name: query, email },
@@ -171,7 +171,7 @@ function Datatable() {
     try {
       setDepartmentDataLoading(true);
       const response = await axios.get(`${url}/dept`, {
-        params: { email,date,transitionDate },
+        params: { email, date, transitionDate },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -386,7 +386,7 @@ function Datatable() {
                         onClick={() => handleSort('SubDeptName')}
                       >
                         <Typography variant="body2" fontWeight="bold">
-                          Sub-Department
+                          SubDept
                         </Typography>
                       </TableSortLabel>
                     </TableCell>
@@ -443,8 +443,8 @@ function Datatable() {
                         Reports
                       </Typography>
                     </TableCell>
-                    <TableCell >
-                      <Typography variant="body2" fontWeight="bold" >
+                    <TableCell>
+                      <Typography variant="body2" fontWeight="bold">
                         Action
                       </Typography>
                     </TableCell>
@@ -456,7 +456,7 @@ function Datatable() {
                       <TableRow key={`${department.DeptID}-${department.SubDeptID || index}`}>
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
-                         {department.DeptName}
+                          {department.DeptName}
                           {/* <Link
                             to={`/DepartmentDayWiseReport?operationId=${1}&date=${selectedFormatedWatchListDate}&departmentId=${department.DeptID}&deptName=${department.DeptName}${department.SubDeptID ? `&subDeptId=${department.SubDeptID}&subDeptName=${department.SubDeptName}` : ''}`}
                             style={{ textDecoration: 'none' }}

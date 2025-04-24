@@ -19,6 +19,8 @@ import {
   CardContent,
   CardHeader,
   Paper,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import '../../style/Updatepage.css';
 
@@ -48,6 +50,17 @@ export default function Updatepage() {
   const [sortDir, setSortDir] = useState('asc');
   const [editMode, setEditMode] = useState(false);
   const [editingMapping, setEditingMapping] = useState(null);
+
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  const showSnackbar = (message, severity = 'success') => {
+    console.log('Snackbar Severity:', severity);
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ open: false, message: '', severity: 'success' });
+  };
 
   // Fetch initial data
   useEffect(() => {
@@ -118,11 +131,11 @@ export default function Updatepage() {
             (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
           );
           setMappings(sorted);
-          alert('Mapping deleted');
+          showSnackbar('Mapping deleted', 'success');
         })
         .catch((err) => {
           console.error('Error deleting mapping:', err);
-          alert('Failed to delete mapping');
+          showSnackbar('Failed to delete mapping', 'error');
         });
     }
   };
@@ -130,7 +143,7 @@ export default function Updatepage() {
   // Submit (add or update)
   const handleSubmit = () => {
     if (!deptId || !subDeptId || !selectedEmployee) {
-      alert('Please complete all fields');
+      showSnackbar('Please complete all fields', 'warning');
       return;
     }
 
@@ -151,12 +164,12 @@ export default function Updatepage() {
             (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
           );
           setMappings(sorted);
-          alert('Mapping updated');
+          showSnackbar('Mapping updated', 'success');
           resetForm();
         })
         .catch((err) => {
           console.error('Error updating mapping:', err);
-          alert('Failed to update mapping');
+          showSnackbar('Failed to update mapping', 'error');
         });
     } else {
       // Add new mapping
@@ -175,12 +188,12 @@ export default function Updatepage() {
             (a.DeptName || '').localeCompare(b.DeptName || '', { sensitivity: 'base' }),
           );
           setMappings(sorted);
-          alert('Mapping added');
+          showSnackbar('Mapping added', 'success');
           resetForm();
         })
         .catch((err) => {
           console.error('Error adding mapping:', err);
-          alert('Failed to add mapping');
+          showSnackbar('Failed to add mapping', 'error');
         });
     }
   };
@@ -210,6 +223,16 @@ export default function Updatepage() {
 
   return (
     <Box sx={{ p: 2, background: '#f9f9f9', minHeight: '100vh' }}>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
       <Grid container spacing={3}>
         {/* Dashboard */}
         <Grid item xs={12} md={8}>
