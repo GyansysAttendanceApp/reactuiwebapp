@@ -192,8 +192,13 @@ export default function Updatepage() {
           resetForm();
         })
         .catch((err) => {
+          const errorMessage =
+            err.response && err.response.data && err.response.data.error
+              ? err.response.data.error
+              : 'Failed to add mapping';
           console.error('Error adding mapping:', err);
-          showSnackbar('Failed to add mapping', 'error');
+          console.log('Error message:', errorMessage);
+          showSnackbar(errorMessage, 'error');
         });
     }
   };
