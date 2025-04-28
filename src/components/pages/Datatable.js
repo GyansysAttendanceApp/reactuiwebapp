@@ -480,7 +480,8 @@ function Datatable() {
                         <Tooltip title="Monthly Department Report" arrow>
                           <TableCell>
                             <Link
-                              to={`/DepartmentMonthWiseReport/${2}/${department.DeptID}/${year}/${month}${department.SubDeptID ? `/${department.SubDeptID}` : ''}`}
+                              to={`/DepartmentMonthWiseReport/${2}/${department.DeptID}/${year}/${month}`}
+                              // ${department.SubDeptID ? `/${department.SubDeptID}` : ''}`}
                             >
                               <FcCalendar size={24} />
                             </Link>
