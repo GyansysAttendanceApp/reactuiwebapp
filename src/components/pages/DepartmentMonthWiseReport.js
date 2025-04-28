@@ -35,7 +35,8 @@ const DepartmentMonthWiseReport = () => {
   // const year = queryParams.get('year');
   // || new Date().getFullYear();
   const operationId = 2;
-  const { deptId, year, month, empName } = useParams();
+  const { deptId, year, month, subDeptId, empName } = useParams();
+  console.log ({ deptId, year, month, subDeptId, empName });
   const convertJson = {};
   const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`);
 
@@ -44,7 +45,13 @@ const DepartmentMonthWiseReport = () => {
     const fetchDepartmentdata = async () => {
       try {
         await fetch(
-          `${url}/get-employee-attendance/?operationId=${operationId}&deptId=${deptId}&year=${year}&month=${month}`,
+          `${url}/monthly-attendance?operationId=${operationId}&deptId=${deptId}&year=${year}&month=${month}${subDeptId ? `&subDeptId=${subDeptId}` : ''}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('apiToken')}`,
+            },
+          }
         )
           .then((res) => res.json())
           .then((response) => {
@@ -79,6 +86,9 @@ const DepartmentMonthWiseReport = () => {
             console.log({ column });
 
             setColumnDefinition(column.map((item) => ({ id: item, label: item })));
+          })
+          .catch((error) => {
+            console.error("Error fetching employee attendance:", error);
           });
       } catch (error) {
         console.log('Error fetching departmrntdata', error);

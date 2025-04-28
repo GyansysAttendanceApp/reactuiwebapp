@@ -56,7 +56,7 @@ const ApplictionRoutes = () => {
           />
           <Route path="/DepartmentDayWiseReport" element={<DepartmentDayWiseReport />} />
           <Route
-            path="/DepartmentMonthWiseReport/:operationId/:deptId/:year/:month"
+            path="/DepartmentMonthWiseReport/:operationId/:deptId/:year/:month/:subDeptId"
             element={
               <ThemeProvider theme={theme}>
                 <DepartmentMonthWiseReport />
