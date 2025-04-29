@@ -21,7 +21,7 @@ import DateComponent from '../common/DateComponent';
 import dayjs from 'dayjs';
 import Autocomplete from '@mui/material/Autocomplete';
 import constraints from '../../constraints';
- 
+import * as XLSX from 'xlsx';
 
 import {
   formatDateWithoutTime,
@@ -44,6 +44,7 @@ function EmployeeHistory() {
     const fetchEmployeeHistory = async () => {
       try {
         const response = await axios.get(`${url}/attendance/${empId}/${year}/${month}`);
+        console.log('response', response.data);
         setEmployeeData(response.data);
       } catch (error) {
         console.error('Error fetching employee history:', error);
@@ -71,7 +72,7 @@ function EmployeeHistory() {
       const email = accounts[0]?.username; // Assuming email is available in accounts
       const response = await axios.get(`${url}/employees`, {
         params: { name: query, email },
-      });      
+      });
       setSuggestions(response.data);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
@@ -87,13 +88,13 @@ function EmployeeHistory() {
     try {
       // const response = await axios.get(`${url}/employees?name=${searchQuery}`);
       const email = accounts[0]?.username; // Assuming email is available in accounts
-              const response = await axios.get(`${url}/employees`, {
-                params: { name: searchQuery, email },
-              });
+      const response = await axios.get(`${url}/employees`, {
+        params: { name: searchQuery, email },
+      });
       const data = response.data;
       if (data.length > 0) {
         const empId = data[0].EmpID;
-        console.log('executed')
+        console.log('executed');
         navigate(`/EmpHistory/${empId}/${year}/${month}`);
       } else {
         console.log('Employee not found');
@@ -123,6 +124,36 @@ function EmployeeHistory() {
   const handleBack = async () => {
     await setActiveApiCall(false);
     await navigate('/');
+  };
+
+  const exportToExcel = () => {
+    if (!employeeData || employeeData.length === 0) {
+      alert('No data available to export!');
+      return;
+    }
+
+    // Prepare data for Excel
+    const worksheetData = employeeData.map((row) => ({
+      No: employeeData.indexOf(row) + 1,
+      Date: formatDateWithoutTime(row.AttDate),
+      Day: row.AttDay,
+      Type: weekdaysTypeAccordingToDate(row.IsWeekDay, row.IsHoliday),
+      Department: row.DeptName,
+      SubDeptName: row.SubdeptName,
+      EmpID: row.EmpID,
+      EmpName: row.EmpName,
+      FirstIn: formatDateWithTime(row.FirstIn),
+      LastOut: formatDateWithTime(row.LastOut),
+      Duration: row.Duration,
+    }));
+
+    // Create a worksheet and workbook
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Employee History');
+
+    // Export the workbook
+    XLSX.writeFile(workbook, 'EmployeeHistory.xlsx');
   };
 
   return (
@@ -250,6 +281,10 @@ function EmployeeHistory() {
               <Button variant="contained" onClick={handleSearch}>
                 Search
               </Button>
+
+              <Button variant="contained" color="success" onClick={exportToExcel}>
+                Export to Excel
+              </Button>
               {/* </Box> */}
             </Box>
           </Box>
@@ -272,7 +307,7 @@ function EmployeeHistory() {
                 <TableCell>Type</TableCell>
                 <TableCell>Department</TableCell>
                 <TableCell>SubDeptName</TableCell>
-                {/* <TableCell>EmpID</TableCell> */}
+                <TableCell>EmpID</TableCell>
                 <TableCell>Emp Name</TableCell>
                 <TableCell>First In</TableCell>
                 <TableCell>Last Out</TableCell>
@@ -302,7 +337,7 @@ function EmployeeHistory() {
                   </TableCell>
                   <TableCell>{employee.DeptName}</TableCell>
                   <TableCell>{employee.SubdeptName}</TableCell>
-                  {/* <TableCell>{employee.EmpID}</TableCell> */}
+                  <TableCell>{employee.EmpID}</TableCell>
                   <TableCell>{employee.EmpName}</TableCell>
                   <TableCell>{formatDateWithTime(employee.FirstIn)}</TableCell>
                   <TableCell>{formatDateWithTime(employee.LastOut)}</TableCell>

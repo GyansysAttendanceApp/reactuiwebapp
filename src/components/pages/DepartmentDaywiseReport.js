@@ -99,12 +99,11 @@ const DepartmentDayWiseReport = () => {
               Attendance History of {subDeptName ? `${subDeptName} (${deptName})` : deptName}
             </Typography>
           </Box>
-        </Box>
-
-        <Box display="flex" justifyContent="flex-end" gap="1rem" padding="1rem">
-          <Button variant="contained" color="success" onClick={exportToExcel}>
-            Export to Excel
-          </Button>
+          <Box display="flex" justifyContent="flex-end" gap="1rem">
+            <Button variant="contained" color="success" onClick={exportToExcel}>
+              Export to Excel
+            </Button>
+          </Box>
         </Box>
 
         {loading ? (

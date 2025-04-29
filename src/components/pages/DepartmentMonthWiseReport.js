@@ -4,32 +4,33 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
- 
+
 import DynamicTable from '../common/DynamicTable';
 import { generateMonthDates } from '../../utils/Helper';
 import { TextField } from '@mui/material';
 import AutoCompleteInput from '../common/AutoCompleteInput';
 import UserContext from '../../context/UserContext';
 import axios from 'axios';
- 
+import * as XLSX from 'xlsx';
+
 const DepartmentMonthWiseReport = () => {
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
- 
+
   const [departmentMonthWiseData, setDepartmentMonthWiseData] = useState([]);
   const [columnDefinition, setColumnDefinition] = useState([]);
   const [departmentSuggestion, setDepartmentSuggestion] = useState([]);
   const [queryFlag, setQueryFlag] = useState(false);
   const [query, setQuery] = useState('');
   const [DeptName, setDepatName] = useState('');
- 
+
   const location = useLocation();
   const navigate = useNavigate();
   const operationId = 2;
   const { deptId, year, month, subDeptId, empName } = useParams();
-  console.log ({ deptId, year, month, subDeptId, empName });
+  console.log({ deptId, year, month, subDeptId, empName });
   const convertJson = {};
   const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`);
- 
+
   console.log(selectedYearMonth);
   useEffect(() => {
     const fetchDepartmentdata = async () => {
@@ -41,7 +42,7 @@ const DepartmentMonthWiseReport = () => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('apiToken')}`,
             },
-          }
+          },
         )
           .then((res) => res.json())
           .then((response) => {
@@ -54,6 +55,14 @@ const DepartmentMonthWiseReport = () => {
                 if (item.Duration) {
                   convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
+                  );
+                } else if (!item.IsWeekDay) {
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'dark-blue', fontWeight: 'bold' }}> WE </span>
+                  );
+                } else if (item.IsHoliday) {
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'orange', fontWeight: 'bold' }}> H</span>
                   );
                 } else {
                   convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
@@ -70,6 +79,14 @@ const DepartmentMonthWiseReport = () => {
                   convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
                   );
+                } else if (!item.IsWeekDay) {
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'blue', fontWeight: 'bold' }}> WE </span>
+                  );
+                } else if (item.IsHoliday) {
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'orange', fontWeight: 'bold' }}> H</span>
+                  );
                 } else {
                   convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
                     <span style={{ color: 'red', fontWeight: 'bold' }}>-</span>
@@ -77,7 +94,7 @@ const DepartmentMonthWiseReport = () => {
                 }
               }
             });
- 
+
             console.log(Object.values(convertJson));
             const monthDates = generateMonthDates(year, month);
             setDepartmentMonthWiseData(Object.values(convertJson));
@@ -87,7 +104,7 @@ const DepartmentMonthWiseReport = () => {
             ]);
             const column = Array.from(columnSet);
             console.log({ column });
- 
+
             setColumnDefinition(column.map((item) => ({ id: item, label: item })));
           })
           .catch((error) => {
@@ -100,11 +117,11 @@ const DepartmentMonthWiseReport = () => {
     };
     fetchDepartmentdata();
   }, [month, year, queryFlag]);
- 
+
   useEffect(() => {
     fetchDepartmentSuggestion(dayjs(new Date()).format('YYYY-MM-DD'));
   }, []);
- 
+
   const fetchDepartmentSuggestion = async (date) => {
     try {
       const response = await axios.get(`${url}/dept?date=${date}`);
@@ -122,23 +139,23 @@ const DepartmentMonthWiseReport = () => {
     const selectedMonth = event.target.value;
     setDepartmentMonthWiseData([]);
     setSelectedYearMonth(selectedMonth);
- 
+
     const [selectedYear, selectedMonthValue] = selectedMonth.split('-');
     console.log({ selectedMonth, selectedYear });
     navigate(
       `/DepartmentMonthWiseReport/${operationId}/${deptId}/${selectedYear}/${selectedMonthValue}`,
     );
   };
- 
+
   const handleSearch = async () => {
     if (!query) {
       return;
     } else {
       setQueryFlag(!queryFlag);
       console.log({ query });
- 
+
       const deptDetails = departmentSuggestion.filter((item) => item.DeptName === query);
- 
+
       setDepatName(deptDetails[0].DeptName);
       console.log({ deptDetails });
       const [selectedYear, selectedMonthValue] = selectedYearMonth.split('-');
@@ -150,6 +167,34 @@ const DepartmentMonthWiseReport = () => {
   };
   const handleBack = async () => {
     await navigate('/');
+  };
+
+  // Function to export data to Excel
+  const exportToExcel = () => {
+    if (!departmentMonthWiseData || departmentMonthWiseData.length === 0) {
+      alert('No data available to export!');
+      return;
+    }
+
+    // Prepare data for Excel
+    const worksheetData = departmentMonthWiseData.map((row) => {
+      const formattedRow = { ...row };
+      Object.keys(formattedRow).forEach((key) => {
+        if (React.isValidElement(formattedRow[key])) {
+          // Extract text content from JSX elements
+          formattedRow[key] = formattedRow[key].props.children;
+        }
+      });
+      return formattedRow;
+    });
+
+    // Create a worksheet and workbook
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
+
+    // Export the workbook
+    XLSX.writeFile(workbook, 'DepartmentMonthWiseReport.xlsx');
   };
   return (
     <>
@@ -169,9 +214,11 @@ const DepartmentMonthWiseReport = () => {
             <Button variant="contained" color="primary" onClick={handleBack}>
               Back to home page
             </Button>
- 
+
             <Typography variant="h6" fontWeight="bold">
-              Attendance History of Department: {departmentMonthWiseData[0]?.DeptName || 'Loading...'} / Sub Department: {departmentMonthWiseData[0]?.SubDeptName || 'Loading...'}
+              Attendance History of Department:{' '}
+              {departmentMonthWiseData[0]?.DeptName || 'Loading...'} / Sub Department:{' '}
+              {departmentMonthWiseData[0]?.SubDeptName || 'Loading...'}
             </Typography>
           </Box>
           <Box display={'flex'} gap={'1rem'}>
@@ -185,6 +232,9 @@ const DepartmentMonthWiseReport = () => {
               }}
               size="small"
             />
+            <Button variant="contained" color="success" onClick={exportToExcel}>
+              Export to Excel
+            </Button>
             {/* <Box sx={{ width: '24vw' }}>
               <AutoCompleteInput
                 isSearch
@@ -209,5 +259,5 @@ const DepartmentMonthWiseReport = () => {
     </>
   );
 };
- 
+
 export default DepartmentMonthWiseReport;
