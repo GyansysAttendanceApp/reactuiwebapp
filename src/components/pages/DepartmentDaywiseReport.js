@@ -16,10 +16,13 @@ import {
   formatDateWithTime,
   weekdaysTypeAccordingToDate,
 } from '../../utils/Helper';
+import * as XLSX from 'xlsx'; // For Excel/CSV export
+import jsPDF from 'jspdf'; // For PDF export
+import 'jspdf-autotable'; // For PDF table
 
 const DepartmentDayWiseReport = () => {
   const [departmentDayWiseData, setDepartmentDayWiseData] = useState([]);
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const { selectedFormatedWatchListDate } = useContext(UserContext);
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
@@ -29,14 +32,13 @@ const DepartmentDayWiseReport = () => {
   const departmentId = queryParams.get('departmentId');
   const date = queryParams.get('date');
   const deptName = queryParams.get('deptName');
-  const subDeptId = queryParams.get('subDeptId'); // Extract subDeptId
-  const subDeptName = queryParams.get('subDeptName'); // Extract subDeptName for display
+  const subDeptId = queryParams.get('subDeptId');
+  const subDeptName = queryParams.get('subDeptName');
 
   useEffect(() => {
     const fetchDepartmentdata = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
-        // Construct the URL with subDeptId if provided, otherwise omit it
         const apiUrl = subDeptId
           ? `${url}/get-employee-attendance/${operationId}/${date}/${departmentId}/${subDeptId}`
           : `${url}/get-employee-attendance/${operationId}/${date}/${departmentId}/null`;
@@ -48,17 +50,16 @@ const DepartmentDayWiseReport = () => {
           },
         }).then((res) => res.json());
 
-        console.log({ response }, 'response from departmentwise data');
         if (response) {
           setDepartmentDayWiseData(response);
         } else {
           setDepartmentDayWiseData([]);
         }
       } catch (error) {
-        console.log('Error fetching department data', error);
+        console.error('Error fetching department data', error);
         setDepartmentDayWiseData([]);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
     fetchDepartmentdata();
@@ -66,6 +67,14 @@ const DepartmentDayWiseReport = () => {
 
   const handleBack = async () => {
     await navigate('/');
+  };
+
+  // Export to Excel
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(departmentDayWiseData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Department Data');
+    XLSX.writeFile(workbook, 'DepartmentDayWiseReport.xlsx');
   };
 
   return (
@@ -90,6 +99,12 @@ const DepartmentDayWiseReport = () => {
               Attendance History of {subDeptName ? `${subDeptName} (${deptName})` : deptName}
             </Typography>
           </Box>
+        </Box>
+
+        <Box display="flex" justifyContent="flex-end" gap="1rem" padding="1rem">
+          <Button variant="contained" color="success" onClick={exportToExcel}>
+            Export to Excel
+          </Button>
         </Box>
 
         {loading ? (
@@ -121,7 +136,9 @@ const DepartmentDayWiseReport = () => {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{formatDateWithoutTime(row.AttDate)}</TableCell>
                     <TableCell>{row.AttDay}</TableCell>
-                    <TableCell>{weekdaysTypeAccordingToDate(row.IsWeekDay, row.IsHoliday)}</TableCell>
+                    <TableCell>
+                      {weekdaysTypeAccordingToDate(row.IsWeekDay, row.IsHoliday)}
+                    </TableCell>
                     <TableCell>{row.DeptName}</TableCell>
                     <TableCell>{row.SubDeptName || '-'}</TableCell>
                     <TableCell>{row.EmpID}</TableCell>

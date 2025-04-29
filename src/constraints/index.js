@@ -19,7 +19,7 @@ const constraints = {
     Reports: 'reports',
     TOTAL: 'Total',
     NO: 'No.',
-    NO_DATA_FOUND: ' No data found!',
+    NO_DATA_FOUND: ' No data found please refresh the page!',
     SEARCH: {
       LABEL: 'Search by employee name',
     },
