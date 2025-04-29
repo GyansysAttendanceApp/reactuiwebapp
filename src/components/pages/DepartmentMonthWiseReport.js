@@ -4,42 +4,32 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-
+ 
 import DynamicTable from '../common/DynamicTable';
 import { generateMonthDates } from '../../utils/Helper';
 import { TextField } from '@mui/material';
 import AutoCompleteInput from '../common/AutoCompleteInput';
 import UserContext from '../../context/UserContext';
 import axios from 'axios';
-
+ 
 const DepartmentMonthWiseReport = () => {
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
-
+ 
   const [departmentMonthWiseData, setDepartmentMonthWiseData] = useState([]);
   const [columnDefinition, setColumnDefinition] = useState([]);
   const [departmentSuggestion, setDepartmentSuggestion] = useState([]);
   const [queryFlag, setQueryFlag] = useState(false);
   const [query, setQuery] = useState('');
   const [DeptName, setDepatName] = useState('');
-
+ 
   const location = useLocation();
   const navigate = useNavigate();
-  // const {departmentSuggestion}=useContext(UserContext)
-  // const queryParams = new URLSearchParams(location.search);
-  // const deptId = queryParams.get('deptId');
-  // || '010';
-  // const DeptName = 'hr';
-  // || 'HR';
-  // const month = queryParams.get('month');
-  // || new Date().getMonth() - 1;
-  // const year = queryParams.get('year');
-  // || new Date().getFullYear();
   const operationId = 2;
   const { deptId, year, month, subDeptId, empName } = useParams();
   console.log ({ deptId, year, month, subDeptId, empName });
   const convertJson = {};
   const [selectedYearMonth, setSelectedYearMonth] = useState(`${year}-${month}`);
-
+ 
   console.log(selectedYearMonth);
   useEffect(() => {
     const fetchDepartmentdata = async () => {
@@ -59,23 +49,36 @@ const DepartmentMonthWiseReport = () => {
               if (convertJson[item.EmpName]) {
                 convertJson[item.EmpName]['EmpName'] = item.EmpName;
                 convertJson[item.EmpName]['EmpId'] = item.EmpId;
-                // convertJson[item.EmpName]['DeptName'] = item.DeptName;
+                convertJson[item.EmpName]['DeptName'] = item.DeptName;
+                convertJson[item.EmpName]['SubDeptName'] = item.SubDeptName; // Add SubDeptName
                 if (item.Duration) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] =
-                    item.Duration;
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
+                  );
                 } else {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = '-';
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'red', fontWeight: 'bold' }}>-</span>
+                  );
                 }
               } else {
                 convertJson[item.EmpName] = {};
                 convertJson[item.EmpName]['EmpName'] = item.EmpName;
                 convertJson[item.EmpName]['EmpId'] = item.EmpId;
-                // convertJson[item.EmpName]['DeptName'] = item.DeptName;
-                convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = item.Duration;
+                convertJson[item.EmpName]['DeptName'] = item.DeptName;
+                convertJson[item.EmpName]['SubDeptName'] = item.SubDeptName; // Add SubDeptName
+                if (item.Duration) {
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
+                  );
+                } else {
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                    <span style={{ color: 'red', fontWeight: 'bold' }}>-</span>
+                  );
+                }
               }
             });
-            // const monthDates=generateMonthDates(new Date().getMonth())
-            console.log(Object.values(convertJson)[0]);
+ 
+            console.log(Object.values(convertJson));
             const monthDates = generateMonthDates(year, month);
             setDepartmentMonthWiseData(Object.values(convertJson));
             const columnSet = new Set([
@@ -84,24 +87,24 @@ const DepartmentMonthWiseReport = () => {
             ]);
             const column = Array.from(columnSet);
             console.log({ column });
-
+ 
             setColumnDefinition(column.map((item) => ({ id: item, label: item })));
           })
           .catch((error) => {
-            console.error("Error fetching employee attendance:", error);
+            console.error('Error fetching employee attendance:', error);
           });
       } catch (error) {
-        console.log('Error fetching departmrntdata', error);
+        console.log('Error fetching department data', error);
         setDepartmentMonthWiseData([]);
       }
     };
     fetchDepartmentdata();
   }, [month, year, queryFlag]);
-
+ 
   useEffect(() => {
     fetchDepartmentSuggestion(dayjs(new Date()).format('YYYY-MM-DD'));
   }, []);
-
+ 
   const fetchDepartmentSuggestion = async (date) => {
     try {
       const response = await axios.get(`${url}/dept?date=${date}`);
@@ -109,7 +112,7 @@ const DepartmentMonthWiseReport = () => {
       setDepartmentSuggestion(response.data);
       const deptDetails = response.data.filter((item) => item.DeptID === deptId);
       if (deptDetails) {
-        setDepatName(deptDetails[0].DeptName);
+        setDepatName(departmentMonthWiseData[0]?.DeptName);
       }
     } catch (error) {
       console.error('Error fetching department data:', error);
@@ -119,25 +122,23 @@ const DepartmentMonthWiseReport = () => {
     const selectedMonth = event.target.value;
     setDepartmentMonthWiseData([]);
     setSelectedYearMonth(selectedMonth);
-
+ 
     const [selectedYear, selectedMonthValue] = selectedMonth.split('-');
     console.log({ selectedMonth, selectedYear });
     navigate(
       `/DepartmentMonthWiseReport/${operationId}/${deptId}/${selectedYear}/${selectedMonthValue}`,
     );
   };
-
+ 
   const handleSearch = async () => {
     if (!query) {
-      // setError('Please enter a username.');
-      // setEmployeeDetailsLoading(false);
       return;
     } else {
       setQueryFlag(!queryFlag);
       console.log({ query });
-
+ 
       const deptDetails = departmentSuggestion.filter((item) => item.DeptName === query);
-
+ 
       setDepatName(deptDetails[0].DeptName);
       console.log({ deptDetails });
       const [selectedYear, selectedMonthValue] = selectedYearMonth.split('-');
@@ -168,9 +169,9 @@ const DepartmentMonthWiseReport = () => {
             <Button variant="contained" color="primary" onClick={handleBack}>
               Back to home page
             </Button>
-
+ 
             <Typography variant="h6" fontWeight="bold">
-              Attendance History of Department:{DeptName}
+              Attendance History of Department: {departmentMonthWiseData[0]?.DeptName || 'Loading...'} / Sub Department: {departmentMonthWiseData[0]?.SubDeptName || 'Loading...'}
             </Typography>
           </Box>
           <Box display={'flex'} gap={'1rem'}>
@@ -184,7 +185,7 @@ const DepartmentMonthWiseReport = () => {
               }}
               size="small"
             />
-            <Box sx={{ width: '24vw' }}>
+            {/* <Box sx={{ width: '24vw' }}>
               <AutoCompleteInput
                 isSearch
                 query={query}
@@ -193,7 +194,7 @@ const DepartmentMonthWiseReport = () => {
                 handleSearch={handleSearch}
                 label={'Search Department'}
               />
-            </Box>
+            </Box> */}
           </Box>
         </Box>
         <Box
@@ -208,5 +209,5 @@ const DepartmentMonthWiseReport = () => {
     </>
   );
 };
-
+ 
 export default DepartmentMonthWiseReport;
