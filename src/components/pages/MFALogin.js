@@ -20,12 +20,12 @@ const MFALogin = ({ username }) => {
         flexDirection: 'column',
       }}
     >
-      <h2>Welcome to Gyansys Attendance Application</h2>
+      <h2>Welcome to GyanSys Attendance Application</h2>
       <br />
       <div>
         {!username && (
           <button onClick={handleLoginRedirect}>
-            Click here to login with you Organization Email
+            Click here to login with your Organization Email
           </button>
         )}
       </div>

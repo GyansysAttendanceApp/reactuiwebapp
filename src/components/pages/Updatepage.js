@@ -28,9 +28,9 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../../style/Updatepage.css';
- 
+
 const url = process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL;
- 
+
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('apiToken');
@@ -41,7 +41,7 @@ axios.interceptors.request.use(
   },
   (error) => Promise.reject(error),
 );
- 
+
 export default function Updatepage() {
   const [depts, setDepts] = useState([]);
   const [deptId, setDeptId] = useState('');
@@ -54,15 +54,15 @@ export default function Updatepage() {
   const [mappings, setMappings] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
- 
+
   const showSnackbar = (message, severity = 'success') => {
     setSnackbar({ open: true, message, severity });
   };
- 
+
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: '', severity: 'success' });
   };
- 
+
   // Fetch initial data
   useEffect(() => {
     axios
@@ -80,7 +80,7 @@ export default function Updatepage() {
       })
       .catch(console.error);
   }, []);
- 
+
   // Group mappings by DeptId and SubDeptId
   const groupedMappings = useMemo(() => {
     const groups = {};
@@ -99,7 +99,7 @@ export default function Updatepage() {
     });
     return Object.values(groups).sort((a, b) => a.DeptName.localeCompare(b.DeptName));
   }, [mappings]);
- 
+
   // Update selectedGroup when groupedMappings changes
   useEffect(() => {
     if (selectedGroup) {
@@ -113,7 +113,7 @@ export default function Updatepage() {
       }
     }
   }, [groupedMappings]);
- 
+
   // Filter sub-departments based on selected department
   useEffect(() => {
     const subs = depts
@@ -122,7 +122,7 @@ export default function Updatepage() {
     setSubDepts(subs);
     setSubDeptId('');
   }, [deptId, depts]);
- 
+
   // Debounce employee search
   useEffect(() => {
     const t = setTimeout(() => {
@@ -137,7 +137,7 @@ export default function Updatepage() {
     }, 300);
     return () => clearTimeout(t);
   }, [searchTerm]);
- 
+
   // Handle delete manager
   const handleDelete = (deptId, subDeptId, managerId) => {
     if (window.confirm('Are you sure you want to delete this manager?')) {
@@ -157,18 +157,18 @@ export default function Updatepage() {
         });
     }
   };
- 
+
   // Handle form submission (add new mapping)
   const handleSubmit = () => {
     if (!deptId || !subDeptId || !selectedEmployee) {
       showSnackbar('Please complete all fields', 'warning');
       return;
     }
- 
+
     const { EmpId: ManagerId, email: ManagerEmail } = selectedEmployee;
     const { DeptName, SubDeptName } =
       depts.find((d) => d.DeptId === deptId && d.SubDeptId === subDeptId) || {};
- 
+
     axios
       .post(`${url}/deptmanager`, {
         DeptId: deptId,
@@ -196,7 +196,7 @@ export default function Updatepage() {
         showSnackbar(errorMessage, 'error');
       });
   };
- 
+
   // Reset form
   const resetForm = () => {
     setDeptId('');
@@ -206,7 +206,7 @@ export default function Updatepage() {
     setSearchTerm('');
     setEmployees([]);
   };
- 
+
   return (
     <Box sx={{ p: 2, background: '#f9f9f9', minHeight: '100vh' }}>
       <Snackbar
@@ -223,7 +223,9 @@ export default function Updatepage() {
         {/* Dashboard */}
         <Grid item xs={12} md={8}>
           <Card variant="outlined" sx={{ maxheight: '70vh' }}>
-            <CardHeader title={<Typography variant="h6">Existing Mappings</Typography>} />
+            <CardHeader
+              title={<Typography variant="h6">Department to Managers Mapping</Typography>}
+            />
             <CardContent sx={{ p: 0 }}>
               <TableContainer sx={{ maxHeight: '75vh', overflowY: 'auto' }} component={Paper}>
                 <Table stickyHeader size="small">
@@ -263,7 +265,7 @@ export default function Updatepage() {
             </CardContent>
           </Card>
         </Grid>
- 
+
         {/* Form and Managers List */}
         <Grid item xs={12} md={4}>
           <Card variant="outlined">
@@ -304,7 +306,7 @@ export default function Updatepage() {
                   </TextField>
                 </Grid>
               </Grid>
- 
+
               <Autocomplete
                 options={employees}
                 getOptionLabel={(emp) => `${emp.empname} (${emp.EmpId})`}
@@ -326,7 +328,7 @@ export default function Updatepage() {
                 noOptionsText="No matches"
                 sx={{ mb: 2 }}
               />
- 
+
               {selectedEmployee && (
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={8}>
@@ -347,7 +349,7 @@ export default function Updatepage() {
               )}
             </CardContent>
           </Card>
- 
+
           {selectedGroup && (
             <Card variant="outlined" sx={{ mt: 2 }}>
               <CardHeader
@@ -362,7 +364,7 @@ export default function Updatepage() {
                         backgroundColor: index % 2 === 0 ? '#f5f5f5' : 'white',
                       }}
                     >
-                      <ListItemText primary={manager.ManagerId} secondary={manager.ManagerEmail} />
+                      <ListItemText primary={`${manager.ManagerId} - ${manager.ManagerEmail}`} />
                       <ListItemSecondaryAction>
                         <IconButton
                           edge="end"

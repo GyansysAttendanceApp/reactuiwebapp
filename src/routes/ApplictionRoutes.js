@@ -17,6 +17,7 @@ import { ThemeProvider } from '@emotion/react';
 import theme from '../components/themes/DepartmentMonthWiseReportTheme';
 import watchlistTheme from '../components/themes/watchListTheme';
 import EmployeeStatus from '../components/pages/Employeereporting';
+import OldDeptMonthWiseReport from '../components/pages/OldDeptMonthWiseReport';
 
 const ApplictionRoutes = () => {
   const { user: username, userRoles, isAutheriseUser } = useContext(UserContext);
@@ -46,10 +47,7 @@ const ApplictionRoutes = () => {
               </ThemeProvider>
             }
           />
-          <Route 
-          path='/EmployeeStatus'
-          element={<EmployeeStatus/>}
-          />
+          <Route path="/EmployeeStatus" element={<EmployeeStatus />} />
           <Route
             path="/Updatepage"
             element={<Updatepage username={username} userRoles={userRoles} />}
@@ -60,6 +58,14 @@ const ApplictionRoutes = () => {
             element={
               <ThemeProvider theme={theme}>
                 <DepartmentMonthWiseReport />
+              </ThemeProvider>
+            }
+          />
+          <Route
+            path="/DepartmentMonthWiseReport/:operationId/:deptId/:year/:month"
+            element={
+              <ThemeProvider theme={theme}>
+                <OldDeptMonthWiseReport />
               </ThemeProvider>
             }
           />

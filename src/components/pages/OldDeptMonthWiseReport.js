@@ -13,7 +13,7 @@ import UserContext from '../../context/UserContext';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
 
-const DepartmentMonthWiseReport = () => {
+const OldDeptMonthWiseReport = () => {
   const url = `${process.env.REACT_APP_ATTENDANCE_TRACKER_API_URL}`;
 
   const [departmentMonthWiseData, setDepartmentMonthWiseData] = useState([]);
@@ -36,7 +36,7 @@ const DepartmentMonthWiseReport = () => {
     const fetchDepartmentdata = async () => {
       try {
         await fetch(
-          `${url}/monthly-attendance?operationId=${operationId}&deptId=${deptId}&year=${year}&month=${month}${subDeptId ? `&subDeptId=${subDeptId}` : ''}`,
+          `${url}/get-employee-attendance/?operationId=${operationId}&deptId=${deptId}&year=${year}&month=${month}`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -48,10 +48,10 @@ const DepartmentMonthWiseReport = () => {
           .then((response) => {
             response?.forEach((item) => {
               if (convertJson[item.EmpName]) {
-                convertJson[item.EmpName]['Emp-Name'] = item.EmpName;
-                convertJson[item.EmpName]['Emp-Id'] = item.EmpId;
-                convertJson[item.EmpName]['Dept'] = item.DeptName;
-                convertJson[item.EmpName]['SubDept'] = item.SubDeptName; // Add SubDeptName
+                convertJson[item.EmpName]['EmpName'] = item.EmpName;
+                convertJson[item.EmpName]['EmpId'] = item.EmpId;
+                convertJson[item.EmpName]['DeptName'] = item.DeptName;
+                convertJson[item.EmpName]['SubDeptName'] = item.SubDeptName; // Add SubDeptName
                 if (item.Duration) {
                   convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
@@ -71,10 +71,10 @@ const DepartmentMonthWiseReport = () => {
                 }
               } else {
                 convertJson[item.EmpName] = {};
-                convertJson[item.EmpName]['Emp-Name'] = item.EmpName;
-                convertJson[item.EmpName]['Emp-Id'] = item.EmpId;
-                convertJson[item.EmpName]['Dept'] = item.DeptName;
-                convertJson[item.EmpName]['SubDept'] = item.SubDeptName; // Add SubDeptName
+                convertJson[item.EmpName]['EmpName'] = item.EmpName;
+                convertJson[item.EmpName]['EmpId'] = item.EmpId;
+                convertJson[item.EmpName]['DeptName'] = item.DeptName;
+                convertJson[item.EmpName]['SubDeptName'] = item.SubDeptName; // Add SubDeptName
                 if (item.Duration) {
                   convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
@@ -260,4 +260,4 @@ const DepartmentMonthWiseReport = () => {
   );
 };
 
-export default DepartmentMonthWiseReport;
+export default OldDeptMonthWiseReport;

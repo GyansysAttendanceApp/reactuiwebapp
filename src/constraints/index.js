@@ -24,8 +24,8 @@ const constraints = {
       LABEL: 'Search by employee name',
     },
     BUTTON: {
-      FETCH: 'Fetch',
-      FETCH_HISTORY: 'Fetch History',
+      FETCH: 'Search',
+      FETCH_HISTORY: 'History',
       CLEAR: 'Clear',
       SEARCH: 'Search',
     },
