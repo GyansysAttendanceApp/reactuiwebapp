@@ -40,12 +40,13 @@ export const trimString = (value, sliceLength = 4) => {
 export const generateMonthDates = (year, month) => {
   const date = new Date(year, month - 1, 1);
   const dates = [];
+  console.log(dates);
 
   const lastDay = new Date(year, month, 0).getDate();
 
   for (let i = 1; i <= lastDay; i++) {
     date.setDate(i);
-    dates.push(dayjs(new Date(date)).format('DD/MM'));
+    dates.push(dayjs(new Date(dates)).format('DD-MMM'));
   }
 
   return dates;

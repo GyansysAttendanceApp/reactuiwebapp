@@ -353,7 +353,11 @@ export default function Updatepage() {
           {selectedGroup && (
             <Card variant="outlined" sx={{ mt: 2 }}>
               <CardHeader
-                title={`Managers for ${selectedGroup.DeptName} - ${selectedGroup.SubDeptName}`}
+                subheader={
+                  <Typography variant="body1" fontWeight="bold">
+                    Managers for {selectedGroup.DeptName} - {selectedGroup.SubDeptName}
+                  </Typography>
+                }
               />
               <CardContent sx={{ maxHeight: '300px', overflowY: 'auto' }}>
                 <List>

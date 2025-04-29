@@ -53,19 +53,22 @@ const DepartmentMonthWiseReport = () => {
                 convertJson[item.EmpName]['Dept'] = item.DeptName;
                 convertJson[item.EmpName]['SubDept'] = item.SubDeptName; // Add SubDeptName
                 if (item.Duration) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
                   );
                 } else if (!item.IsWeekDay) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
-                    <span style={{ color: 'dark-blue', fontWeight: 'bold' }}> WE </span>
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
+                    <span style={{ color: 'dark-blue', fontWeight: 'bold' }}>
+                      {' '}
+                      {item.AttDay.substring(0, 3)}
+                    </span>
                   );
                 } else if (item.IsHoliday) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'orange', fontWeight: 'bold' }}> H</span>
                   );
                 } else {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'red', fontWeight: 'bold' }}>-</span>
                   );
                 }
@@ -76,19 +79,19 @@ const DepartmentMonthWiseReport = () => {
                 convertJson[item.EmpName]['Dept'] = item.DeptName;
                 convertJson[item.EmpName]['SubDept'] = item.SubDeptName; // Add SubDeptName
                 if (item.Duration) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
                   );
                 } else if (!item.IsWeekDay) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
-                    <span style={{ color: 'blue', fontWeight: 'bold' }}> WE </span>
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
+                    <span style={{ color: 'blue', fontWeight: 'bold' }}> {item.AttDay} </span>
                   );
                 } else if (item.IsHoliday) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'orange', fontWeight: 'bold' }}> H</span>
                   );
                 } else {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'red', fontWeight: 'bold' }}>-</span>
                   );
                 }
@@ -98,12 +101,9 @@ const DepartmentMonthWiseReport = () => {
             console.log(Object.values(convertJson));
             const monthDates = generateMonthDates(year, month);
             setDepartmentMonthWiseData(Object.values(convertJson));
-            const columnSet = new Set([
-              ...Object.keys(Object.values(convertJson)[0]),
-              ...monthDates,
-            ]);
+            const columnSet = new Set([...Object.keys(Object.values(convertJson)[0])]);
             const column = Array.from(columnSet);
-            console.log({ column });
+            console.log({ monthDates });
 
             setColumnDefinition(column.map((item) => ({ id: item, label: item })));
           })

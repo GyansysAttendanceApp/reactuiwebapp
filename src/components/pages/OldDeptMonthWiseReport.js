@@ -57,15 +57,18 @@ const OldDeptMonthWiseReport = () => {
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
                   );
                 } else if (!item.IsWeekDay) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
-                    <span style={{ color: 'dark-blue', fontWeight: 'bold' }}> WE </span>
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
+                    <span style={{ color: 'dark-blue', fontWeight: 'bold' }}>
+                      {' '}
+                      (item.AttDay).substring(0,3){' '}
+                    </span>
                   );
                 } else if (item.IsHoliday) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'orange', fontWeight: 'bold' }}> H</span>
                   );
                 } else {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'red', fontWeight: 'bold' }}>-</span>
                   );
                 }
@@ -80,15 +83,18 @@ const OldDeptMonthWiseReport = () => {
                     <span style={{ color: 'green', fontWeight: 'bold' }}>{item.Duration}</span>
                   );
                 } else if (!item.IsWeekDay) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
-                    <span style={{ color: 'blue', fontWeight: 'bold' }}> WE </span>
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
+                    <span style={{ color: 'blue', fontWeight: 'bold' }}>
+                      {' '}
+                      {item.AttDay.substring(0, 3)}{' '}
+                    </span>
                   );
                 } else if (item.IsHoliday) {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'orange', fontWeight: 'bold' }}> H</span>
                   );
                 } else {
-                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MM')] = (
+                  convertJson[item.EmpName][dayjs(item.AttDateText).format('DD/MMM')] = (
                     <span style={{ color: 'red', fontWeight: 'bold' }}>-</span>
                   );
                 }
