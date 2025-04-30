@@ -217,8 +217,8 @@ const DepartmentMonthWiseReport = () => {
 
             <Typography variant="h6" fontWeight="bold">
               Attendance History of Department:{' '}
-              {departmentMonthWiseData[0]?.DeptName || 'Loading...'} / Sub Department:{' '}
-              {departmentMonthWiseData[0]?.SubDeptName || 'Loading...'}
+              {departmentMonthWiseData[0]?.Dept || 'Loading...'} / Sub Department:{' '}
+              {departmentMonthWiseData[0]?.SubDept || 'Loading...'}
             </Typography>
           </Box>
           <Box display={'flex'} gap={'1rem'}>
